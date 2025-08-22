@@ -1,6 +1,7 @@
 # Python cache files
 __pycache__/
 *.py[cod]
+*$py.class
 
 # Django stuff
 db.sqlite3
@@ -8,6 +9,24 @@ db.sqlite3
 *.pot
 *.pyc
 *.pyo
+media/
+staticfiles/
+
+# Environment files
+.env
+*.env
+.venv/
+env/
+venv/
 
 # VS Code settings
 .vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Pytest / coverage / testing
+.coverage
+htmlcov/
+.pytest_cache/
