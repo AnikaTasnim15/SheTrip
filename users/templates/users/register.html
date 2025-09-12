@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join SheTrip - Create Your Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 25%, #4facfe 50%, #00f2fe 75%, #c471f5 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b9d;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ff6b9d;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 0.5rem;
+            transform: scale(1.2);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .radio-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ff6b9d;
+        }
+
+        .radio-item input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-link a {
+            color: #ff6b9d;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #c471f5;
+            text-shadow: 0 0 10px rgba(196, 113, 245, 0.5);
+        }
+
+        .errorlist {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            list-style: none;
+        }
+
+        .errorlist li {
+            color: #ffcccb;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff6b9d;
+            border-bottom: 2px solid rgba(255, 107, 157, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .form-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Custom select arrow */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3e%3cpath d='M8 13.1l4.7-4.7-1.4-1.4L8 10.3 4.7 7l-1.4 1.4z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">SheTrip</div>
+            <h1>Join Our Community</h1>
+            <p>Connect with amazing women travelers worldwide</p>
+        </div>
+
+        <div class="form-container">
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- Error messages will be displayed here -->
+            <div class="errorlist" id="errorMessages" style="display: none;">
+            </div>
+
+            <form method="post" enctype="multipart/form-data" id="registrationForm">
+
+                <!-- Basic Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Basic Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="id_first_name">First Name *</label>
+                            <input type="text" name="first_name" id="id_first_name" required placeholder="Enter your first name">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_last_name">Last Name *</label>
+                            <input type="text" name="last_name" id="id_last_name" required placeholder="Enter your last name">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_username">Username *</label>
+                            <input type="text" name="username" id="id_username" required placeholder="Choose a unique username">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_email">Email Address *</label>
+                            <input type="email" name="email" id="id_email" required placeholder="your.email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_password1">Password *</label>
+                            <input type="password" name="password1" id="id_password1" required placeholder="Create a strong password">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_password2">Confirm Password *</label>
+                            <input type="password" name="password2" id="id_password2" required placeholder="Confirm your password">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Details Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Personal Details</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="id_age">Age *</label>
+                            <input type="number" name="age" id="id_age" min="18" max="100" required placeholder="Your age">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_phone">Phone Number</label>
+                            <input type="tel" name="phone" id="id_phone" placeholder="+880 1234-567891">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_city">Current City *</label>
+                            <input type="text" name="city" id="id_city" required placeholder="City where you live">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_country">Country *</label>
+                            <select name="country" id="id_country" required>
+                                <option value="">Select your country</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="AU">Australia</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="ES">Spain</option>
+                                <option value="IT">Italy</option>
+                                <option value="JP">Japan</option>
+                                <option value="BR">Brazil</option>
+                                <option value="IN">India</option>
+                                <option value="BD">Bangladesh</option>
+                                <!-- Add more countries as needed -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_occupation">Occupation</label>
+                            <input type="text" name="occupation" id="id_occupation" placeholder="Your profession">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_languages">Languages Spoken</label>
+                            <input type="text" name="languages" id="id_languages" placeholder="English, Bangla..">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Travel Preferences Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Travel Preferences</h2>
+
+                    <div class="form-group">
+                        <label>Travel Style *</label>
+                        <div class="radio-group">
+                            <label class="radio-item">
+                                <input type="radio" name="travel_style" value="budget" required>
+                                Budget Traveler
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="travel_style" value="mid-range" required>
+                                Mid-Range
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="travel_style" value="luxury" required>
+                                Luxury
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="travel_style" value="mixed" required>
+                                Mixed
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Accommodation Preferences</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="accommodation" value="hostels">
+                                Hostels
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="accommodation" value="hotels">
+                                Hotels
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="accommodation" value="airbnb">
+                                Airbnb
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="accommodation" value="guesthouses">
+                                Guesthouses
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Travel Interests</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="adventure">
+                                Adventure & Sports
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="culture">
+                                Culture & History
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="food">
+                                Food & Culinary
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="nature">
+                                Nature & Wildlife
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="nightlife">
+                                Nightlife & Entertainment
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="wellness">
+                                Wellness & Spa
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="photography">
+                                Photography
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="shopping">
+                                Shopping
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="id_dream_destinations">Dream Destinations</label>
+                            <textarea name="dream_destinations" id="id_dream_destinations" rows="3" placeholder="Tell us about the places you'd love to visit..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About You Section -->
+                <div class="form-section">
+                    <h2 class="section-title">About You</h2>
+                    <div class="form-group">
+                        <label for="id_bio">Bio</label>
+                        <textarea name="bio" id="id_bio" rows="4" placeholder="Tell us about yourself, your travel experiences, and what makes you a great travel companion..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_profile_picture">Profile Picture</label>
+                        <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*">
+                    </div>
+                </div>
+
+                <!-- Terms and Conditions -->
+                <div class="form-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="terms_accepted" required>
+                        I agree to the Terms of Service and Privacy Policy *
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="newsletter_opt_in">
+                        Send me travel tips and updates via email
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create My Account</button>
+            </form>
+
+            <div class="login-link">
+                <p>Already have an account? <a href="/users/login/">Log In Here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Progress bar functionality
+        function updateProgressBar() {
+            const form = document.getElementById('registrationForm');
+            const requiredInputs = form.querySelectorAll('input[required], select[required]');
+            const filledInputs = Array.from(requiredInputs).filter(input => {
+                if (input.type === 'radio') {
+                    return form.querySelector(`input[name="${input.name}"]:checked`);
+                }
+                return input.value.trim() !== '';
+            });
+
+            const progress = (filledInputs.length / requiredInputs.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        // Add event listeners to all form inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            const formInputs = document.querySelectorAll('input, select, textarea');
+            formInputs.forEach(input => {
+                input.addEventListener('input', updateProgressBar);
+                input.addEventListener('change', updateProgressBar);
+            });
+
+            // Initial progress calculation
+            updateProgressBar();
+        });
+
+        // Form submission with validation
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default submission for demo
+
+            const password1 = document.getElementById('id_password1').value;
+            const password2 = document.getElementById('id_password2').value;
+            const errorDiv = document.getElementById('errorMessages');
+
+            // Clear previous errors
+            errorDiv.innerHTML = '';
+            errorDiv.style.display = 'none';
+
+            let errors = [];
+
+            if (password1 !== password2) {
+                errors.push('Passwords do not match!');
+            }
+
+            if (password1.length < 8) {
+                errors.push('Password must be at least 8 characters long!');
+            }
+
+            // Check required fields
+            const requiredFields = this.querySelectorAll('input[required], select[required]');
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    errors.push(`${field.previousElementSibling.textContent.replace('*', '').trim()} is required.`);
+                }
+            });
+
+            // Check if terms are accepted
+            const termsCheckbox = document.querySelector('input[name="terms_accepted"]');
+            if (!termsCheckbox.checked) {
+                errors.push('You must accept the Terms of Service and Privacy Policy.');
+            }
+
+            if (errors.length > 0) {
+                errorDiv.innerHTML = errors.map(error => `<li>${error}</li>`).join('');
+                errorDiv.style.display = 'block';
+                errorDiv.scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            // If validation passes, show success message
+            alert('Registration successful! (This is a demo - in real implementation, data would be sent to server)');
+
+            // In real Django implementation, remove e.preventDefault() above and add:
+            // this.submit();
+        });
+
+        // Enhanced file input
+        document.getElementById('id_profile_picture').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                    alert('File size must be less than 5MB');
+                    this.value = '';
+                    return;
+                }
+
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Please upload a valid image file (JPEG, PNG, or GIF)');
+                    this.value = '';
+                    return;
+                }
+            }
+        });
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
