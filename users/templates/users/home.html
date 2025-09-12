@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SheTrip - Connect, Explore, Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5be5770 25%, #f84ffe5c 50%, #fe005900 75%, #c471f5 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 107, 157, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            padding: 1rem;
+            margin: 0;
+        }
+
+        .mobile-nav-links li {
+            margin: 0.5rem 0;
+        }
+
+        .mobile-nav-links a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: block;
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(255, 107, 157, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-links a:hover {
+            background: rgba(255, 107, 157, 0.2);
+            transform: translateX(10px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            padding: 2rem;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4);
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 60%; right: 10%; animation-delay: 2s; }
+        .floating-element:nth-child(3) { top: 80%; left: 20%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Overview Section */
+        .overview {
+            padding: 5rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+        }
+
+        .overview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .overview h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 80%;
+                max-width: 300px;
+            }
+
+            .overview h2 {
+                font-size: 2rem;
+            }
+
+            .logo {
+                font-size: 2rem;
+            }
+        }
+
+        /* Particle Animation */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: particleFloat 10s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">SheTrip</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#help">Help</a></li>
+            </ul>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <div class="mobile-menu" id="mobileMenu">
+                <ul class="mobile-nav-links">
+                    <li><a href="#home" onclick="closeMobileMenu()">Home</a></li>
+                    <li><a href="#about" onclick="closeMobileMenu()">About</a></li>
+                    <li><a href="#services" onclick="closeMobileMenu()">Services</a></li>
+                    <li><a href="#pricing" onclick="closeMobileMenu()">Pricing</a></li>
+                    <li><a href="#how-it-works" onclick="closeMobileMenu()">How It Works</a></li>
+                    <li><a href="#help" onclick="closeMobileMenu()">Help</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <!-- Floating decorative elements -->
+        <div class="floating-element">✈️</div>
+        <div class="floating-element">🌸</div>
+        <div class="floating-element">💖</div>
+        
+        <div class="hero-content">
+            <h1>Find Your Perfect Travel Companion</h1>
+            <p>Connect with like-minded women travelers, explore new destinations, and create unforgettable memories together. Your next adventure is just a swipe away!</p>
+            
+            <div class="cta-buttons">
+                <a href="{% url 'register' %}" class="btn btn-primary">Create Account</a>
+                <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="overview" id="about">
+        <div class="overview-container">
+            <h2>Why Choose SheTrip?</h2>
+            <p>Empowering women to explore the world safely and confidently through meaningful connections.</p>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Safe Connections</h3>
+                    <p>Meet verified female travelers with similar interests and travel styles. Safety and trust are our top priorities.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Discover Together</h3>
+                    <p>Explore new destinations with companions who share your passion for adventure and cultural experiences.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💫</div>
+                    <h3>Create Memories</h3>
+                    <p>Build lasting friendships and create unforgettable memories with fellow women who love to travel.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="overview" id="services" style="background: rgba(255, 255, 255, 0.03);">
+        <div class="overview-container">
+            <h2>Our Services</h2>
+            <p>Comprehensive solutions for every aspect of your travel journey</p>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Smart Matching</h3>
+                    <p>Advanced algorithm matches you with compatible travel companions based on interests, destinations, and travel style.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Safety Verification</h3>
+                    <p>Comprehensive background checks and identity verification to ensure your safety and peace of mind.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Trip Planning</h3>
+                    <p>Collaborative trip planning tools to organize itineraries, bookings, and shared expenses with your travel buddy.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>24/7 Support</h3>
+                    <p>Round-the-clock customer support and emergency assistance while you're traveling anywhere in the world.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Premium Experiences</h3>
+                    <p>Access to exclusive events, guided tours, and premium accommodations through our partner network.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Mobile App</h3>
+                    <p>Full-featured mobile app with offline maps, translation tools, and emergency contacts for safe travel.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="overview" id="pricing">
+        <div class="overview-container">
+            <h2>Choose Your Plan</h2>
+            <p>Flexible pricing options to suit every traveler's needs</p>
+            
+            <div class="features">
+                <div class="feature-card" style="border: 2px solid rgba(255, 255, 255, 0.3);">
+                    <div class="feature-icon">🆓</div>
+                    <h3>Basic</h3>
+                    <div style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">Free</div>
+                    <p>• Create profile and browse matches<br>• Basic messaging features<br>• Community access<br>• Standard support</p>
+                    <div class="cta-buttons" style="margin-top: 1.5rem;">
+                        <a href="{% url 'register' %}" class="btn btn-secondary" style="width: 100%;">Get Started</a>
+                    </div>
+                </div>
+                
+                <div class="feature-card" style="border: 2px solid #ff6b9d; transform: scale(1.05);">
+                    <div class="feature-icon">⭐</div>
+                    <h3>Premium</h3>
+                    <div style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">$19/month</div>
+                    <p>• Unlimited messaging<br>• Advanced filters<br>• Trip planning tools<br>• Priority support<br>• Profile boost</p>
+                    <div class="cta-buttons" style="margin-top: 1.5rem;">
+                        <a href="{% url 'register' %}" class="btn btn-primary" style="width: 100%;">Go Premium</a>
+                    </div>
+                </div>
+                
+                <div class="feature-card" style="border: 2px solid #c471f5;">
+                    <div class="feature-icon">💎</div>
+                    <h3>VIP</h3>
+                    <div style="font-size: 2rem; font-weight: bold; margin: 1rem 0;">$39/month</div>
+                    <p>• All Premium features<br>• Background verification<br>• Exclusive events<br>• Travel concierge<br>• 24/7 support</p>
+                    <div class="cta-buttons" style="margin-top: 1.5rem;">
+                        <a href="{% url 'register' %}" class="btn btn-primary" style="width: 100%;">Go VIP</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="overview" id="how-it-works" style="background: rgba(255, 255, 255, 0.03);">
+        <div class="overview-container">
+            <h2>How It Works</h2>
+            <p>Getting started is easy! Follow these simple steps to find your perfect travel companion.</p>
+            
+            <div class="features" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: linear-gradient(45deg, #ff6b9d, #c471f5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 4rem;">1</div>
+                    <h3>Create Your Profile</h3>
+                    <p>Sign up and create a detailed profile with your travel preferences, interests, and dream destinations.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: linear-gradient(45deg, #ff6b9d, #c471f5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 4rem;">2</div>
+                    <h3>Browse & Match</h3>
+                    <p>Browse through profiles of fellow female travelers and swipe right on those who catch your interest.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: linear-gradient(45deg, #ff6b9d, #c471f5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 4rem;">3</div>
+                    <h3>Connect & Chat</h3>
+                    <p>When you both swipe right, it's a match! Start chatting and get to know your potential travel buddy.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: linear-gradient(45deg, #ff6b9d, #c471f5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 4rem;">4</div>
+                    <h3>Plan Together</h3>
+                    <p>Use our trip planning tools to organize your itinerary, split expenses, and book accommodations together.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: linear-gradient(45deg, #ff6b9d, #c471f5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 4rem;">5</div>
+                    <h3>Travel & Explore</h3>
+                    <p>Embark on your adventure with confidence, knowing you have a trusted companion by your side.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Help Section -->
+    <section class="overview" id="help">
+        <div class="overview-container">
+            <h2>Need Help?</h2>
+            <p>We're here to support you every step of your journey</p>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>FAQ</h3>
+                    <p>Find answers to the most commonly asked questions about using SheTrip and connecting with travel companions.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Live Chat</h3>
+                    <p>Get instant help from our support team through live chat. Available 24/7 for premium and VIP members.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📧</div>
+                    <h3>Email Support</h3>
+                    <p>Send us detailed questions or concerns via email. We typically respond within 24 hours.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Safety Guidelines</h3>
+                    <p>Learn about our safety protocols and best practices for meeting and traveling with new companions.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <h3>Travel Tips</h3>
+                    <p>Access our comprehensive guide to solo and group travel, including destination guides and packing lists.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📞</div>
+                    <h3>Emergency Support</h3>
+                    <p>24/7 emergency hotline for urgent situations while traveling. Premium feature for your peace of mind.</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem; text-align: center;">
+                <a href="mailto:support@shetrip.com" class="btn btn-primary">Contact Support</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.remove('active');
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Random horizontal position
+                particle.style.left = Math.random() * 100 + '%';
+                
+                // Random animation duration
+                particle.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                
+                // Random delay
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize particles when page loads
+        window.addEventListener('load', createParticles);
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.style.background = 'rgba(255, 255, 255, 0.2)';
+            } else {
+                nav.style.background = 'rgba(255, 255, 255, 0.1)';
+            }
+        });
+    </script>
+</body>
+</html>

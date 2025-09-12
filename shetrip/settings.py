@@ -83,12 +83,8 @@ WSGI_APPLICATION = 'shetrip.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'shetrip_db',
-        'USER': 'shetrip_user',
-        'PASSWORD': 'shetripismydream',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

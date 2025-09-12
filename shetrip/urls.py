@@ -16,11 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include('users.urls')),  # Include your users app URLs
-    path('', lambda request: redirect('login')),  # Redirect homepage to login
+    path('', include('users.urls')),  # Change this from 'users/' to ''
 ]
 
