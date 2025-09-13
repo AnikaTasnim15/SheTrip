@@ -1,34 +1,502 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to SheTrip</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        .errorlist { color: rgb(255, 0, 128); list-style: none; padding: 0; }
-        form { max-width: 300px; margin: auto; }
-        button { margin-top: 10px; }
-        .register-link { display: block; text-align: center; margin-top: 15px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 25%, #4facfe 50%, #00f2fe 75%, #c471f5 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .login-container {
+            max-width: 450px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative elements */
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-text {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            padding-left: 3.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b9d;
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus + .input-icon {
+            color: #ff6b9d;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1.2rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .forgot-password {
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .forgot-password a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #ff6b9d;
+            text-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
+        }
+
+        .divider {
+            margin: 2rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .divider span {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 0 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .register-link {
+            position: relative;
+            z-index: 2;
+        }
+
+        .register-link a {
+            color: #ff6b9d;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            background: rgba(255, 107, 157, 0.1);
+        }
+
+        .register-link a:hover {
+            color: #c471f5;
+            background: rgba(196, 113, 245, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(196, 113, 245, 0.3);
+        }
+
+        .errorlist {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid rgba(255, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            list-style: none;
+            text-align: left;
+            position: relative;
+            z-index: 2;
+        }
+
+        .errorlist li {
+            color: #ffcccb;
+            font-weight: 600;
+        }
+
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 107, 157, 0.3);
+            font-size: 1rem;
+            animation: floatHeart 8s linear infinite;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-20px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+           
+            .logo {
+                font-size: 3rem;
+            }
+           
+            .welcome-text {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <h2>Login</h2>
-    {% if form.errors %}
-        <ul class="errorlist">
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
-    <a href="{% url 'register' %}" class="register-link">Don't have an account? Register</a>
+    <!-- Floating Hearts -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <div class="login-container">
+        <div class="logo">SheTrip</div>
+        <h1 class="welcome-text">Welcome Back</h1>
+        <p class="subtitle">Log in to continue your travel journey</p>
+
+        <!-- Error messages will be displayed here -->
+        <div class="errorlist" id="errorMessages" style="display: none;">
+        </div>
+
+        <form method="post" id="loginForm">
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <div class="input-container">
+                    <input type="text" name="username" id="username" required placeholder="Enter your username or email">
+                    <div class="input-icon">👤</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-container">
+                    <input type="password" name="password" id="password" required placeholder="Enter your password">
+                    <div class="input-icon">🔒</div>
+                </div>
+            </div>
+
+            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+                <label style="display: flex; align-items: center; margin-bottom: 0; cursor: pointer;">
+                    <input type="checkbox" name="remember_me" style="margin-right: 0.5rem; transform: scale(1.2);">
+                    Remember me
+                </label>
+                <a href="#" class="forgot-password" style="margin: 0;">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Log In</button>
+        </form>
+
+        <div class="divider">
+            <span>New to SheTrip?</span>
+        </div>
+
+        <div class="register-link">
+            <a href="/users/register/">Create Your Account</a>
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        function createFloatingHearts() {
+            const heartsContainer = document.getElementById('floatingHearts');
+           
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '💕';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = '0s';
+                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+               
+                heartsContainer.appendChild(heart);
+               
+                // Remove heart after animation
+                setTimeout(() => {
+                    heart.remove();
+                }, 8000);
+            }, 3000);
+        }
+
+        // Form submission with validation
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default submission for demo
+           
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('errorMessages');
+           
+            // Clear previous errors
+            errorDiv.innerHTML = '';
+            errorDiv.style.display = 'none';
+           
+            let errors = [];
+           
+            if (!username) {
+                errors.push('Username or email is required.');
+            }
+           
+            if (!password) {
+                errors.push('Password is required.');
+            }
+           
+            if (password.length < 6) {
+                errors.push('Password must be at least 6 characters long.');
+            }
+           
+            if (errors.length > 0) {
+                errorDiv.innerHTML = errors.map(error => `<li>${error}</li>`).join('');
+                errorDiv.style.display = 'block';
+                return;
+            }
+           
+            // Show loading effect
+            const submitBtn = this.querySelector('.btn-primary');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = 'Logging In...';
+            submitBtn.disabled = true;
+           
+            // Simulate login process
+            setTimeout(() => {
+                alert('Login successful! (This is a demo - in real implementation, you would be redirected to dashboard)');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+           
+            // In real Django implementation, remove e.preventDefault() above and add:
+            // this.submit();
+        });
+
+        // Add input focus effects
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+           
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Initialize floating hearts when page loads
+        window.addEventListener('load', createFloatingHearts);
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const focusedElement = document.activeElement;
+                if (focusedElement.tagName === 'INPUT') {
+                    const form = focusedElement.closest('form');
+                    if (form) {
+                        const inputs = form.querySelectorAll('input[required]');
+                        const currentIndex = Array.from(inputs).indexOf(focusedElement);
+                        if (currentIndex < inputs.length - 1) {
+                            inputs[currentIndex + 1].focus();
+                        } else {
+                            form.querySelector('button[type="submit"]').click();
+                        }
+                    }
+                }
+            }
+        });
+
+        // Add subtle shake animation for errors
+        function shakeForm() {
+            const form = document.getElementById('loginForm');
+            form.style.animation = 'shake 0.5s ease-in-out';
+            setTimeout(() => {
+                form.style.animation = '';
+            }, 500);
+        }
+
+        // Add CSS for shake animation
+        const shakeCSS = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        const style = document.createElement('style');
+        style.textContent = shakeCSS;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
