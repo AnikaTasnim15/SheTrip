@@ -311,8 +311,17 @@
             <!-- Error messages will be displayed here -->
             <div class="errorlist" id="errorMessages" style="display: none;">
             </div>
+            
+            {% if messages %}
+            <div class="errorlist">
+                 {% for message in messages %}
+                 <li>{{ message }}</li>
+                 {% endfor %}
+            </div>
+            {% endif %}
 
             <form method="post" enctype="multipart/form-data" id="registrationForm">
+                {% csrf_token %}
 
                 <!-- Basic Information Section -->
                 <div class="form-section">
@@ -553,7 +562,7 @@
 
         // Form submission with validation
         document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent default submission for demo
+            
 
             const password1 = document.getElementById('id_password1').value;
             const password2 = document.getElementById('id_password2').value;
@@ -594,11 +603,7 @@
                 return;
             }
 
-            // If validation passes, show success message
-            alert('Registration successful! (This is a demo - in real implementation, data would be sent to server)');
-
-            // In real Django implementation, remove e.preventDefault() above and add:
-            // this.submit();
+            
         });
 
         // Enhanced file input

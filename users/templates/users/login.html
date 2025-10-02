@@ -337,6 +337,7 @@
         </div>
 
         <form method="post" id="loginForm">
+            {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username or Email</label>
                 <div class="input-container">
@@ -373,129 +374,70 @@
     </div>
 
     <script>
-        // Create floating hearts
-        function createFloatingHearts() {
-            const heartsContainer = document.getElementById('floatingHearts');
+    // Create floating hearts
+    function createFloatingHearts() {
+        const heartsContainer = document.getElementById('floatingHearts');
+       
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '💕';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = '0s';
+            heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
            
-            setInterval(() => {
-                const heart = document.createElement('div');
-                heart.className = 'heart';
-                heart.innerHTML = '💕';
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.animationDelay = '0s';
-                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
-               
-                heartsContainer.appendChild(heart);
-               
-                // Remove heart after animation
-                setTimeout(() => {
-                    heart.remove();
-                }, 8000);
-            }, 3000);
-        }
-
-        // Form submission with validation
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent default submission for demo
+            heartsContainer.appendChild(heart);
            
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const errorDiv = document.getElementById('errorMessages');
-           
-            // Clear previous errors
-            errorDiv.innerHTML = '';
-            errorDiv.style.display = 'none';
-           
-            let errors = [];
-           
-            if (!username) {
-                errors.push('Username or email is required.');
-            }
-           
-            if (!password) {
-                errors.push('Password is required.');
-            }
-           
-            if (password.length < 6) {
-                errors.push('Password must be at least 6 characters long.');
-            }
-           
-            if (errors.length > 0) {
-                errorDiv.innerHTML = errors.map(error => `<li>${error}</li>`).join('');
-                errorDiv.style.display = 'block';
-                return;
-            }
-           
-            // Show loading effect
-            const submitBtn = this.querySelector('.btn-primary');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = 'Logging In...';
-            submitBtn.disabled = true;
-           
-            // Simulate login process
+            // Remove heart after animation
             setTimeout(() => {
-                alert('Login successful! (This is a demo - in real implementation, you would be redirected to dashboard)');
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 1500);
-           
-            // In real Django implementation, remove e.preventDefault() above and add:
-            // this.submit();
-        });
+                heart.remove();
+            }, 8000);
+        }, 3000);
+    }
 
-        // Add input focus effects
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
-            });
-           
-            input.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
-            });
-        });
-
-        // Initialize floating hearts when page loads
-        window.addEventListener('load', createFloatingHearts);
-
-        // Add keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                const focusedElement = document.activeElement;
-                if (focusedElement.tagName === 'INPUT') {
-                    const form = focusedElement.closest('form');
-                    if (form) {
-                        const inputs = form.querySelectorAll('input[required]');
-                        const currentIndex = Array.from(inputs).indexOf(focusedElement);
-                        if (currentIndex < inputs.length - 1) {
-                            inputs[currentIndex + 1].focus();
-                        } else {
-                            form.querySelector('button[type="submit"]').click();
-                        }
-                    }
-                }
-            }
-        });
-
-        // Add subtle shake animation for errors
-        function shakeForm() {
-            const form = document.getElementById('loginForm');
-            form.style.animation = 'shake 0.5s ease-in-out';
-            setTimeout(() => {
-                form.style.animation = '';
-            }, 500);
+    // Form submission with validation
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const errorDiv = document.getElementById('errorMessages');
+       
+        // Clear previous errors
+        errorDiv.innerHTML = '';
+        errorDiv.style.display = 'none';
+       
+        let errors = [];
+       
+        if (!username) {
+            errors.push('Username or email is required.');
         }
+       
+        if (!password) {
+            errors.push('Password is required.');
+        }
+       
+        if (errors.length > 0) {
+            e.preventDefault();  // Only prevent submission if there are errors
+            errorDiv.innerHTML = errors.map(error => `<li>${error}</li>`).join('');
+            errorDiv.style.display = 'block';
+            return;
+        }
+       
+        // If validation passes, let the form submit naturally to Django
+    });
 
-        // Add CSS for shake animation
-        const shakeCSS = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                25% { transform: translateX(-10px); }
-                75% { transform: translateX(10px); }
-            }
-        `;
-        const style = document.createElement('style');
-        style.textContent = shakeCSS;
-        document.head.appendChild(style);
-    </script>
+    // Add input focus effects
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.02)';
+        });
+       
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    });
+
+    // Initialize floating hearts when page loads
+    window.addEventListener('load', createFloatingHearts);
+</script>
 </body>
 </html>
