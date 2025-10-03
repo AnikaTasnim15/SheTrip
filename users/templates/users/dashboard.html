@@ -4,14 +4,1230 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-light: #a78bfa;
+            --secondary: #ec4899;
+            --secondary-dark: #db2777;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --dark: #1e293b;
+            --dark-light: #334155;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 6px 12px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .brand {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .user-card {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .user-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .nav {
+            padding: 1.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-label {
+            padding: 0 1.5rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray-400);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.08) 0%, transparent 100%);
+            color: var(--primary);
+            border-right: 3px solid var(--primary);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            color: currentColor;
+        }
+
+        .badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.125rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            background: var(--gray-50);
+        }
+
+        .topbar {
+            background: var(--white);
+            padding: 1.75rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .topbar-left h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.5px;
+        }
+
+        .topbar-left p {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+        }
+
+        .topbar-right {
+            display: flex;
+            gap: 0.875rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            border: 1.5px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(124, 58, 237, 0.02);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .alert-card {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--warning);
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .alert-card.success {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-left-color: var(--success);
+        }
+
+        .alert-card.info {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-left-color: var(--info);
+        }
+
+        .alert-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .alert-text {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+        }
+
+        .stat-info h3 {
+            font-size: 0.825rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-weight: 500;
+        }
+
+        .stat-change.positive { color: var(--success); }
+        .stat-change.neutral { color: var(--gray-500); }
+        .stat-change.negative { color: var(--danger); }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .icon-purple {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(167, 139, 250, 0.15));
+            color: var(--primary);
+        }
+        .icon-pink {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(249, 168, 212, 0.15));
+            color: var(--secondary);
+        }
+        .icon-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(167, 243, 208, 0.15));
+            color: var(--success);
+        }
+        .icon-blue {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(191, 219, 254, 0.15));
+            color: var(--info);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            letter-spacing: -0.3px;
+        }
+
+        .card-action {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .card-action:hover {
+            color: var(--primary-dark);
+        }
+
+        .trip-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .trip-card {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.2s ease;
+            border: 1px solid var(--gray-200);
+        }
+
+        .trip-card:hover {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            transform: translateX(4px);
+        }
+
+        .trip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .trip-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--gray-900);
+            margin-bottom: 0.375rem;
+        }
+
+        .trip-date {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .status-badge {
+            padding: 0.375rem 0.875rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-upcoming { background: #dbeafe; color: #1e40af; }
+        .status-active { background: #d1fae5; color: #065f46; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-completed { background: #e0e7ff; color: #3730a3; }
+
+        .trip-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            flex-wrap: wrap;
+        }
+
+        .trip-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .activity-item:hover {
+            background: var(--white);
+            border-color: var(--gray-200);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.125rem;
+        }
+
+        .activity-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--gray-900);
+        }
+
+        .activity-content p {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            margin-top: 0.375rem;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .action-card {
+            background: var(--gray-50);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--gray-900);
+        }
+
+        .action-card:hover {
+            background: var(--white);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .action-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+
+        .action-card h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .profile-item {
+            background: var(--gray-50);
+            padding: 1.25rem;
+            border-radius: 10px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .profile-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .profile-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .sos-button {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35);
+            transition: all 0.2s ease;
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sos-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 24px rgba(239, 68, 68, 0.45);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1.5rem;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            color: var(--gray-300);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            color: var(--gray-500);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .safety-tips {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .safety-tip {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .safety-tip-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .safety-tip-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .safety-tip-content p {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        @media (max-width: 1200px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 1.25rem;
+            }
+
+            .topbar-left h1 {
+                font-size: 1.5rem;
+            }
+
+            .sos-button {
+                width: 60px;
+                height: 60px;
+                font-size: 0.875rem;
+                bottom: 1rem;
+                right: 1rem;
+            }
+
+            .card {
+                padding: 1.25rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-400);
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Your Dashboard, {{ user.first_name }}!</h1>
-    <p>Email: {{ user.email }}</p>
-    {% if profile %}
-        <p>City: {{ profile.city }}</p>
-        <p>Country: {{ profile.country }}</p>
-    {% endif %}
-    <a href="{% url 'logout' %}">Logout</a>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">SheTrip</div>
+                <div class="user-card">
+                    <div class="user-avatar">
+                        {% if profile and profile.profile_picture %}
+                            <img src="{{ profile.profile_picture.url }}" alt="Profile">
+                        {% else %}
+                            {{ user.first_name|first }}{{ user.last_name|first }}
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+                        <p>{% if profile %}{{ profile.city }}{% else %}Traveler{% endif %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <div class="nav-section">
+                    <div class="nav-label">Main Menu</div>
+                    <div class="nav-item">
+                        <a href="{% url 'dashboard' %}" class="nav-link active">
+                            <i class="fas fa-th-large nav-icon"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-map-marked-alt nav-icon"></i>
+                            <span>My Trips</span>
+                            <span class="badge">0</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-search nav-icon"></i>
+                            <span>Find Buddies</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-calendar-alt nav-icon"></i>
+                            <span>Organized Trips</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-label">Communication</div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-comments nav-icon"></i>
+                            <span>Messages</span>
+                            <span class="badge">0</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-bell nav-icon"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-users nav-icon"></i>
+                            <span>Community</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-label">Account</div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-check-circle nav-icon"></i>
+                            <span>Verification</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-user-circle nav-icon"></i>
+                            <span>My Profile</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-credit-card nav-icon"></i>
+                            <span>Subscription</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-receipt nav-icon"></i>
+                            <span>Payments</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-label">Safety</div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-shield-alt nav-icon"></i>
+                            <span>Safety Center</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-phone-alt nav-icon"></i>
+                            <span>Emergency Contacts</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-exclamation-triangle nav-icon"></i>
+                            <span>SOS Alerts</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-label">Settings</div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-cog nav-icon"></i>
+                            <span>Settings</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-question-circle nav-icon"></i>
+                            <span>Help & Support</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="{% url 'logout' %}" class="nav-link">
+                            <i class="fas fa-sign-out-alt nav-icon"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <h1>Welcome back, {{ user.first_name }}!</h1>
+                    <p>Explore Bangladesh safely with verified travel companions</p>
+                </div>
+                <div class="topbar-right">
+                    <a href="#" class="btn btn-outline btn-sm">
+                        <i class="fas fa-bell"></i>
+                        Notifications
+                    </a>
+                    <a href="#" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i>
+                        Create Trip Plan
+                    </a>
+                </div>
+            </div>
+
+            <div class="alert-card">
+                <div class="alert-icon">
+                    <i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>
+                </div>
+                <div class="alert-content">
+                    <div class="alert-title">Account Verification Required</div>
+                    <p class="alert-text">Complete your identity verification to join organized trips and connect with travel buddies. Upload your ID document and selfie for admin approval.</p>
+                    <a href="#" class="btn btn-primary btn-sm">
+                        <i class="fas fa-check-circle"></i>
+                        Start Verification
+                    </a>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Upcoming Trips</h3>
+                        <div class="stat-value">0</div>
+                        <div class="stat-change neutral">
+                            <i class="fas fa-minus"></i>
+                            No trips planned
+                        </div>
+                    </div>
+                    <div class="stat-icon icon-purple">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Travel Matches</h3>
+                        <div class="stat-value">0</div>
+                        <div class="stat-change neutral">
+                            <i class="fas fa-users"></i>
+                            Find your buddies
+                        </div>
+                    </div>
+                    <div class="stat-icon icon-pink">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Completed Trips</h3>
+                        <div class="stat-value">0</div>
+                        <div class="stat-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            New traveler
+                        </div>
+                    </div>
+                    <div class="stat-icon icon-green">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3>Safety Rating</h3>
+                        <div class="stat-value">New</div>
+                        <div class="stat-change neutral">
+                            <i class="fas fa-star"></i>
+                            Build reputation
+                        </div>
+                    </div>
+                    <div class="stat-icon icon-blue">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">My Travel Plans</h2>
+                        <a href="#" class="card-action">
+                            View All
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="trip-list">
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-suitcase-rolling"></i>
+                            </div>
+                            <h3>No trips yet</h3>
+                            <p>Create your first travel plan and find the perfect travel buddy</p>
+                            <a href="#" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i>
+                                Create Trip Plan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Quick Actions</h2>
+                    </div>
+                    <div class="quick-actions">
+                        <a href="#" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h4>Find Travel Buddies</h4>
+                        </a>
+                        <a href="#" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-route"></i>
+                            </div>
+                            <h4>Browse Organized Trips</h4>
+                        </a>
+                        <a href="#" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h4>Complete Verification</h4>
+                        </a>
+                        <a href="#" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <h4>Safety Guidelines</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Activity</h2>
+                        <a href="#" class="card-action">
+                            View All
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(167, 139, 250, 0.15)); color: var(--primary);">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>Account Created Successfully</h4>
+                                <p>Welcome to SheTrip! Complete your profile to get started</p>
+                                <div class="activity-time">Just now</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(191, 219, 254, 0.15)); color: var(--info);">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>Complete Your Profile</h4>
+                                <p>Add more details to attract compatible travel buddies</p>
+                                <div class="activity-time">Today</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(167, 243, 208, 0.15)); color: var(--success);">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>Verify Your Identity</h4>
+                                <p>Submit verification documents for safety approval</p>
+                                <div class="activity-time">Today</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Available Trips</h2>
+                        <a href="#" class="card-action">
+                            Browse All
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h3>No trips available</h3>
+                        <p>Check back soon for organized trips</p>
+                    </div>
+                </div>
+            </div>
+
+            {% if profile %}
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Profile Information</h2>
+                    <a href="#" class="card-action">
+                        Edit Profile
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
+                <div class="profile-grid">
+                    <div class="profile-item">
+                        <div class="profile-label">Full Name</div>
+                        <div class="profile-value">{{ user.first_name }} {{ user.last_name }}</div>
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-label">Email Address</div>
+                        <div class="profile-value">{{ user.email }}</div>
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-label">Location</div>
+                        <div class="profile-value">{{ profile.city }}, {{ profile.country }}</div>
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-label">Age</div>
+                        <div class="profile-value">{{ profile.age }} years</div>
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-label">Travel Style</div>
+                        <div class="profile-value">{{ profile.travel_style|title }}</div>
+                    </div>
+                    <div class="profile-item">
+                        <div class="profile-label">Languages</div>
+                        <div class="profile-value">{{ profile.languages|default:"Not specified" }}</div>
+                    </div>
+                    {% if profile.occupation %}
+                    <div class="profile-item">
+                        <div class="profile-label">Occupation</div>
+                        <div class="profile-value">{{ profile.occupation }}</div>
+                    </div>
+                    {% endif %}
+                    {% if profile.phone %}
+                    <div class="profile-item">
+                        <div class="profile-label">Phone Number</div>
+                        <div class="profile-value">{{ profile.phone }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="card" style="margin-top: 2rem;">
+                <div class="card-header">
+                    <h2 class="card-title">Safety Guidelines</h2>
+                    <a href="#" class="card-action">
+                        View All
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="safety-tips">
+                    <div class="safety-tip">
+                        <div class="safety-tip-icon">
+                            <i class="fas fa-user-check" style="color: var(--success);"></i>
+                        </div>
+                        <div class="safety-tip-content">
+                            <h4>Verify Before Meeting</h4>
+                            <p>Always check that your travel buddy is verified and has positive reviews</p>
+                        </div>
+                    </div>
+                    <div class="safety-tip">
+                        <div class="safety-tip-icon">
+                            <i class="fas fa-map-marker-alt" style="color: var(--info);"></i>
+                        </div>
+                        <div class="safety-tip-content">
+                            <h4>Share Your Location</h4>
+                            <p>Keep emergency contacts updated with your travel itinerary</p>
+                        </div>
+                    </div>
+                    <div class="safety-tip">
+                        <div class="safety-tip-icon">
+                            <i class="fas fa-phone-volume" style="color: var(--danger);"></i>
+                        </div>
+                        <div class="safety-tip-content">
+                            <h4>Emergency Support</h4>
+                            <p>24/7 SOS support available through the app for urgent situations</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <button class="sos-button" title="Emergency SOS">
+            <i class="fas fa-exclamation-triangle"></i>
+        </button>
+    </div>
+
+    <script>
+        document.querySelector('.sos-button').addEventListener('click', function() {
+            if(confirm('Are you in an emergency situation? This will alert our support team and your emergency contacts.')) {
+                alert('SOS Alert sent! Help is on the way. Stay safe!');
+            }
+        });
+    </script>
 </body>
 </html>
