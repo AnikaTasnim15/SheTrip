@@ -105,6 +105,9 @@ def dashboard_view(request):
     """
     Enhanced dashboard view with complete user and trip information
     """
+    if request.user.is_superuser:  # or request.user.is_staff
+        return redirect('admin:index')  # redirect admin to admin panel
+    
     try:
         profile = request.user.userprofile
     except UserProfile.DoesNotExist:
