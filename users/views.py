@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from .forms import LoginForm
+from .forms import LoginForm, UserProfileEditForm
 from django.contrib.auth.forms import UserCreationForm
 from .models import UserProfile
 from django.contrib.auth.models import User
@@ -10,17 +10,31 @@ from django.contrib.auth.decorators import login_required
 
 def login_view(request):
     if request.method == 'POST':
-        form = LoginForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
+        username_or_email = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        # Check if input is email or username
+        user = None
+        if '@' in username_or_email:
+            # Try to find user by email
+            try:
+                user_obj = User.objects.get(email=username_or_email)
+                user = authenticate(request, username=user_obj.username, password=password)
+            except User.DoesNotExist:
+                user = None
+        else:
+            # Authenticate with username
+            user = authenticate(request, username=username_or_email, password=password)
+        
+        if user is not None:
             login(request, user)
             messages.success(request, 'You have successfully logged in.')
             return redirect('dashboard')
         else:
-            messages.error(request, 'Invalid username or password.')
-    else:
-        form = LoginForm()
-    return render(request, 'users/login.html', {'form': form})
+            messages.error(request, 'Invalid username/email or password.')
+            return render(request, 'users/login.html')
+    
+    return render(request, 'users/login.html')
 
 
 def logout_view(request):
@@ -117,3 +131,34 @@ def dashboard_view(request):
     }
 
     return render(request, 'users/dashboard.html', context)
+
+
+@login_required
+def edit_profile_view(request):
+    try:
+        profile = request.user.userprofile
+    except UserProfile.DoesNotExist:
+        profile = UserProfile.objects.create(user=request.user)
+    
+    if request.method == 'POST':
+        form = UserProfileEditForm(request.POST, request.FILES, instance=profile, user=request.user)
+        
+        if form.is_valid():
+            # Update User model fields
+            user = request.user
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.email = form.cleaned_data['email']
+            user.save()
+            
+            # Update UserProfile
+            form.save()
+            
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('dashboard')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = UserProfileEditForm(instance=profile, user=request.user)
+    
+    return render(request, 'users/edit_profile.html', {'form': form, 'profile': profile})
