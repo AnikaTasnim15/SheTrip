@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Profile - SheTrip</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Cropper.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
     <style>
         * {
             margin: 0;
@@ -147,11 +149,7 @@
         }
 
         .file-input-wrapper input[type="file"] {
-            position: absolute;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
+            display: none;
         }
 
         .file-input-label {
@@ -172,11 +170,93 @@
             transform: translateY(-2px);
         }
 
-        .btn-group {
+        /* Cropper Modal */
+        .crop-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .crop-modal.active {
+            display: flex;
+        }
+
+        .crop-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 90%;
+            max-height: 90%;
+            width: 600px;
+        }
+
+        .crop-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .crop-header h3 {
+            font-size: 1.5rem;
+            color: #334155;
+            margin-bottom: 0.5rem;
+        }
+
+        .crop-header p {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .image-container {
+            max-height: 400px;
+            margin-bottom: 1.5rem;
+            background: #f1f5f9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .crop-controls {
             display: flex;
             gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .crop-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: #334155;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .crop-btn:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
+        .crop-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
         }
 
         .btn {
@@ -212,6 +292,22 @@
             background: #e2e8f0;
         }
 
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
         .messages {
             margin-bottom: 2rem;
         }
@@ -244,6 +340,29 @@
             margin-top: 0.25rem;
         }
 
+        .file-name {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .remove-picture-btn {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #fee2e2;
+            color: #991b1b;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .remove-picture-btn:hover {
+            background: #fecaca;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
@@ -269,10 +388,64 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .crop-container {
+                padding: 1.5rem;
+            }
+
+            .crop-controls {
+                flex-direction: column;
+            }
+
+            .crop-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Crop Modal -->
+    <div class="crop-modal" id="cropModal">
+        <div class="crop-container">
+            <div class="crop-header">
+                <h3><i class="fas fa-crop"></i> Adjust Your Photo</h3>
+                <p>Zoom, rotate, and position your image perfectly</p>
+            </div>
+            
+            <div class="image-container">
+                <img id="cropImage" src="" alt="Image to crop">
+            </div>
+
+            <div class="crop-controls">
+                <button type="button" class="crop-btn" onclick="cropper.zoom(0.1)">
+                    <i class="fas fa-search-plus"></i> Zoom In
+                </button>
+                <button type="button" class="crop-btn" onclick="cropper.zoom(-0.1)">
+                    <i class="fas fa-search-minus"></i> Zoom Out
+                </button>
+                <button type="button" class="crop-btn" onclick="cropper.rotate(90)">
+                    <i class="fas fa-redo"></i> Rotate Right
+                </button>
+                <button type="button" class="crop-btn" onclick="cropper.rotate(-90)">
+                    <i class="fas fa-undo"></i> Rotate Left
+                </button>
+                <button type="button" class="crop-btn" onclick="cropper.reset()">
+                    <i class="fas fa-sync"></i> Reset
+                </button>
+            </div>
+
+            <div class="crop-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeCropModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button type="button" class="btn btn-primary" onclick="applyCrop()">
+                    <i class="fas fa-check"></i> Apply
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <a href="{% url 'dashboard' %}" class="back-link">
             <i class="fas fa-arrow-left"></i>
@@ -295,24 +468,34 @@
         </div>
         {% endif %}
 
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" id="profileForm">
             {% csrf_token %}
 
             <div class="profile-picture-section">
-                {% if profile.profile_picture %}
-                    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="current-picture">
-                {% else %}
-                    <div class="avatar-placeholder">
-                        {{ user.first_name|first }}{{ user.last_name|first }}
-                    </div>
-                {% endif %}
+                <div id="imagePreview">
+                    {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" alt="Profile" class="current-picture" id="currentImage">
+                    {% else %}
+                        <div class="avatar-placeholder" id="avatarPlaceholder">
+                            {{ user.first_name|first }}{{ user.last_name|first }}
+                        </div>
+                    {% endif %}
+                </div>
+                
                 <div class="file-input-wrapper">
-                    {{ form.profile_picture }}
-                    <label class="file-input-label">
+                    <input type="file" name="profile_picture" id="profilePictureInput" accept="image/*">
+                    <input type="hidden" name="cropped_image" id="croppedImageInput">
+                    <label for="profilePictureInput" class="file-input-label">
                         <i class="fas fa-camera"></i>
                         Change Profile Picture
                     </label>
                 </div>
+                
+                <div id="fileName" class="file-name" style="display: none;"></div>
+                
+                <button type="button" id="removePictureBtn" class="remove-picture-btn" style="display: none;" onclick="removePicture()">
+                    <i class="fas fa-trash"></i> Remove Picture
+                </button>
             </div>
 
             <div class="form-grid">
@@ -413,5 +596,187 @@
             </div>
         </form>
     </div>
+
+    <!-- Cropper.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    
+    <script>
+        let cropper = null;
+        let originalImageSrc = document.getElementById('currentImage') ? document.getElementById('currentImage').src : null;
+        let croppedImageBlob = null;
+
+        // File input change handler
+        document.getElementById('profilePictureInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                // Validate file
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file');
+                    this.value = '';
+                    return;
+                }
+                
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image size should be less than 5MB');
+                    this.value = '';
+                    return;
+                }
+
+                // Show file name
+                document.getElementById('fileName').textContent = `Selected: ${file.name}`;
+                document.getElementById('fileName').style.display = 'block';
+
+                // Open cropper
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    openCropModal(event.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function openCropModal(imageSrc) {
+            const modal = document.getElementById('cropModal');
+            const image = document.getElementById('cropImage');
+            
+            image.src = imageSrc;
+            modal.classList.add('active');
+
+            // Destroy previous cropper if exists
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            // Initialize cropper
+            cropper = new Cropper(image, {
+                aspectRatio: 1,
+                viewMode: 2,
+                dragMode: 'move',
+                autoCropArea: 1,
+                restore: false,
+                guides: true,
+                center: true,
+                highlight: false,
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+                toggleDragModeOnDblclick: false,
+            });
+        }
+
+        function closeCropModal() {
+            const modal = document.getElementById('cropModal');
+            modal.classList.remove('active');
+            
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+
+            // Reset file input
+            document.getElementById('profilePictureInput').value = '';
+            document.getElementById('fileName').style.display = 'none';
+        }
+
+        function applyCrop() {
+            if (!cropper) return;
+
+            // Get cropped canvas
+            const canvas = cropper.getCroppedCanvas({
+                width: 400,
+                height: 400,
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'high',
+            });
+
+            // Convert to blob
+            canvas.toBlob(function(blob) {
+                croppedImageBlob = blob;
+                
+                // Create preview
+                const url = URL.createObjectURL(blob);
+                updateImagePreview(url);
+
+                // Convert blob to base64 and store in hidden input
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    document.getElementById('croppedImageInput').value = reader.result;
+                };
+                reader.readAsDataURL(blob);
+
+                closeCropModal();
+                
+                // Show remove button
+                document.getElementById('removePictureBtn').style.display = 'inline-block';
+            }, 'image/jpeg', 0.95);
+        }
+
+        function updateImagePreview(url) {
+            const previewDiv = document.getElementById('imagePreview');
+            previewDiv.innerHTML = `<img src="${url}" alt="Profile Preview" class="current-picture" id="currentImage">`;
+        }
+
+        function removePicture() {
+            // Clear inputs
+            document.getElementById('profilePictureInput').value = '';
+            document.getElementById('croppedImageInput').value = '';
+            document.getElementById('fileName').style.display = 'none';
+            document.getElementById('removePictureBtn').style.display = 'none';
+            croppedImageBlob = null;
+
+            // Restore original or placeholder
+            const previewDiv = document.getElementById('imagePreview');
+            if (originalImageSrc) {
+                previewDiv.innerHTML = `<img src="${originalImageSrc}" alt="Profile" class="current-picture" id="currentImage">`;
+            } else {
+                previewDiv.innerHTML = `<div class="avatar-placeholder">{{ user.first_name|first }}{{ user.last_name|first }}</div>`;
+            }
+        }
+
+        // Form validation
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            const firstName = document.getElementById('id_first_name').value.trim();
+            const lastName = document.getElementById('id_last_name').value.trim();
+            const email = document.getElementById('id_email').value.trim();
+
+            if (!firstName) {
+                e.preventDefault();
+                alert('First name is required');
+                document.getElementById('id_first_name').focus();
+                return;
+            }
+
+            if (!lastName) {
+                e.preventDefault();
+                alert('Last name is required');
+                document.getElementById('id_last_name').focus();
+                return;
+            }
+
+            if (!email) {
+                e.preventDefault();
+                alert('Email is required');
+                document.getElementById('id_email').focus();
+                return;
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                e.preventDefault();
+                alert('Please enter a valid email address');
+                document.getElementById('id_email').focus();
+                return;
+            }
+        });
+
+        // Auto-resize textareas
+        document.querySelectorAll('textarea').forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+            textarea.style.height = textarea.scrollHeight + 'px';
+        });
+    </script>
 </body>
 </html>
