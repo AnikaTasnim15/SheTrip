@@ -101,7 +101,8 @@ def register_view(request):
             interests=','.join(request.POST.getlist('interests')),
             dream_destinations=request.POST.get('dream_destinations', ''),
             bio=request.POST.get('bio', ''),
-            profile_picture=request.FILES.get('profile_picture')
+            profile_picture=request.FILES.get('profile_picture'),
+            verification_status='start_verification'
         )
 
         messages.success(request, "Account created successfully!")
