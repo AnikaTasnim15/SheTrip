@@ -332,7 +332,16 @@
         <h1 class="welcome-text">Welcome Back</h1>
         <p class="subtitle">Log in to continue your travel journey</p>
 
-        <!-- Error messages will be displayed here -->
+        <!-- Django messages from backend -->
+        {% if messages %}
+            <div class="errorlist">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- JavaScript validation messages -->
         <div class="errorlist" id="errorMessages" style="display: none;">
         </div>
 
@@ -359,7 +368,7 @@
                     <input type="checkbox" name="remember_me" style="margin-right: 0.5rem; transform: scale(1.2);">
                     Remember me
                 </label>
-                <a href="#" class="forgot-password" style="margin: 0;">Forgot password?</a>
+                <a href="{% url 'password_reset' %}" class="forgot-password" style="margin: 0;">Forgot password?</a>
             </div>
 
             <button type="submit" class="btn btn-primary">Log In</button>
@@ -438,6 +447,51 @@
 
     // Initialize floating hearts when page loads
     window.addEventListener('load', createFloatingHearts);
+</script>
+<script>
+    // Clear password field when page loads from cache (back button)
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            // Page was loaded from cache (back button was used)
+            document.getElementById('password').value = '';
+            document.getElementById('password').focus();
+            
+            // Don't clear username if "remember me" was checked
+            const rememberMe = localStorage.getItem('rememberMe');
+            if (!rememberMe) {
+                document.getElementById('username').value = '';
+            }
+        }
+    });
+    
+    // Load saved username if "remember me" was checked previously
+    window.addEventListener('load', function() {
+        const savedUsername = localStorage.getItem('savedUsername');
+        const rememberMe = localStorage.getItem('rememberMe');
+        
+        if (rememberMe === 'true' && savedUsername) {
+            document.getElementById('username').value = savedUsername;
+            document.querySelector('input[name="remember_me"]').checked = true;
+        }
+        
+        // Always clear password for security
+        document.getElementById('password').value = '';
+    });
+    
+    // Save username when form is submitted with "remember me" checked
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const rememberMe = document.querySelector('input[name="remember_me"]').checked;
+        const username = document.getElementById('username').value.trim();
+        if (username) {
+           if (rememberMe) {
+               localStorage.setItem('savedUsername', username);
+               localStorage.setItem('rememberMe', 'true');
+           } else {
+               localStorage.removeItem('savedUsername');
+               localStorage.removeItem('rememberMe');
+           }
+        }
+    }, true);
 </script>
 </body>
 </html>

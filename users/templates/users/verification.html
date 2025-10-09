@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Verification - SheTrip</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 25%, #4facfe 50%, #00f2fe 75%, #c471f5 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .status-pending {
+            background: rgba(251, 191, 36, 0.2);
+            border: 2px solid #fbbf24;
+            color: #fef3c7;
+        }
+
+        .status-verified {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid #10b981;
+            color: #d1fae5;
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+            color: #fecaca;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #ff6b9d;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .upload-text {
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .file-name {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #d1fae5;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1.2rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            color: white;
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .back-link {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .back-link a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #ff6b9d;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px solid #3b82f6;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: #dbeafe;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-box li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .info-box li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        .messages {
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid #ef4444;
+            border-radius: 15px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: #fecaca;
+        }
+
+        .messages.success {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #d1fae5;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">SheTrip</div>
+        <h1 class="title">Account Verification</h1>
+        <p class="subtitle">Upload your NID for identity verification</p>
+
+        <div style="text-align: center;">
+            {% if profile.verification_status == 'pending' %}
+                <span class="status-badge status-pending">⏳ Verification Pending</span>
+            {% elif profile.verification_status == 'verified' %}
+                <span class="status-badge status-verified">✅ Verified Account</span>
+            {% elif profile.verification_status == 'rejected' %}
+                <span class="status-badge status-rejected">❌ Verification Rejected</span>
+            {% endif %}
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="messages {% if message.tags %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if profile.verification_status == 'verified' %}
+            <div class="info-box">
+                <h3>🎉 Your account is verified!</h3>
+                <p style="opacity: 0.9; margin-top: 0.5rem;">You can now access all features including organized trips and travel buddy connections.</p>
+            </div>
+        {% elif profile.verification_status == 'pending' and profile.nid_front %}
+            <div class="info-box">
+                <h3>📋 Documents Submitted</h3>
+                <p style="opacity: 0.9; margin-top: 0.5rem;">Your verification documents are under review. This usually takes 24-48 hours. You'll be notified once approved.</p>
+            </div>
+        {% elif profile.verification_status == 'rejected' %}
+            <div class="info-box" style="background: rgba(239, 68, 68, 0.2); border-color: #ef4444;">
+                <h3>❌ Verification Rejected</h3>
+                <p style="opacity: 0.9; margin-top: 0.5rem;">Your verification was not approved. Please upload clear, valid ID images and try again.</p>
+            </div>
+            
+            <form method="post" enctype="multipart/form-data" id="verificationForm">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label>NID Front Side</label>
+                    <div class="upload-area" onclick="document.getElementById('nid_front').click()">
+                        <div class="upload-icon">📄</div>
+                        <div class="upload-text">Click to upload NID front side</div>
+                        <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
+                        <input type="file" id="nid_front" name="nid_front" accept="image/jpeg,image/jpg,image/png" required>
+                        <div class="file-name" id="front-name" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>NID Back Side</label>
+                    <div class="upload-area" onclick="document.getElementById('nid_back').click()">
+                        <div class="upload-icon">📄</div>
+                        <div class="upload-text">Click to upload NID back side</div>
+                        <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
+                        <input type="file" id="nid_back" name="nid_back" accept="image/jpeg,image/jpg,image/png" required>
+                        <div class="file-name" id="back-name" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">Resubmit for Verification</button>
+            </form>
+        {% else %}
+            <div class="info-box">
+                <h3>📋 Requirements</h3>
+                <ul>
+                    <li>Clear photo of your National ID (NID) - Front side</li>
+                    <li>Clear photo of your National ID (NID) - Back side</li>
+                    <li>Accepted formats: JPG, JPEG, PNG</li>
+                    <li>Maximum file size: 5MB each</li>
+                    <li>Verification takes 24-48 hours</li>
+                </ul>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" id="verificationForm">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label>NID Front Side</label>
+                    <label class="upload-area" for="nid_front" style="cursor:pointer;">
+                        <div class="upload-icon">📄</div>
+                        <div class="upload-text">Click to upload NID front side</div>
+                        <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
+                        <input type="file" id="nid_front" name="nid_front" accept="image/jpeg,image/jpg,image/png" required style="display:none;">
+                        <div class="file-name" id="front-name" style="display: none;"></div>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>NID Back Side</label>
+                    <label class="upload-area" for="nid_back" style="cursor:pointer;">
+                        <div class="upload-icon">📄</div>
+                        <div class="upload-text">Click to upload NID back side</div>
+                        <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
+                        <input type="file" id="nid_back" name="nid_back" accept="image/jpeg,image/jpg,image/png" required style="display:none;">
+                        <div class="file-name" id="back-name" style="display: none;"></div>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn">Submit for Verification</button>
+            </form>
+        {% endif %}
+
+        <div class="back-link">
+            <a href="{% url 'dashboard' %}">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('nid_front')?.addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            const nameDiv = document.getElementById('front-name');
+            if (fileName) {
+                nameDiv.textContent = '✓ ' + fileName;
+                nameDiv.style.display = 'block';
+            }
+        });
+
+        document.getElementById('nid_back')?.addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            const nameDiv = document.getElementById('back-name');
+            if (fileName) {
+                nameDiv.textContent = '✓ ' + fileName;
+                nameDiv.style.display = 'block';
+            }
+        });
+
+        // Prevent form resubmission
+        document.getElementById('verificationForm')?.addEventListener('submit', function() {
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Uploading...';
+            }
+        });
+    </script>
+</body>
+</html>

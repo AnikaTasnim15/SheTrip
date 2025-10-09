@@ -848,7 +848,7 @@
                 <div class="nav-section">
                     <div class="nav-label">Account</div>
                     <div class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{% url 'verification' %}" class="nav-link">
                             <i class="fas fa-check-circle nav-icon"></i>
                             <span>Verification</span>
                         </a>
@@ -936,20 +936,58 @@
                     </a>
                 </div>
             </div>
-
-            <div class="alert-card">
-                <div class="alert-icon">
-                    <i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>
-                </div>
-                <div class="alert-content">
-                    <div class="alert-title">Account Verification Required</div>
-                    <p class="alert-text">Complete your identity verification to join organized trips and connect with travel buddies. Upload your ID document and selfie for admin approval.</p>
-                    <a href="#" class="btn btn-primary btn-sm">
-                        <i class="fas fa-check-circle"></i>
-                        Start Verification
-                    </a>
-                </div>
+            
+            {% if profile %}
+    {% if profile.verification_status == 'verified' %}
+        <div class="alert-card success">
+            <div class="alert-icon">
+                <i class="fas fa-check-circle" style="color: var(--success);"></i>
             </div>
+            <div class="alert-content">
+                <div class="alert-title">✅ Account Verified!</div>
+                <p class="alert-text">Your account is verified. You can now join organized trips and connect with verified travel buddies.</p>
+            </div>
+        </div>
+    {% elif profile.verification_status == 'pending' %}
+        <div class="alert-card info">
+            <div class="alert-icon">
+                <i class="fas fa-clock" style="color: var(--info);"></i>
+            </div>
+            <div class="alert-content">
+                <div class="alert-title">⏳ Verification Pending</div>
+                <p class="alert-text">Your verification documents are under review. This usually takes 24-48 hours. We'll notify you once approved.</p>
+            </div>
+        </div>
+    {% elif profile.verification_status == 'rejected' %}
+        <div class="alert-card" style="background: linear-gradient(135deg, #fee2e2, #fecaca); border-left-color: var(--danger);">
+            <div class="alert-icon">
+                <i class="fas fa-times-circle" style="color: var(--danger);"></i>
+            </div>
+            <div class="alert-content">
+                <div class="alert-title">❌ Verification Rejected</div>
+                <p class="alert-text">Your verification was not approved. Please check your documents and try again with clear, valid ID images.</p>
+                <a href="{% url 'verification' %}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-redo"></i>
+                    Try Again
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert-card">
+            <div class="alert-icon">
+                <i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>
+            </div>
+            <div class="alert-content">
+                <div class="alert-title">Account Verification Required</div>
+                <p class="alert-text">Complete your identity verification to join organized trips and connect with travel buddies. Upload your ID document and selfie for admin approval.</p>
+                <a href="{% url 'verification' %}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-check-circle"></i>
+                    Start Verification
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
 
             <div class="stats-grid">
                 <div class="stat-card">
@@ -1050,7 +1088,7 @@
                             </div>
                             <h4>Browse Organized Trips</h4>
                         </a>
-                        <a href="#" class="action-card">
+                        <a href="{% url 'verification' %}" class="action-card">
                             <div class="action-icon">
                                 <i class="fas fa-check-circle"></i>
                             </div>
