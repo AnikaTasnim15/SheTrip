@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Travel Buddies - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-light: #a78bfa;
+            --secondary: #ec4899;
+            --secondary-dark: #db2777;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --dark: #1e293b;
+            --dark-light: #334155;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 6px 12px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .brand {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .user-card {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .user-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .nav {
+            padding: 1.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-label {
+            padding: 0 1.5rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray-400);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.08) 0%, transparent 100%);
+            color: var(--primary);
+            border-right: 3px solid var(--primary);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            color: currentColor;
+        }
+
+        .badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.125rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            background: var(--gray-50);
+        }
+
+        .page-header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+        }
+
+        .search-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .search-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-header h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .form-control {
+            padding: 0.75rem 1rem;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            border: 1.5px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(124, 58, 237, 0.02);
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-count {
+            font-size: 0.95rem;
+            color: var(--gray-600);
+        }
+
+        .results-count strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .sort-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sort-dropdown select {
+            padding: 0.5rem 1rem;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .buddy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .buddy-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .buddy-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .buddy-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .buddy-card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+            transform: translateY(-4px);
+        }
+
+        .buddy-header {
+            display: flex;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .buddy-avatar-large {
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: var(--white);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .verified-badge {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            width: 24px;
+            height: 24px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--white);
+        }
+
+        .buddy-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .buddy-location {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            color: var(--gray-600);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .compatibility-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(236, 72, 153, 0.1));
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .trip-destination-box {
+            background: var(--gray-50);
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+            border-left: 3px solid var(--primary);
+        }
+
+        .trip-destination-box h4 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .trip-dates-text {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .trip-meta-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .trip-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--gray-600);
+        }
+
+        .trip-meta-item i {
+            color: var(--primary);
+        }
+
+        .buddy-bio {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.25rem;
+        }
+
+        .buddy-bio p {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        .buddy-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .tag {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .buddy-actions {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.75rem;
+        }
+
+        .match-percentage {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            color: var(--gray-300);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--gray-900);
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .buddy-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-400);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">SheTrip</div>
+                <div class="user-card">
+                    <div class="user-avatar">
+                        {% if user.first_name and user.last_name %}
+                            {{ user.first_name|first }}{{ user.last_name|first }}
+                        {% else %}
+                            {{ user.username|first }}
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+                        <p>{% if profile %}{{ profile.city }}{% else %}Traveler{% endif %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <div class="nav-section">
+                    <div class="nav-label">Main Menu</div>
+                    <div class="nav-item">
+                        <a href="{% url 'dashboard' %}" class="nav-link">
+                            <i class="fas fa-th-large nav-icon"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="{% url 'my_trips' %}" class="nav-link">
+                            <i class="fas fa-map-marked-alt nav-icon"></i>
+                            <span>My Trips</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="{% url 'find_buddies' %}" class="nav-link active">
+                            <i class="fas fa-search nav-icon"></i>
+                            <span>Find Buddies</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="{% url 'organized_trips' %}" class="nav-link">
+                            <i class="fas fa-calendar-alt nav-icon"></i>
+                            <span>Organized Trips</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-label">Communication</div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-comments nav-icon"></i>
+                            <span>Messages</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-bell nav-icon"></i>
+                            <span>Notifications</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-label">Account</div>
+                    <div class="nav-item">
+                        <a href="{% url 'verification' %}" class="nav-link">
+                            <i class="fas fa-check-circle nav-icon"></i>
+                            <span>Verification</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-user-circle nav-icon"></i>
+                            <span>My Profile</span>
+                        </a>
+                    </div>
+                    <div class="nav-item">
+                        <a href="{% url 'logout' %}" class="nav-link">
+                            <i class="fas fa-sign-out-alt nav-icon"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Find Travel Buddies</h1>
+                <p class="page-subtitle">Discover verified women travelers heading to similar destinations</p>
+            </div>
+
+            <div class="search-section">
+                <div class="search-header">
+                    <i class="fas fa-filter" style="color: var(--primary); font-size: 1.5rem;"></i>
+                    <h3>Search & Filter</h3>
+                </div>
+                <form method="GET" action="{% url 'find_buddies' %}" class="search-form">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Destination
+                        </label>
+                        {{ form.destination }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-calendar"></i>
+                            Start Date (From)
+                        </label>
+                        {{ form.start_date }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-wallet"></i>
+                            Budget Range
+                        </label>
+                        {{ form.budget_range }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-flag"></i>
+                            Travel Purpose
+                        </label>
+                        {{ form.purpose }}
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-search"></i>
+                            Search Travel Plans
+                        </button>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                        <a href="{% url 'find_buddies' %}" class="btn btn-outline btn-full">
+                            <i class="fas fa-redo"></i>
+                            Clear Filters
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="results-header">
+                <div class="results-count">
+                    Found <strong>{{ travel_plans.count }}</strong> travel plan{{ travel_plans.count|pluralize }} matching your search
+                </div>
+                <div class="sort-dropdown">
+                    <label style="font-size: 0.85rem; color: var(--gray-600);">Sort by:</label>
+                    <select id="sortSelect">
+                        <option value="date">Departure Date</option>
+                        <option value="compatibility">Best Match</option>
+                        <option value="budget">Budget</option>
+                        <option value="recent">Recently Posted</option>
+                    </select>
+                </div>
+            </div>
+
+            {% if travel_plans %}
+            <div class="buddy-grid">
+                {% for plan in travel_plans %}
+                <div class="buddy-card">
+                    <div class="match-percentage">
+                        {{ plan.compatibility_score|default:"85" }}%
+                    </div>
+
+                    <div class="buddy-header">
+                        <div class="buddy-avatar-large">
+                            {{ plan.user.first_name|first }}{{ plan.user.last_name|first }}
+                            {% if plan.user.profile.is_verified %}
+                            <div class="verified-badge">
+                                <i class="fas fa-check" style="color: white; font-size: 0.7rem;"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="buddy-info">
+                            <h3>{{ plan.user.first_name }} {{ plan.user.last_name|first }}.</h3>
+                            <div class="buddy-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                {% if plan.user.profile %}{{ plan.user.profile.city }}, {{ plan.user.profile.country }}{% else %}Bangladesh{% endif %}
+                            </div>
+                            <div class="compatibility-score">
+                                <i class="fas fa-heart"></i>
+                                High Match
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trip-destination-box">
+                        <h4>
+                            <i class="fas fa-location-dot"></i>
+                            {{ plan.destination }}
+                        </h4>
+                        <div class="trip-dates-text">
+                            <i class="fas fa-calendar-alt"></i>
+                            {{ plan.start_date|date:"M d" }} - {{ plan.end_date|date:"M d, Y" }}
+                            <span style="color: var(--gray-400);">•</span>
+                            {{ plan.duration_days }} day{{ plan.duration_days|pluralize }}
+                        </div>
+                        <div class="trip-meta-row">
+                            <div class="trip-meta-item">
+                                <i class="fas fa-flag"></i>
+                                {{ plan.get_purpose_display }}
+                            </div>
+                            <div class="trip-meta-item">
+                                <i class="fas fa-wallet"></i>
+                                {{ plan.get_budget_range_display }}
+                            </div>
+                            <div class="trip-meta-item">
+                                <i class="fas fa-users"></i>
+                                Max {{ plan.max_participants }} travelers
+                            </div>
+                            <div class="trip-meta-item">
+                                <i class="fas fa-clock"></i>
+                                Posted {{ plan.created_at|timesince }} ago
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if plan.description %}
+                    <div class="buddy-bio">
+                        <p>{{ plan.description|truncatewords:30 }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if plan.user.profile %}
+                    <div class="buddy-tags">
+                        {% if plan.user.profile.travel_style %}
+                        <span class="tag">
+                            <i class="fas fa-hiking"></i> {{ plan.user.profile.travel_style|title }}
+                        </span>
+                        {% endif %}
+                        {% if plan.user.profile.age %}
+                        <span class="tag">
+                            <i class="fas fa-birthday-cake"></i> {{ plan.user.profile.age }} years
+                        </span>
+                        {% endif %}
+                        {% if plan.user.profile.languages %}
+                        <span class="tag">
+                            <i class="fas fa-language"></i> {{ plan.user.profile.languages }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <div class="buddy-actions">
+                        <a href="{% url 'travel_plan_detail' plan.plan_id %}" class="btn btn-primary">
+                            <i class="fas fa-info-circle"></i>
+                            View Details
+                        </a>
+                        <a href="#" class="btn btn-outline">
+                            <i class="fas fa-comment"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>No Travel Plans Found</h3>
+                <p>We couldn't find any travel plans matching your search criteria. Try adjusting your filters or create your own travel plan to find buddies!</p>
+                <a href="{% url 'create_travel_plan' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Create Your Travel Plan
+                </a>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('sortSelect').addEventListener('change', function() {
+            console.log('Sorting by:', this.value);
+        });
+    </script>
+</body>
+</html>
