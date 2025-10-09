@@ -8,11 +8,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.views import PasswordResetView
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.urls import reverse_lazy
 from django.urls import reverse
 
+@ensure_csrf_cookie
 @never_cache
 def login_view(request):
+    # Redirect authenticated users away from login page
+    if request.user.is_authenticated:
+        return redirect('dashboard')
     if request.method == 'POST':
         username_or_email = request.POST.get('username')
         password = request.POST.get('password')

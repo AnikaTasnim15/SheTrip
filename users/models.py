@@ -17,13 +17,14 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(upload_to='profiles/', blank=True, null=True)
     
     verification_status = models.CharField(
-    max_length=20, 
-    choices=[
-        ('pending', 'Pending'),
-        ('verified', 'Verified'),
-        ('rejected', 'Rejected'),
-    ],
-    default='pending'
+        max_length=20,
+        choices=[
+            ('start_verification', 'Start Verification'),
+            ('pending', 'Pending'),
+            ('verified', 'Verified'),
+            ('rejected', 'Rejected'),
+        ],
+        default='start_verification'
     )
     nid_front = models.ImageField(upload_to='verification/nid_front/', blank=True, null=True)
     nid_back = models.ImageField(upload_to='verification/nid_back/', blank=True, null=True)

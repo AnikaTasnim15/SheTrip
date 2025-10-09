@@ -972,7 +972,7 @@
                 </a>
             </div>
         </div>
-    {% else %}
+    {% elif profile.verification_status == 'start_verification' %}
         <div class="alert-card">
             <div class="alert-icon">
                 <i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>
@@ -983,6 +983,20 @@
                 <a href="{% url 'verification' %}" class="btn btn-primary btn-sm">
                     <i class="fas fa-check-circle"></i>
                     Start Verification
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert-card info">
+            <div class="alert-icon">
+                <i class="fas fa-info-circle" style="color: var(--info);"></i>
+            </div>
+            <div class="alert-content">
+                <div class="alert-title">Verification Status</div>
+                <p class="alert-text">Your current verification status is: {{ profile.verification_status|title }}</p>
+                <a href="{% url 'verification' %}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-check-circle"></i>
+                    Manage Verification
                 </a>
             </div>
         </div>

@@ -345,7 +345,7 @@
         <div class="errorlist" id="errorMessages" style="display: none;">
         </div>
 
-        <form method="post" id="loginForm">
+        <form method="post" id="loginForm" autocomplete="off">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username or Email</label>
@@ -449,18 +449,17 @@
     window.addEventListener('load', createFloatingHearts);
 </script>
 <script>
-    // Clear password field when page loads from cache (back button)
+    // If page is restored from bfcache, reload to refresh CSRF token
     window.addEventListener('pageshow', function(event) {
-        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-            // Page was loaded from cache (back button was used)
-            document.getElementById('password').value = '';
-            document.getElementById('password').focus();
-            
-            // Don't clear username if "remember me" was checked
-            const rememberMe = localStorage.getItem('rememberMe');
-            if (!rememberMe) {
-                document.getElementById('username').value = '';
-            }
+        if (event.persisted) {
+            window.location.reload();
+            return;
+        }
+        // Otherwise clear password and optionally username
+        document.getElementById('password').value = '';
+        const rememberMe = localStorage.getItem('rememberMe');
+        if (!rememberMe) {
+            document.getElementById('username').value = '';
         }
     });
     

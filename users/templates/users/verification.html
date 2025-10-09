@@ -253,7 +253,9 @@
         <p class="subtitle">Upload your NID for identity verification</p>
 
         <div style="text-align: center;">
-            {% if profile.verification_status == 'pending' %}
+            {% if profile.verification_status == 'start_verification' %}
+                <span class="status-badge" style="background: rgba(59,130,246,0.2); border: 2px solid #3b82f6; color: #dbeafe;">Start Verification</span>
+            {% elif profile.verification_status == 'pending' %}
                 <span class="status-badge status-pending">⏳ Verification Pending</span>
             {% elif profile.verification_status == 'verified' %}
                 <span class="status-badge status-verified">✅ Verified Account</span>
