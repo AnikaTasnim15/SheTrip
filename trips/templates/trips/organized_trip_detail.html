@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ trip.trip_name }} - SheTrip{% endblock %}
+
+{% block content %}
+<div class="container">
+    <a href="{% url 'trips:organized_trips' %}">← Back to Trips</a>
+
+    <h1>{{ trip.trip_name }}</h1>
+    <p>{{ trip.destination }} — {{ trip.departure_time|date:"M d, Y H:i" }}</p>
+
+    <h3>Itinerary</h3>
+    <div>{{ trip.itinerary|linebreaks }}</div>
+
+    <h3>Participants ({{ trip.total_participants }})</h3>
+    <ul>
+        {% for p in participants %}
+        <li>{{ p.user.first_name }} {{ p.user.last_name }}</li>
+        {% empty %}
+        <li>No participants yet</li>
+        {% endfor %}
+    </ul>
+
+    {% if not is_participant and trip.available_slots > 0 and trip.trip_status in ['open', 'confirmed'] %}
+    <a href="{% url 'trips:join_organized_trip' trip.trip_id %}" class="btn btn-primary">Join Trip</a>
+    {% endif %}
+</div>
+{% endblock %}

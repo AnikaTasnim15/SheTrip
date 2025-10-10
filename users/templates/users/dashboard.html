@@ -917,6 +917,20 @@
             </nav>
         </aside>
 
+                <!-- Upcoming Organized Trips -->
+                <div class="main-card">
+                    <h3 style="margin-bottom:0.75rem">Upcoming Organized Trips</h3>
+                    <div style="display:grid; gap:0.75rem; margin-top:0.75rem">
+                        {% for trip in upcoming_organized_trips %}
+                        <a href="{% url 'trips:organized_trip_detail' trip.trip_id %}" style="display:block; padding:0.75rem; background:#fff; border:1px solid #eee; border-radius:8px; text-decoration:none; color:inherit">
+                            <div style="font-weight:700">{{ trip.trip_name }}</div>
+                            <div style="font-size:0.9rem; color:#666">{{ trip.destination }} — {{ trip.departure_time|date:"M j, Y H:i" }}</div>
+                        </a>
+                        {% empty %}
+                        <div style="padding:0.75rem; background:#fff; border:1px solid #eee; border-radius:8px; color:#666">No upcoming organized trips.</div>
+                        {% endfor %}
+                    </div>
+                </div>
         <main class="main-content">
             <div class="topbar">
                 <div class="topbar-left">

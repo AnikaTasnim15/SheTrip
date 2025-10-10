@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Safety Guidelines - SheTrip{% endblock %}
+{% block content %}
+  <div class="card">
+    <h1 style="margin:0 0 0.5rem 0">Safety Guidelines</h1>
+    <p class="muted">Helpful pages and quick actions to keep you safe when meeting other travelers.</p>
+    <div style="margin-top:1rem">
+      <a class="btn" href="{% url 'safety:verify_before_meeting' %}">Verify Before Meeting</a>
+      <a class="btn-outline" href="{% url 'safety:share_location' %}">Share Your Location</a>
+      <a class="btn-outline" href="{% url 'safety:emergency_support' %}">Emergency Support</a>
+    </div>
+  </div>
+{% endblock %}

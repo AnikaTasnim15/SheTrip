@@ -129,11 +129,25 @@ def travel_plan_detail_view(request, plan_id):
 
 @login_required
 def organized_trips_view(request):
-    """View all available organized trips"""
+    """View all available organized trips with filters"""
     # Get active organized trips with available slots
     organized_trips = OrganizedTrip.objects.filter(
-        trip_status__in=['open', 'confirmed']
-    ).select_related('driver').order_by('departure_time')
+        trip_status__in=['open', 'confirmed', 'ongoing']
+    ).select_related('driver', 'travel_plan').order_by('departure_time')
+    
+    # Apply filters from GET parameters
+    destination = request.GET.get('destination')
+    status = request.GET.get('status')
+    date_from = request.GET.get('date_from')
+    
+    if destination:
+        organized_trips = organized_trips.filter(destination__icontains=destination)
+    
+    if status:
+        organized_trips = organized_trips.filter(trip_status=status)
+    
+    if date_from:
+        organized_trips = organized_trips.filter(departure_time__gte=date_from)
     
     # Check which trips the user has already joined
     user_trip_ids = TripParticipant.objects.filter(
@@ -145,7 +159,6 @@ def organized_trips_view(request):
         'user_trip_ids': list(user_trip_ids),
     }
     return render(request, 'trips/organized_trips.html', context)
-
 
 @login_required
 def organized_trip_detail_view(request, trip_id):

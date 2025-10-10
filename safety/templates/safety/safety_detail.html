@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ report.title }} - Safety Report{% endblock %}
+
+{% block content %}
+  <div class="card">
+    <p><a href="{% url 'safety:safety_list' %}">← Back to reports</a></p>
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <h1 style="margin:0">{{ report.title }}</h1>
+        <p class="muted" style="margin:0">{{ report.created_at|date:"M d, Y H:i" }}{% if report.reporter %} — {{ report.reporter }}{% endif %}</p>
+      </div>
+      <div>
+        {% if report.resolved %}
+          <span class="badge" style="background:#10b981;color:#fff;padding:0.35rem 0.6rem;border-radius:4px">Resolved</span>
+        {% else %}
+          <span class="badge" style="background:#f59e0b;color:#fff;padding:0.35rem 0.6rem;border-radius:4px">Open</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <div style="margin-top:1rem">
+      <div class="card">{{ report.description|linebreaks }}</div>
+    </div>
+
+    {% if user.is_staff %}
+      <form method="post" action="" style="margin-top:1rem;">
+        {% csrf_token %}
+        {% if not report.resolved %}
+          <button class="btn" formaction="">Mark resolved</button>
+        {% else %}
+          <button class="btn-outline" formaction="">Mark unresolved</button>
+        {% endif %}
+      </form>
+    {% endif %}
+  </div>
+{% endblock %}

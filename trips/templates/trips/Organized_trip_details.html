@@ -1,0 +1,648 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ trip.trip_name }} - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-light: #a78bfa;
+            --secondary: #ec4899;
+            --secondary-dark: #db2777;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 6px 12px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            transition: all 0.2s;
+        }
+
+        .back-button:hover {
+            gap: 0.75rem;
+        }
+
+        .trip-header {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .trip-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .trip-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .trip-destination {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            font-size: 1.1rem;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-open { background: #d1fae5; color: #065f46; }
+        .status-confirmed { background: #dbeafe; color: #1e40af; }
+        .status-ongoing { background: #fef3c7; color: #92400e; }
+        .status-completed { background: #e0e7ff; color: #3730a3; }
+
+        .trip-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .meta-item {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .meta-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+        }
+
+        .icon-purple {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(167, 139, 250, 0.15));
+            color: var(--primary);
+        }
+
+        .icon-pink {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(249, 168, 212, 0.15));
+            color: var(--secondary);
+        }
+
+        .icon-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(167, 243, 208, 0.15));
+            color: var(--success);
+        }
+
+        .icon-blue {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(191, 219, 254, 0.15));
+            color: var(--info);
+        }
+
+        .meta-content {
+            flex: 1;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .info-icon {
+            color: var(--primary);
+            width: 20px;
+            margin-top: 0.25rem;
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .info-text {
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        .price-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .price-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-amount {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-note {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .participants-list {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .participant-item {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .participant-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .participant-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .participant-info p {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #dc2626;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .action-buttons {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+            border-left: 4px solid var(--warning);
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid var(--info);
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid var(--success);
+        }
+
+        .itinerary-section {
+            background: var(--gray-50);
+            padding: 1.5rem;
+            border-radius: 10px;
+            white-space: pre-line;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 968px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .trip-title {
+                font-size: 1.5rem;
+            }
+
+            .price-amount {
+                font-size: 2.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'organized_trips' %}" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Back to All Trips
+        </a>
+
+        <div class="trip-header">
+            <div class="trip-header-top">
+                <div>
+                    <h1 class="trip-title">{{ trip.trip_name }}</h1>
+                    <div class="trip-destination">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{ trip.destination }}</span>
+                    </div>
+                </div>
+                <div class="status-badge status-{{ trip.trip_status }}">
+                    {{ trip.get_trip_status_display }}
+                </div>
+            </div>
+
+            <div class="trip-meta">
+                <div class="meta-item">
+                    <div class="meta-icon icon-purple">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="meta-content">
+                        <div class="meta-label">Departure</div>
+                        <div class="meta-value">{{ trip.departure_time|date:"M d, Y" }}</div>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-icon icon-pink">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="meta-content">
+                        <div class="meta-label">Return</div>
+                        <div class="meta-value">{{ trip.return_time|date:"M d, Y" }}</div>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-icon icon-green">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="meta-content">
+                        <div class="meta-label">Participants</div>
+                        <div class="meta-value">{{ trip.total_participants }} joined</div>
+                    </div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-icon icon-blue">
+                        <i class="fas fa-chair"></i>
+                    </div>
+                    <div class="meta-content">
+                        <div class="meta-label">Available Slots</div>
+                        <div class="meta-value">{{ available_slots }} left</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas fa-info-circle"></i>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="grid-2">
+            <div>
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-info-circle"></i>
+                        Trip Details
+                    </h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-car info-icon"></i>
+                            <div class="info-content">
+                                <div class="info-label">Transportation</div>
+                                <div class="info-text">{{ trip.transportation_details|default:"Details will be provided soon" }}</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-bed info-icon"></i>
+                            <div class="info-content">
+                                <div class="info-label">Accommodation</div>
+                                <div class="info-text">{{ trip.accommodation_details|default:"Details will be provided soon" }}</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-utensils info-icon"></i>
+                            <div class="info-content">
+                                <div class="info-label">Meal Arrangements</div>
+                                <div class="info-text">{{ trip.meal_arrangements|default:"Details will be provided soon" }}</div>
+                            </div>
+                        </div>
+                        {% if trip.driver %}
+                        <div class="info-item">
+                            <i class="fas fa-user-tie info-icon"></i>
+                            <div class="info-content">
+                                <div class="info-label">Assigned Driver</div>
+                                <div class="info-text">
+                                    {{ trip.driver.name }} - {{ trip.driver.vehicle_details }}
+                                    <br>Rating: ⭐ {{ trip.driver.rating }}/5.0
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if trip.itinerary %}
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-route"></i>
+                        Itinerary
+                    </h2>
+                    <div class="itinerary-section">{{ trip.itinerary }}</div>
+                </div>
+                {% endif %}
+
+                <div class="card">
+                    <h2 class="card-title">
+                        <i class="fas fa-users"></i>
+                        Participants ({{ participants.count }})
+                    </h2>
+                    {% if participants %}
+                        <div class="participants-list">
+                            {% for participant in participants %}
+                                <div class="participant-item">
+                                    <div class="participant-avatar">
+                                        {{ participant.user.first_name|first }}{{ participant.user.last_name|first }}
+                                    </div>
+                                    <div class="participant-info">
+                                        <h4>{{ participant.user.first_name }} {{ participant.user.last_name }}</h4>
+                                        <p>Joined {{ participant.join_date|date:"M d, Y" }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="color: var(--gray-500); text-align: center; padding: 2rem;">No participants yet. Be the first to join!</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div>
+                <div class="price-card">
+                    <div class="price-label">Price Per Person</div>
+                    <div class="price-amount">৳{{ trip.final_cost_per_person|floatformat:0 }}</div>
+                    <div class="price-note">All expenses included</div>
+                </div>
+
+                <div class="card">
+                    <h3 class="section-title">Trip Actions</h3>
+                    
+                    {% if not is_participant %}
+                        {% if available_slots > 0 and trip.trip_status in 'open,confirmed' %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                <span>You can join this trip. {{ available_slots }} slots remaining!</span>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="{% url 'join_organized_trip' trip.trip_id %}" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                    Join This Trip
+                                </a>
+                            </div>
+                        {% elif available_slots <= 0 %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>This trip is fully booked.</span>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>This trip is not accepting registrations.</span>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i>
+                            <span>You have joined this trip!</span>
+                        </div>
+                        <div class="action-buttons">
+                            <form method="post" action="{% url 'leave_organized_trip' trip.trip_id %}" onsubmit="return confirm('Are you sure you want to leave this trip?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-times"></i>
+                                    Leave Trip
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="card">
+                    <h3 class="section-title">Safety Features</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-shield-alt info-icon"></i>
+                            <div class="info-content">
+                                <div class="info-label">Verified Driver</div>
+                                <div class="info-text">All drivers are background checked</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-location-arrow info-icon"></i>
+                            <div class="info-content">
+                                <div class="info-label">GPS Tracking</div>
+                                <div class="info-text">Real-time location monitoring</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone-alt info-icon"></i>
+                            <div class="info-content">
+                                <div class="info-label">24/7 Support</div>
+                                <div class="info-text">Emergency assistance available</div>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-user-check info-icon"></i>
+                            <div class="info-content">
+                                <div class="info-label">Verified Travelers</div>
+                                <div class="info-text">All participants are verified</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

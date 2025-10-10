@@ -131,7 +131,9 @@ def dashboard_view(request):
         'completed_trips_count': 0,
         'travel_buddies_count': 0,
         'user_rating': 'New',
+        # Pull upcoming organized trips (few) to show on dashboard
         'upcoming_trips': [],
+        'upcoming_organized_trips': [],
         'recent_activities': [
             {
                 'icon': '🎉',
@@ -141,6 +143,16 @@ def dashboard_view(request):
             }
         ]
     }
+
+    # Lazy import to avoid circular imports at top-level
+    try:
+        from trips.models import OrganizedTrip
+        upcoming = OrganizedTrip.objects.filter(trip_status__in=['open', 'confirmed']).order_by('departure_time')[:3]
+        context['upcoming_organized_trips'] = upcoming
+        context['upcoming_trips_count'] = upcoming.count()
+    except Exception:
+        # If trips app not available or DB issue, keep defaults
+        pass
 
     return render(request, 'users/dashboard.html', context)
 

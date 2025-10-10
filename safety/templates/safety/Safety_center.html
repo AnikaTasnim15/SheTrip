@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Center - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-600: #475569;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header p {
+            opacity: 0.95;
+            font-size: 1.05rem;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.75rem;
+            border: 2px solid var(--gray-200);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .action-card.danger:hover {
+            border-color: var(--danger);
+        }
+
+        .action-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .icon-danger {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.15));
+            color: var(--danger);
+        }
+
+        .icon-info {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(191, 219, 254, 0.15));
+            color: var(--info);
+        }
+
+        .icon-warning {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.15));
+            color: var(--warning);
+        }
+
+        .icon-success {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(167, 243, 208, 0.15));
+            color: var(--success);
+        }
+
+        .action-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .action-card p {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 2px solid var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .contact-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .contact-item {
+            background: var(--gray-50);
+            padding: 1.25rem;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--gray-200);
+        }
+
+        .contact-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-info p {
+            color: var(--gray-600);
+            font-size: 0.85rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background: #ddd6fe;
+            color: #5b21b6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--gray-600);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            color: var(--gray-200);
+            margin-bottom: 1rem;
+        }
+
+        .alert {
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            color: #92400e;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-left: 4px solid var(--info);
+            color: #1e40af;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-shield-alt"></i>
+                Safety Center
+            </h1>
+            <p>Your safety is our top priority. Access emergency tools and safety resources here.</p>
+        </div>
+
+        {% if active_sos %}
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle" style="font-size: 1.5rem;"></i>
+            <div>
+                <strong>Active SOS Alert!</strong>
+                <p style="margin: 0.25rem 0 0 0;">You have an active emergency alert. Help is on the way.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="quick-actions">
+            <a href="{% url 'safety:trigger_sos' %}" class="action-card danger">
+                <div class="action-icon icon-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3>SOS Emergency</h3>
+                <p>Trigger immediate emergency alert to contacts and support team</p>
+            </a>
+
+            <a href="{% url 'safety:emergency_contacts' %}" class="action-card">
+                <div class="action-icon icon-info">
+                    <i class="fas fa-phone-alt"></i>
+                </div>
+                <h3>Emergency Contacts</h3>
+                <p>Manage your trusted emergency contacts</p>
+            </a>
+
+            <a href="{% url 'safety:safety_create' %}" class="action-card">
+                <div class="action-icon icon-warning">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <h3>Report Incident</h3>
+                <p>Report safety concerns or suspicious behavior</p>
+            </a>
+
+            <a href="{% url 'safety:guidelines_index' %}" class="action-card">
+                <div class="action-icon icon-success">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3>Safety Guidelines</h3>
+                <p>Learn best practices for safe travel</p>
+            </a>
+        </div>
+
+        {% if not has_emergency_contacts %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle" style="font-size: 1.5rem;"></i>
+            <div>
+                <strong>Add Emergency Contacts</strong>
+                <p style="margin: 0.25rem 0 0 0;">Add trusted contacts who will be notified in case of emergency.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Emergency Contacts</h2>
+                <a href="{% url 'safety:add_emergency_contact' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add Contact
+                </a>
+            </div>
+
+            {% if emergency_contacts %}
+            <div class="contact-list">
+                {% for contact in emergency_contacts %}
+                <div class="contact-item">
+                    <div class="contact-info">
+                        <h4>
+                            {{ contact.name }}
+                            {% if contact.is_primary %}
+                            <span class="badge badge-primary">Primary</span>
+                            {% endif %}
+                        </h4>
+                        <p>{{ contact.relationship }} • {{ contact.phone }}</p>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <a href="{% url 'safety:edit_emergency_contact' contact.pk %}" class="btn btn-outline" style="padding: 0.5rem 1rem;">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'safety:delete_emergency_contact' contact.pk %}" class="btn btn-outline" style="padding: 0.5rem 1rem; color: var(--danger);">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-address-book"></i>
+                </div>
+                <h3>No Emergency Contacts</h3>
+                <p>Add trusted contacts for emergency situations</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Recent Safety Reports</h2>
+                <a href="{% url 'safety:safety_list' %}" class="btn btn-outline">View All</a>
+            </div>
+
+            {% if recent_reports %}
+            <div class="contact-list">
+                {% for report in recent_reports %}
+                <div class="contact-item">
+                    <div class="contact-info">
+                        <h4>{{ report.title }}</h4>
+                        <p>{{ report.get_report_type_display }} • {{ report.created_at|date:"M d, Y" }}</p>
+                    </div>
+                    <span class="badge {% if report.resolved %}badge-primary{% else %}badge-warning{% endif %}" style="{% if not report.resolved %}background: #fef3c7; color: #92400e;{% endif %}">
+                        {{ report.get_status_display }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3>No Reports Yet</h3>
+                <p>Your safety reports will appear here</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i>
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</body>
+</html>
