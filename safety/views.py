@@ -1,38 +1,145 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import SafetyReport
-from .forms import SafetyReportForm
+from django.contrib import messages
+from django.db.models import Q, Count
+from django.utils import timezone
+from .models import SafetyReport, SafetyGuideline, EmergencyContact, SOSAlert
+from .forms import SafetyReportForm, EmergencyContactForm, SOSAlertForm, QuickSOSForm
 
 
+# ==================== SAFETY CENTER ====================
+@login_required
+def safety_center(request):
+    """Main safety center dashboard"""
+    # Get user's emergency contacts
+    emergency_contacts = EmergencyContact.objects.filter(user=request.user)
+
+    # Get recent SOS alerts
+    recent_sos = SOSAlert.objects.filter(user=request.user).order_by('-timestamp')[:5]
+
+    # Get user's safety reports
+    user_reports = SafetyReport.objects.filter(reporter=request.user)
+
+    # Get featured safety guidelines
+    featured_guidelines = SafetyGuideline.objects.filter(
+        is_active=True,
+        priority__gte=7
+    )[:6]
+
+    # Statistics
+    stats = {
+        'emergency_contacts_count': emergency_contacts.count(),
+        'has_primary_contact': emergency_contacts.filter(is_primary=True).exists(),
+        'active_sos_count': recent_sos.filter(status='active').count(),
+        'reports_count': user_reports.count(),
+    }
+
+    context = {
+        'emergency_contacts': emergency_contacts,
+        'recent_sos': recent_sos,
+        'user_reports': user_reports[:5],
+        'featured_guidelines': featured_guidelines,
+        'stats': stats,
+    }
+    return render(request, 'safety/safety_center.html', context)
+
+
+# ==================== SAFETY REPORTS ====================
 def safety_list(request):
-    reports = SafetyReport.objects.all()
-    return render(request, 'safety/safety_list.html', {'reports': reports})
+    """Public list of safety reports (anonymized)"""
+    reports = SafetyReport.objects.filter(status='resolved').select_related('reporter')
+
+    # Filter by type if provided
+    report_type = request.GET.get('type')
+    if report_type:
+        reports = reports.filter(report_type=report_type)
+
+    context = {
+        'reports': reports,
+        'report_types': SafetyReport.REPORT_TYPE_CHOICES,
+    }
+    return render(request, 'safety/safety_list.html', context)
 
 
 def safety_detail(request, pk):
+    """View details of a safety report"""
     report = get_object_or_404(SafetyReport, pk=pk)
-    return render(request, 'safety/safety_detail.html', {'report': report})
+    context = {'report': report}
+    return render(request, 'safety/safety_detail.html', context)
 
 
 @login_required
 def safety_create(request):
+    """Create a new safety report"""
     if request.method == 'POST':
         form = SafetyReportForm(request.POST)
         if form.is_valid():
             report = form.save(commit=False)
             report.reporter = request.user
             report.save()
+            messages.success(request, 'Your safety report has been submitted. Our team will review it shortly.')
             return redirect('safety:safety_detail', pk=report.pk)
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = SafetyReportForm()
-    return render(request, 'safety/safety_form.html', {'form': form})
+
+    context = {'form': form}
+    return render(request, 'safety/safety_form.html', context)
 
 
+@login_required
+def my_reports(request):
+    """View user's own safety reports"""
+    reports = SafetyReport.objects.filter(reporter=request.user).order_by('-created_at')
+    context = {'reports': reports}
+    return render(request, 'safety/my_reports.html', context)
+
+
+# ==================== SAFETY GUIDELINES ====================
 def guidelines_index(request):
-    """Overview page linking to individual safety guideline pages."""
-    return render(request, 'safety/guidelines/index.html')
+    """Overview page of all safety guidelines"""
+    # Group guidelines by category
+    guidelines_by_category = {}
+    for category_key, category_name in SafetyGuideline.CATEGORY_CHOICES:
+        guidelines = SafetyGuideline.objects.filter(
+            category=category_key,
+            is_active=True
+        )
+        if guidelines.exists():
+            guidelines_by_category[category_name] = guidelines
+
+    # Get high priority guidelines
+    featured_guidelines = SafetyGuideline.objects.filter(
+        is_active=True,
+        priority__gte=8
+    )[:3]
+
+    context = {
+        'guidelines_by_category': guidelines_by_category,
+        'featured_guidelines': featured_guidelines,
+    }
+    return render(request, 'safety/guidelines/index.html', context)
 
 
+def guideline_detail(request, slug):
+    """View a specific safety guideline"""
+    guideline = get_object_or_404(SafetyGuideline, slug=slug, is_active=True)
+
+    # Get related guidelines from same category
+    related_guidelines = SafetyGuideline.objects.filter(
+        category=guideline.category,
+        is_active=True
+    ).exclude(slug=slug)[:3]
+
+    context = {
+        'guideline': guideline,
+        'related_guidelines': related_guidelines,
+    }
+    return render(request, 'safety/guidelines/detail.html', context)
+
+
+# Legacy guideline views (for compatibility)
 def verify_before_meeting(request):
     return render(request, 'safety/guidelines/verify_before_meeting.html')
 
@@ -43,4 +150,179 @@ def share_location(request):
 
 def emergency_support(request):
     return render(request, 'safety/guidelines/emergency_support.html')
-# (safety views are defined above)
+
+
+# ==================== EMERGENCY CONTACTS ====================
+@login_required
+def emergency_contacts(request):
+    """Manage emergency contacts"""
+    contacts = EmergencyContact.objects.filter(user=request.user).order_by('-is_primary', 'contact_name')
+
+    context = {
+        'contacts': contacts,
+        'has_primary': contacts.filter(is_primary=True).exists(),
+    }
+    return render(request, 'safety/emergency_contacts.html', context)
+
+
+@login_required
+def add_emergency_contact(request):
+    """Add a new emergency contact"""
+    if request.method == 'POST':
+        form = EmergencyContactForm(request.POST)
+        if form.is_valid():
+            contact = form.save(commit=False)
+            contact.user = request.user
+            contact.save()
+            messages.success(request, f'{contact.contact_name} has been added as an emergency contact.')
+            return redirect('safety:emergency_contacts')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = EmergencyContactForm()
+
+    context = {'form': form, 'action': 'Add'}
+    return render(request, 'safety/emergency_contact_form.html', context)
+
+
+@login_required
+def edit_emergency_contact(request, contact_id):
+    """Edit an existing emergency contact"""
+    contact = get_object_or_404(EmergencyContact, pk=contact_id, user=request.user)
+
+    if request.method == 'POST':
+        form = EmergencyContactForm(request.POST, instance=contact)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'{contact.contact_name} has been updated.')
+            return redirect('safety:emergency_contacts')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = EmergencyContactForm(instance=contact)
+
+    context = {
+        'form': form,
+        'contact': contact,
+        'action': 'Edit'
+    }
+    return render(request, 'safety/emergency_contact_form.html', context)
+
+
+@login_required
+def delete_emergency_contact(request, contact_id):
+    """Delete an emergency contact"""
+    contact = get_object_or_404(EmergencyContact, pk=contact_id, user=request.user)
+
+    if request.method == 'POST':
+        contact_name = contact.contact_name
+        contact.delete()
+        messages.success(request, f'{contact_name} has been removed from your emergency contacts.')
+        return redirect('safety:emergency_contacts')
+
+    context = {'contact': contact}
+    return render(request, 'safety/emergency_contact_confirm_delete.html', context)
+
+
+# ==================== SOS ALERTS ====================
+@login_required
+def sos_alerts(request):
+    """View user's SOS alert history"""
+    alerts = SOSAlert.objects.filter(user=request.user).order_by('-timestamp')
+
+    # Statistics
+    stats = {
+        'total_alerts': alerts.count(),
+        'active_alerts': alerts.filter(status='active').count(),
+        'resolved_alerts': alerts.filter(status='resolved').count(),
+    }
+
+    context = {
+        'alerts': alerts,
+        'stats': stats,
+    }
+    return render(request, 'safety/sos_alerts.html', context)
+
+
+@login_required
+def create_sos_alert(request):
+    """Create a new SOS alert"""
+    if request.method == 'POST':
+        form = SOSAlertForm(request.POST)
+        if form.is_valid():
+            alert = form.save(commit=False)
+            alert.user = request.user
+
+            # Try to get location from request if available
+            latitude = request.POST.get('latitude')
+            longitude = request.POST.get('longitude')
+            if latitude and longitude:
+                try:
+                    alert.location_latitude = float(latitude)
+                    alert.location_longitude = float(longitude)
+                except (ValueError, TypeError):
+                    pass
+
+            alert.save()
+
+            # TODO: Send notifications to emergency contacts
+            # notify_emergency_contacts(alert)
+
+            messages.success(request, 'SOS Alert sent! Help is on the way. Stay safe!')
+            return redirect('safety:sos_alert_detail', alert_id=alert.pk)
+        else:
+            messages.error(request, 'Please provide alert details.')
+    else:
+        form = SOSAlertForm()
+
+    # Get user's emergency contacts
+    emergency_contacts = EmergencyContact.objects.filter(user=request.user)
+
+    context = {
+        'form': form,
+        'emergency_contacts': emergency_contacts,
+    }
+    return render(request, 'safety/create_sos_alert.html', context)
+
+
+@login_required
+def sos_alert_detail(request, alert_id):
+    """View details of an SOS alert"""
+    alert = get_object_or_404(SOSAlert, pk=alert_id, user=request.user)
+
+    context = {'alert': alert}
+    return render(request, 'safety/sos_alert_detail.html', context)
+
+
+@login_required
+def quick_sos(request):
+    """Quick SOS button - minimal form for emergencies"""
+    if request.method == 'POST':
+        alert_type = request.POST.get('alert_type', 'emergency')
+        location = request.POST.get('location', '')
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+
+        # Create SOS alert
+        alert = SOSAlert.objects.create(
+            user=request.user,
+            alert_type=alert_type,
+            location_address=location,
+            description='Quick SOS alert',
+        )
+
+        # Add GPS coordinates if available
+        if latitude and longitude:
+            try:
+                alert.location_latitude = float(latitude)
+                alert.location_longitude = float(longitude)
+                alert.save()
+            except (ValueError, TypeError):
+                pass
+
+        messages.success(request, 'Emergency alert sent! Help is coming!')
+        return redirect('safety:sos_alert_detail', alert_id=alert.pk)
+
+    form = QuickSOSForm()
+    context = {'form': form}
+    return render(request, 'safety/quick_sos.html', context)
