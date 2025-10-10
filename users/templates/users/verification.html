@@ -259,6 +259,9 @@
                 <span class="status-badge status-verified">✅ Verified Account</span>
             {% elif profile.verification_status == 'rejected' %}
                 <span class="status-badge status-rejected">❌ Verification Rejected</span>
+            {% else %}
+        <!-- For 'not_submitted' status -->
+                <span class="status-badge status-pending">📋 Not Submitted</span>
             {% endif %}
         </div>
 
@@ -275,7 +278,7 @@
                 <h3>🎉 Your account is verified!</h3>
                 <p style="opacity: 0.9; margin-top: 0.5rem;">You can now access all features including organized trips and travel buddy connections.</p>
             </div>
-        {% elif profile.verification_status == 'pending' and profile.nid_front %}
+        {% elif profile.verification_status == 'pending' %}
             <div class="info-box">
                 <h3>📋 Documents Submitted</h3>
                 <p style="opacity: 0.9; margin-top: 0.5rem;">Your verification documents are under review. This usually takes 24-48 hours. You'll be notified once approved.</p>

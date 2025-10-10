@@ -131,9 +131,7 @@ def dashboard_view(request):
         'completed_trips_count': 0,
         'travel_buddies_count': 0,
         'user_rating': 'New',
-        # Pull upcoming organized trips (few) to show on dashboard
         'upcoming_trips': [],
-        'upcoming_organized_trips': [],
         'recent_activities': [
             {
                 'icon': '🎉',
@@ -143,16 +141,6 @@ def dashboard_view(request):
             }
         ]
     }
-
-    # Lazy import to avoid circular imports at top-level
-    try:
-        from trips.models import OrganizedTrip
-        upcoming = OrganizedTrip.objects.filter(trip_status__in=['open', 'confirmed']).order_by('departure_time')[:3]
-        context['upcoming_organized_trips'] = upcoming
-        context['upcoming_trips_count'] = upcoming.count()
-    except Exception:
-        # If trips app not available or DB issue, keep defaults
-        pass
 
     return render(request, 'users/dashboard.html', context)
 
@@ -175,6 +163,22 @@ def edit_profile_view(request):
             user.email = form.cleaned_data['email']
             user.save()
             
+             # Handle cropped image
+            cropped_image_data = request.POST.get('cropped_image')
+            if cropped_image_data:
+                import base64
+                from django.core.files.base import ContentFile
+                import uuid
+                
+                # Decode base64 image
+                format, imgstr = cropped_image_data.split(';base64,')
+                ext = format.split('/')[-1]
+                
+                # Create file
+                data = ContentFile(base64.b64decode(imgstr), name=f'profile_{uuid.uuid4()}.{ext}')
+                profile.profile_picture = data
+            
+
             # Update UserProfile
             form.save()
             

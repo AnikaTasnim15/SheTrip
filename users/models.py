@@ -19,11 +19,12 @@ class UserProfile(models.Model):
     verification_status = models.CharField(
     max_length=20, 
     choices=[
+        ('not_submitted', 'Not Submitted'),
         ('pending', 'Pending'),
         ('verified', 'Verified'),
         ('rejected', 'Rejected'),
     ],
-    default='pending'
+    default='not_submitted'
     )
     nid_front = models.ImageField(upload_to='verification/nid_front/', blank=True, null=True)
     nid_back = models.ImageField(upload_to='verification/nid_back/', blank=True, null=True)
