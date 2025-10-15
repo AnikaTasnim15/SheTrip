@@ -10,7 +10,37 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.views import PasswordResetView
 from django.urls import reverse_lazy
 from django.urls import reverse
+from datetime import date
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenRefreshView
+from django.http import JsonResponse
+import json
+from django.conf import settings
 
+def set_jwt_cookies(response, user):
+    """Helper function to set JWT tokens in httpOnly cookies"""
+    refresh = RefreshToken.for_user(user)
+    
+    # Set cookies
+    response.set_cookie(
+        key='shetrip-auth',
+        value=str(refresh.access_token),
+        httponly=True,
+        secure=False,  # Set True in production with HTTPS
+        samesite='Lax',
+        max_age=3600,  # 1 hour
+    )
+    
+    response.set_cookie(
+        key='shetrip-refresh',
+        value=str(refresh),
+        httponly=True,
+        secure=False,
+        samesite='Lax',
+        max_age=7776000,  # 90 days
+    )
+    
+    return response
 @never_cache
 def login_view(request):
     if request.method == 'POST':
@@ -32,13 +62,21 @@ def login_view(request):
         
         if user is not None:
             login(request, user)
-
+            
+            # Create response
+            response = redirect('dashboard')
+            
+            # Set JWT tokens in cookies
+            response = set_jwt_cookies(response, user)
+            
+            # Set session expiry
             if not request.POST.get('remember_me'):
                 request.session.set_expiry(0)
             else:
-                request.session.set_expiry(2592000)
+                request.session.set_expiry(7776000)
+
             messages.success(request, 'You have successfully logged in.')
-            return redirect('dashboard')
+            return response
         else:
             messages.error(request, 'Invalid username/email or password.')
             return render(request, 'users/login.html')
@@ -47,9 +85,19 @@ def login_view(request):
 
 
 def logout_view(request):
+
+    # Clear JWT cookies
+    response = redirect('login')
+    response.delete_cookie('shetrip-auth')
+    response.delete_cookie('shetrip-refresh')
+
+    
+    storage = messages.get_messages(request)
+    storage.used = True
+
     logout(request)
     messages.info(request, 'You have been logged out.')
-    return redirect('login')
+    return response
 
 
 def register_view(request):
@@ -109,37 +157,26 @@ def home_view(request):
     return render(request, 'users/home.html')
 
 
-@login_required
+@login_required 
 def dashboard_view(request):
-    """
-    Enhanced dashboard view with complete user and trip information
-    """
-    if request.user.is_superuser:  # or request.user.is_staff
-        return redirect('admin:index')  # redirect admin to admin panel
+    """Enhanced dashboard view with verification status check"""
+    if request.user.is_superuser:
+        return redirect('admin:index')
     
     try:
         profile = request.user.userprofile
     except UserProfile.DoesNotExist:
-        profile = None
+        profile = UserProfile.objects.create(
+            user=request.user,
+            age=0,
+            verification_status='not_submitted'
+        )
 
-    # Prepare context data for the dashboard
+    # Show verification status in dashboard
     context = {
         'profile': profile,
-        'user': request.user,
-        # These will be populated once trip models are created
-        'upcoming_trips_count': 0,
-        'completed_trips_count': 0,
-        'travel_buddies_count': 0,
-        'user_rating': 'New',
-        'upcoming_trips': [],
-        'recent_activities': [
-            {
-                'icon': '🎉',
-                'title': 'Welcome to SheTrip!',
-                'description': 'Account created successfully',
-                'bg_color': '#ddd6fe'
-            }
-        ]
+        'verification_required': not profile.is_verified,
+        'is_social_user': hasattr(request.user, 'socialaccount_set') and request.user.socialaccount_set.exists()
     }
 
     return render(request, 'users/dashboard.html', context)
@@ -150,7 +187,7 @@ def edit_profile_view(request):
     try:
         profile = request.user.userprofile
     except UserProfile.DoesNotExist:
-        profile = UserProfile.objects.create(user=request.user)
+        profile = None
     
     if request.method == 'POST':
         form = UserProfileEditForm(request.POST, request.FILES, instance=profile, user=request.user)
@@ -176,8 +213,16 @@ def edit_profile_view(request):
                 
                 # Create file
                 data = ContentFile(base64.b64decode(imgstr), name=f'profile_{uuid.uuid4()}.{ext}')
-                profile.profile_picture = data
-            
+                if profile:
+                    profile.profile_picture = data
+                else:
+                    # Create new profile with required fields from form
+                    profile = form.save(commit=False)
+                    profile.user = user
+                    profile.profile_picture = data
+                    profile.save()
+                    messages.success(request, 'Profile created successfully!')
+                    return redirect('dashboard')
 
             # Update UserProfile
             form.save()
@@ -195,51 +240,100 @@ def edit_profile_view(request):
 
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'users/password_reset.html'
+    email_template_name = 'users/password_reset_email.html'
+    subject_template_name = 'users/password_reset_subject.txt'
     success_url = reverse_lazy('password_reset_done')
     
     def form_valid(self, form):
-        # Get the email
-        email = form.cleaned_data['email']
+        """Custom password reset with direct email sending"""
+        from django.contrib.auth.models import User
+        from django.contrib.auth.tokens import default_token_generator
+        from django.utils.http import urlsafe_base64_encode
+        from django.utils.encoding import force_bytes
+        from django.core.mail import send_mail
+        from django.template.loader import render_to_string
+        from django.contrib import messages
         
-        # Get user
-        try:
-            user = User.objects.get(email=email)
-            
-            # Generate token
-            from django.contrib.auth.tokens import default_token_generator
-            from django.utils.http import urlsafe_base64_encode
-            from django.utils.encoding import force_bytes
-            
+        email = form.cleaned_data.get('email')
+        
+        # Find active users with this email
+        users = User.objects.filter(email=email, is_active=True)
+        
+        # If no user found, still show success page (security feature)
+        if not users.exists():
+            messages.error(
+                self.request, 
+                f'No account found with email: {email}. Please check your email or register a new account.'
+            )
+            return redirect('register')
+        
+        # Send reset email to each user (typically just one)
+        for user in users:
+            # Generate secure token and UID
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             
-            # Build reset URL
-            reset_url = self.request.build_absolute_uri(
-                reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
-            )
+            # Build email context
+            context = {
+                'email': user.email,
+                'domain': self.request.get_host(),
+                'site_name': 'SheTrip',
+                'uid': uid,
+                'user': user,
+                'token': token,
+                'protocol': 'https' if self.request.is_secure() else 'http',
+            }
             
-            # Store in session
-            self.request.session['reset_url'] = reset_url
+            # Render email templates
+            subject = render_to_string(self.subject_template_name, context)
+            subject = ''.join(subject.splitlines())  # Remove newlines
+            body = render_to_string(self.email_template_name, context)
+            
+            # Send email
+            try:
+                send_mail(
+                    subject=subject,
+                    message=body,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    fail_silently=False,
+                )
+                print(f"✅ Password reset email sent to {user.email}")
+            except Exception as e:
+                # Log error but don't expose to user
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Password reset email failed: {e}")
+                messages.error(
+                    self.request, 
+                    '❌ Failed to send email. Please try again later.'
+                )
+                return redirect('password_reset')
+                # Still redirect to success page (security)
+        
+        # Store email for success page
+        if email:
             self.request.session['reset_email'] = email
             
-        except User.DoesNotExist:
-            pass
-        
-        return redirect('password_reset_done')
+            messages.success(
+            self.request, 
+            f'✅ Password reset instructions sent to {email}'
+            )
+        # Redirect to success page
+        return redirect(self.success_url)
 
 
 def password_reset_done_view(request):
-    reset_url = request.session.get('reset_url', '')
+    
     reset_email = request.session.get('reset_email', '')
     
     # Clear session data after displaying
-    if 'reset_url' in request.session:
-        del request.session['reset_url']
+    
     if 'reset_email' in request.session:
         del request.session['reset_email']
     
     context = {
-        'reset_url': reset_url,
+
         'reset_email': reset_email
     }
     return render(request, 'users/password_reset_done.html', context)

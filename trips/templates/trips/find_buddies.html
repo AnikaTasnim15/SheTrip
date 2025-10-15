@@ -102,6 +102,20 @@
             font-size: 1.125rem;
             color: var(--white);
             flex-shrink: 0;
+            cursor: pointer;             
+            transition: all 0.2s;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow);
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: cover;
         }
 
         .user-info h4 {
@@ -610,92 +624,7 @@
 </head>
 <body>
     <div class="dashboard">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="brand">SheTrip</div>
-                <div class="user-card">
-                    <div class="user-avatar">
-                        {% if user.first_name and user.last_name %}
-                            {{ user.first_name|first }}{{ user.last_name|first }}
-                        {% else %}
-                            {{ user.username|first }}
-                        {% endif %}
-                    </div>
-                    <div class="user-info">
-                        <h4>{{ user.first_name }} {{ user.last_name }}</h4>
-                        <p>{% if profile %}{{ profile.city }}{% else %}Traveler{% endif %}</p>
-                    </div>
-                </div>
-            </div>
-
-            <nav class="nav">
-                <div class="nav-section">
-                    <div class="nav-label">Main Menu</div>
-                    <div class="nav-item">
-                        <a href="{% url 'dashboard' %}" class="nav-link">
-                            <i class="fas fa-th-large nav-icon"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="{% url 'my_trips' %}" class="nav-link">
-                            <i class="fas fa-map-marked-alt nav-icon"></i>
-                            <span>My Trips</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="{% url 'find_buddies' %}" class="nav-link active">
-                            <i class="fas fa-search nav-icon"></i>
-                            <span>Find Buddies</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="{% url 'organized_trips' %}" class="nav-link">
-                            <i class="fas fa-calendar-alt nav-icon"></i>
-                            <span>Organized Trips</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-label">Communication</div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-comments nav-icon"></i>
-                            <span>Messages</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-bell nav-icon"></i>
-                            <span>Notifications</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-label">Account</div>
-                    <div class="nav-item">
-                        <a href="{% url 'verification' %}" class="nav-link">
-                            <i class="fas fa-check-circle nav-icon"></i>
-                            <span>Verification</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-user-circle nav-icon"></i>
-                            <span>My Profile</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="{% url 'logout' %}" class="nav-link">
-                            <i class="fas fa-sign-out-alt nav-icon"></i>
-                            <span>Logout</span>
-                        </a>
-                    </div>
-                </div>
-            </nav>
-        </aside>
+    {% include 'includes/sidebar.html' %}
 
         <main class="main-content">
             <div class="page-header">

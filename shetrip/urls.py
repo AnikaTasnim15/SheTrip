@@ -23,5 +23,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')), 
     path('trips/', include('trips.urls')),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    
+ # JWT & Social Auth APIs
+    path('api/auth/', include('dj_rest_auth.urls')),
+    path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('accounts/', include('allauth.urls')),  # Social login
+]
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

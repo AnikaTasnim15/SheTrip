@@ -1,0 +1,251 @@
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Connections - SheTrip</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #3c1f3fff 0%, #431515fe 25%, #0c242ef0 50%, rgba(74, 22, 40, 1) 75%, #562e2fff 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .menu-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .menu-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-item {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(5px);
+        }
+
+        .menu-item a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.1rem;
+        }
+
+        .account-card {
+            background: rgba(66, 133, 244, 0.15);
+            border: 2px solid rgba(66, 133, 244, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .account-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .provider-icon {
+            font-size: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #ff4444, #cc0000);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">SheTrip</div>
+        <h2>Account Settings</h2>
+
+        <!-- Menu Section -->
+        <div class="menu-section">
+            <h3>📋 Menu</h3>
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="#">
+                        <span>📧 Change Email</span>
+                        <span>→</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <span>🔒 Change Password</span>
+                        <span>→</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#">
+                        <span>🔗 Account Connections</span>
+                        <span>→</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{% url 'logout' %}">
+                        <span>🚪 Sign Out</span>
+                        <span>→</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Connected Accounts -->
+        <div class="menu-section">
+            <h3>🔗 Connected Social Accounts</h3>
+            
+            {% if form.accounts %}
+                {% for account in form.accounts %}
+                <div class="account-card">
+                    <div class="account-info">
+                        <span class="provider-icon">
+                            {% if account.provider == 'google' %}
+                                <svg width="32" height="32" viewBox="0 0 48 48">
+                                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                                </svg>
+                            {% else %}
+                                🔗
+                            {% endif %}
+                        </span>
+                        <div>
+                            <strong>{{ account.get_provider_display }}</strong><br>
+                            <small style="opacity: 0.7;">{{ account.uid }}</small>
+                        </div>
+                    </div>
+                    <form method="post" action="{% url 'socialaccount_connections' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="account" value="{{ account.id }}"/>
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <p>No social accounts connected yet.</p>
+                    <a href="{% provider_login_url 'google' %}" class="btn btn-primary" style="margin-top: 1rem;">
+                        Connect Google Account
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary">← Back to Dashboard</a>
+    </div>
+</body>
+</html>

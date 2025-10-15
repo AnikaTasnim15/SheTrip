@@ -755,88 +755,7 @@
 </head>
 <body>
     <div class="dashboard">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="brand">SheTrip</div>
-                <div class="user-card">
-                    <div class="user-avatar">SA</div>
-                    <div class="user-info">
-                        <h4>Sarah Ahmed</h4>
-                        <p>Dhaka, Bangladesh</p>
-                    </div>
-                </div>
-            </div>
-
-            <nav class="nav">
-                <div class="nav-section">
-                    <div class="nav-label">Main Menu</div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-th-large nav-icon"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link active">
-                            <i class="fas fa-map-marked-alt nav-icon"></i>
-                            <span>My Trips</span>
-                            <span class="badge">3</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-search nav-icon"></i>
-                            <span>Find Buddies</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-calendar-alt nav-icon"></i>
-                            <span>Organized Trips</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-label">Communication</div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-comments nav-icon"></i>
-                            <span>Messages</span>
-                            <span class="badge">2</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-bell nav-icon"></i>
-                            <span>Notifications</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-label">Account</div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-check-circle nav-icon"></i>
-                            <span>Verification</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-user-circle nav-icon"></i>
-                            <span>My Profile</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-sign-out-alt nav-icon"></i>
-                            <span>Logout</span>
-                        </a>
-                    </div>
-                </div>
-            </nav>
-        </aside>
+    {% include 'includes/sidebar.html' %}
 
         <main class="main-content">
             <div class="page-header">
@@ -845,7 +764,7 @@
                         <h1 class="page-title">My Trips</h1>
                         <p class="page-subtitle">Manage your travel plans and organized trips</p>
                     </div>
-                    <a href="#" class="btn btn-primary">
+                    <a href="{% url 'create_travel_plan' %}" class="btn btn-primary">
                         <i class="fas fa-plus"></i>
                         Create New Trip Plan
                     </a>
@@ -855,16 +774,17 @@
                     <button class="tab active" data-tab="travel-plans">
                         <i class="fas fa-clipboard-list"></i>
                         My Travel Plans
-                        <span class="badge">2</span>
+                        <span class="badge">{{ user_plans.count }}</span>
                     </button>
                     <button class="tab" data-tab="organized-trips">
                         <i class="fas fa-calendar-check"></i>
                         Joined Trips
-                        <span class="badge">1</span>
+                        <span class="badge">{{ participations.count }}</span>
                     </button>
                     <button class="tab" data-tab="past-trips">
                         <i class="fas fa-history"></i>
                         Past Trips
+                        <span class="badge">{{ past_trips.count }}</span>
                     </button>
                 </div>
             </div>
@@ -875,213 +795,131 @@
                         <div class="stat-box-icon icon-purple">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
-                        <div class="stat-box-value">2</div>
+                        <div class="stat-box-value">{{ user_plans.count }}</div>
                         <div class="stat-box-label">Active Travel Plans</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-box-icon icon-pink">
                             <i class="fas fa-users"></i>
                         </div>
-                        <div class="stat-box-value">5</div>
+                        <div class="stat-box-value">{{ matched_buddies }}</div>
                         <div class="stat-box-label">Matched Buddies</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-box-icon icon-green">
                             <i class="fas fa-calendar-day"></i>
                         </div>
-                        <div class="stat-box-value">Nov 15</div>
+                        <div class="stat-box-value">
+                            {% if next_trip %}
+                                {{ next_trip.start_date|date:"M d, Y" }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </div>
                         <div class="stat-box-label">Next Trip Date</div>
                     </div>
                 </div>
 
-                <div class="trip-grid">
-                    <div class="trip-card">
-                        <div class="trip-card-header">
-                            <div class="trip-card-title">
-                                <div class="trip-destination">
-                                    <i class="fas fa-map-pin" style="color: var(--primary);"></i>
-                                    Cox's Bazar Beach Gateway
-                                </div>
-                                <div class="trip-dates">
-                                    <i class="fas fa-calendar"></i>
-                                    Nov 15 - Nov 18, 2025
-                                    <span style="color: var(--gray-400);">•</span>
-                                    4 Days
-                                </div>
-                            </div>
-                            <div class="status-badge status-active">Active</div>
-                        </div>
+ {% if user_plans %}
+<div class="trip-grid">
+    {% for plan in user_plans %}
+    <div class="trip-card">
+        <div class="trip-card-header">
+            <div class="trip-card-title">
+                <div class="trip-destination">
+                    <i class="fas fa-map-pin" style="color: var(--primary);"></i>
+                    {{ plan.destination }}
+                </div>
+                <div class="trip-dates">
+                    <i class="fas fa-calendar"></i>
+                    {{ plan.start_date|date:"M d" }} - {{ plan.end_date|date:"M d, Y" }}
+                    <span style="color: var(--gray-400);">•</span>
+                    {{ plan.duration_days }} Day{{ plan.duration_days|pluralize }}
+                </div>
+            </div>
+            <div class="status-badge status-{% if plan.is_active %}active{% else %}inactive{% endif %}">
+                {% if plan.is_active %}Active{% else %}Inactive{% endif %}
+            </div>
+        </div>
 
-                        <div class="trip-card-body">
-                            <div class="trip-info-grid">
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-purple">
-                                        <i class="fas fa-flag"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Purpose</h4>
-                                        <p>Leisure/Vacation</p>
-                                    </div>
-                                </div>
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-pink">
-                                        <i class="fas fa-wallet"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Budget</h4>
-                                        <p>Mid-Range</p>
-                                    </div>
-                                </div>
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-green">
-                                        <i class="fas fa-user-friends"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Max Travelers</h4>
-                                        <p>6 People</p>
-                                    </div>
-                                </div>
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-blue">
-                                        <i class="fas fa-heart"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Matches Found</h4>
-                                        <p>3 Buddies</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="trip-description">
-                                <h4>Trip Description</h4>
-                                <p>Looking for travel companions to explore the beautiful beaches of Cox's Bazar! Planning to visit Inani Beach, Himchari, and enjoy fresh seafood. Seeking like-minded women who love beach activities, photography, and adventure.</p>
-                            </div>
-
-                            <div class="alert-box success">
-                                <div class="alert-icon">
-                                    <i class="fas fa-users" style="color: var(--success);"></i>
-                                </div>
-                                <div class="alert-content">
-                                    <h4>3 Compatible Matches Found!</h4>
-                                    <p>We found 3 verified travelers with similar plans. Check your matches to connect!</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="trip-card-footer">
-                            <a href="#" class="btn btn-primary btn-sm">
-                                <i class="fas fa-users"></i>
-                                View Matches
-                            </a>
-                            <a href="#" class="btn btn-outline btn-sm">
-                                <i class="fas fa-edit"></i>
-                                Edit Plan
-                            </a>
-                            <a href="#" class="btn btn-outline btn-sm">
-                                <i class="fas fa-share-alt"></i>
-                                Share
-                            </a>
-                            <a href="#" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i>
-                                Delete
-                            </a>
-                        </div>
+        <div class="trip-card-body">
+            <div class="trip-info-grid">
+                <div class="trip-info-item">
+                    <div class="trip-info-icon icon-purple">
+                        <i class="fas fa-flag"></i>
                     </div>
-
-                    <div class="trip-card">
-                        <div class="trip-card-header">
-                            <div class="trip-card-title">
-                                <div class="trip-destination">
-                                    <i class="fas fa-mountain" style="color: var(--success);"></i>
-                                    Sylhet Tea Gardens Adventure
-                                </div>
-                                <div class="trip-dates">
-                                    <i class="fas fa-calendar"></i>
-                                    Dec 5 - Dec 8, 2025
-                                    <span style="color: var(--gray-400);">•</span>
-                                    4 Days
-                                </div>
-                            </div>
-                            <div class="status-badge status-upcoming">Upcoming</div>
-                        </div>
-
-                        <div class="trip-card-body">
-                            <div class="trip-info-grid">
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-purple">
-                                        <i class="fas fa-flag"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Purpose</h4>
-                                        <p>Cultural Experience</p>
-                                    </div>
-                                </div>
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-pink">
-                                        <i class="fas fa-wallet"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Budget</h4>
-                                        <p>Budget Friendly</p>
-                                    </div>
-                                </div>
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-green">
-                                        <i class="fas fa-user-friends"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Max Travelers</h4>
-                                        <p>8 People</p>
-                                    </div>
-                                </div>
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-blue">
-                                        <i class="fas fa-heart"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Matches Found</h4>
-                                        <p>2 Buddies</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="trip-description">
-                                <h4>Trip Description</h4>
-                                <p>Exploring the stunning tea gardens of Sylhet, visiting Ratargul Swamp Forest, and enjoying the natural beauty of Jaflong. Looking for nature lovers and photography enthusiasts to share this amazing experience!</p>
-                            </div>
-
-                            <div class="alert-box info">
-                                <div class="alert-icon">
-                                    <i class="fas fa-clock" style="color: var(--info);"></i>
-                                </div>
-                                <div class="alert-content">
-                                    <h4>Searching for Matches</h4>
-                                    <p>We're actively looking for compatible travel buddies for your trip.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="trip-card-footer">
-                            <a href="#" class="btn btn-primary btn-sm">
-                                <i class="fas fa-users"></i>
-                                View Matches
-                            </a>
-                            <a href="#" class="btn btn-outline btn-sm">
-                                <i class="fas fa-edit"></i>
-                                Edit Plan
-                            </a>
-                            <a href="#" class="btn btn-outline btn-sm">
-                                <i class="fas fa-share-alt"></i>
-                                Share
-                            </a>
-                            <a href="#" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i>
-                                Delete
-                            </a>
-                        </div>
+                    <div class="trip-info-content">
+                        <h4>Purpose</h4>
+                        <p>{{ plan.get_purpose_display }}</p>
+                    </div>
+                </div>
+                <div class="trip-info-item">
+                    <div class="trip-info-icon icon-pink">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="trip-info-content">
+                        <h4>Budget</h4>
+                        <p>{{ plan.get_budget_range_display }}</p>
+                    </div>
+                </div>
+                <div class="trip-info-item">
+                    <div class="trip-info-icon icon-green">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="trip-info-content">
+                        <h4>Max Travelers</h4>
+                        <p>{{ plan.max_participants }} People</p>
+                    </div>
+                </div>
+                <div class="trip-info-item">
+                    <div class="trip-info-icon icon-blue">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="trip-info-content">
+                        <h4>Posted</h4>
+                        <p>{{ plan.created_at|timesince }} ago</p>
                     </div>
                 </div>
             </div>
+
+            {% if plan.description %}
+            <div class="trip-description">
+                <h4>Trip Description</h4>
+                <p>{{ plan.description }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="trip-card-footer">
+            <a href="{% url 'travel_plan_detail' plan.plan_id %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-info-circle"></i>
+                View Details
+            </a>
+            <a href="{% url 'edit_travel_plan' plan.plan_id %}" class="btn btn-outline btn-sm">
+                <i class="fas fa-edit"></i>
+                Edit Plan
+            </a>
+            <a href="{% url 'delete_travel_plan' plan.plan_id %}" class="btn btn-danger btn-sm">
+                <i class="fas fa-trash"></i>
+                Delete
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">
+        <i class="fas fa-suitcase-rolling"></i>
+    </div>
+    <h3>No Travel Plans Yet</h3>
+    <p>Create your first travel plan to find compatible travel buddies!</p>
+    <a href="{% url 'create_travel_plan' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i>
+        Create Travel Plan
+    </a>
+</div>
+{% endif %}   
 
             <div class="tab-content" id="organized-trips">
                 <div class="stats-row">
@@ -1089,168 +927,147 @@
                         <div class="stat-box-icon icon-green">
                             <i class="fas fa-check-circle"></i>
                         </div>
-                        <div class="stat-box-value">1</div>
+                        <div class="stat-box-value">{{ participations.count }}</div>
                         <div class="stat-box-label">Confirmed Trips</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-box-icon icon-blue">
                             <i class="fas fa-users"></i>
                         </div>
-                        <div class="stat-box-value">12</div>
+                        <div class="stat-box-value">{{ total_co_travelers }}</div>
                         <div class="stat-box-label">Co-Travelers</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-box-icon icon-purple">
                             <i class="fas fa-calendar-check"></i>
                         </div>
-                        <div class="stat-box-value">Nov 20</div>
-                        <div class="stat-box-label">Departure Date</div>
+                         <div class="stat-box-value">
+                {% if next_organized_trip %}
+                    {{ next_organized_trip.trip.departure_time|date:"M d" }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </div>
+            <div class="stat-box-label">Departure Date</div>
                     </div>
                 </div>
 
-                <div class="trip-grid">
-                    <div class="trip-card">
-                        <div class="trip-card-header">
-                            <div class="trip-card-title">
-                                <div class="trip-destination">
-                                    <i class="fas fa-ship" style="color: var(--info);"></i>
-                                    Sundarbans Mangrove Expedition
-                                </div>
-                                <div class="trip-dates">
-                                    <i class="fas fa-calendar"></i>
-                                    Nov 20 - Nov 23, 2025
-                                    <span style="color: var(--gray-400);">•</span>
-                                    4 Days / 3 Nights
-                                </div>
-                            </div>
-                            <div class="status-badge status-confirmed">Confirmed</div>
-                        </div>
+                {% if participations %}
+<div class="trip-grid">
+    {% for participation in participations %}
+    <div class="trip-card">
+        <div class="trip-card-header">
+            <div class="trip-card-title">
+                <div class="trip-destination">
+                    <i class="fas fa-ship" style="color: var(--info);"></i>
+                    {{ participation.trip.trip_name }}
+                </div>
+                <div class="trip-dates">
+                    <i class="fas fa-calendar"></i>
+                    {{ participation.trip.departure_time|date:"M d" }} - {{ participation.trip.return_time|date:"M d, Y" }}
+                </div>
+            </div>
+            <div class="status-badge status-{{ participation.trip.trip_status }}">
+                {{ participation.trip.get_trip_status_display }}
+            </div>
+        </div>
 
-                        <div class="trip-card-body">
-                            <div class="trip-info-grid">
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-purple">
-                                        <i class="fas fa-bus"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Transportation</h4>
-                                        <p>AC Bus + Boat</p>
-                                    </div>
-                                </div>
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-pink">
-                                        <i class="fas fa-hotel"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Accommodation</h4>
-                                        <p>Resort + Boat</p>
-                                    </div>
-                                </div>
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-green">
-                                        <i class="fas fa-utensils"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Meals</h4>
-                                        <p>All Inclusive</p>
-                                    </div>
-                                </div>
-                                <div class="trip-info-item">
-                                    <div class="trip-info-icon icon-blue">
-                                        <i class="fas fa-user-shield"></i>
-                                    </div>
-                                    <div class="trip-info-content">
-                                        <h4>Driver</h4>
-                                        <p>Verified (4.8★)</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="trip-description">
-                                <h4>Trip Itinerary</h4>
-                                <p><strong>Day 1:</strong> Dhaka to Khulna (bus), transfer to boat<br>
-                                <strong>Day 2:</strong> Sundarbans wildlife safari, visit Karamjal<br>
-                                <strong>Day 3:</strong> Explore Katka beach, tiger trails<br>
-                                <strong>Day 4:</strong> Morning bird watching, return to Dhaka</p>
-                            </div>
-
-                            <div class="participants-section">
-                                <div class="participants-header">
-                                    <h4><i class="fas fa-users"></i> Fellow Travelers</h4>
-                                    <span class="participant-count">12 / 15</span>
-                                </div>
-                                <div class="participants-list">
-                                    <div class="participant-avatar">SA</div>
-                                    <div class="participant-avatar">NK</div>
-                                    <div class="participant-avatar">FA</div>
-                                    <div class="participant-avatar">RH</div>
-                                    <div class="participant-avatar">MS</div>
-                                    <div class="participant-avatar">+7</div>
-                                </div>
-                            </div>
-
-                            <div class="payment-status-card">
-                                <div class="payment-status-header">
-                                    <h5><i class="fas fa-credit-card"></i> Payment Details</h5>
-                                    <div class="status-badge status-pending">Payment Pending</div>
-                                </div>
-                                <div class="payment-amount">৳12,500 BDT</div>
-                                <div class="payment-details">
-                                    <div class="payment-detail">
-                                        <span class="payment-detail-label">Base Cost:</span>
-                                        <span class="payment-detail-value">৳11,000</span>
-                                    </div>
-                                    <div class="payment-detail">
-                                        <span class="payment-detail-label">Platform Fee:</span>
-                                        <span class="payment-detail-value">৳1,500</span>
-                                    </div>
-                                    <div class="payment-detail">
-                                        <span class="payment-detail-label">Payment Due:</span>
-                                        <span class="payment-detail-value">Nov 13, 2025</span>
-                                    </div>
-                                    <div class="payment-detail">
-                                        <span class="payment-detail-label">Status:</span>
-                                        <span class="payment-detail-value" style="color: var(--warning);">Pending</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="alert-box">
-                                <div class="alert-icon">
-                                    <i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>
-                                </div>
-                                <div class="alert-content">
-                                    <h4>Complete Payment Soon!</h4>
-                                    <p>Your spot is reserved. Please complete payment by Nov 13 to confirm your participation.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="trip-card-footer">
-                            <a href="#" class="btn btn-success btn-sm">
-                                <i class="fas fa-credit-card"></i>
-                                Pay Now
-                            </a>
-                            <a href="#" class="btn btn-primary btn-sm">
-                                <i class="fas fa-info-circle"></i>
-                                Trip Details
-                            </a>
-                            <a href="#" class="btn btn-outline btn-sm">
-                                <i class="fas fa-comments"></i>
-                                Group Chat
-                            </a>
-                            <a href="#" class="btn btn-outline btn-sm">
-                                <i class="fas fa-phone-alt"></i>
-                                Contact Driver
-                            </a>
-                            <a href="#" class="btn btn-danger btn-sm">
-                                <i class="fas fa-times-circle"></i>
-                                Leave Trip
-                            </a>
-                        </div>
+        <div class="trip-card-body">
+            <div class="trip-info-grid">
+                <div class="trip-info-item">
+                    <div class="trip-info-icon icon-purple">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <div class="trip-info-content">
+                        <h4>Transportation</h4>
+                        <p>{{ participation.trip.transportation_details|truncatewords:3 }}</p>
+                    </div>
+                </div>
+                <div class="trip-info-item">
+                    <div class="trip-info-icon icon-pink">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <div class="trip-info-content">
+                        <h4>Accommodation</h4>
+                        <p>{{ participation.trip.accommodation_details|truncatewords:3 }}</p>
+                    </div>
+                </div>
+                <div class="trip-info-item">
+                    <div class="trip-info-icon icon-green">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="trip-info-content">
+                        <h4>Meals</h4>
+                        <p>{{ participation.trip.meal_arrangements|truncatewords:2 }}</p>
+                    </div>
+                </div>
+                <div class="trip-info-item">
+                    <div class="trip-info-icon icon-blue">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="trip-info-content">
+                        <h4>Driver</h4>
+                        <p>{% if participation.trip.driver %}{{ participation.trip.driver.name }}{% else %}TBA{% endif %}</p>
                     </div>
                 </div>
             </div>
+
+            <div class="payment-status-card">
+                <div class="payment-status-header">
+                    <h5><i class="fas fa-credit-card"></i> Payment Details</h5>
+                    <div class="status-badge status-{{ participation.payment_status }}">
+                        {{ participation.get_payment_status_display }}
+                    </div>
+                </div>
+                <div class="payment-amount">৳{{ participation.trip.final_cost_per_person }} BDT</div>
+                <div class="payment-details">
+                    <div class="payment-detail">
+                        <span class="payment-detail-label">Amount Paid:</span>
+                        <span class="payment-detail-value">৳{{ participation.amount_paid }}</span>
+                    </div>
+                    <div class="payment-detail">
+                        <span class="payment-detail-label">Platform Fee:</span>
+                        <span class="payment-detail-value">৳{{ participation.commission_charged }}</span>
+                    </div>
+                    <div class="payment-detail">
+                        <span class="payment-detail-label">Status:</span>
+                        <span class="payment-detail-value">{{ participation.get_payment_status_display }}</span>
+                    </div>
+                    <div class="payment-detail">
+                        <span class="payment-detail-label">Joined:</span>
+                        <span class="payment-detail-value">{{ participation.join_date|date:"M d, Y" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="trip-card-footer">
+            <a href="{% url 'organized_trip_detail' participation.trip.trip_id %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-info-circle"></i>
+                Trip Details
+            </a>
+            <a href="{% url 'leave_organized_trip' participation.trip.trip_id %}" class="btn btn-danger btn-sm">
+                <i class="fas fa-times-circle"></i>
+                Leave Trip
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">
+        <i class="fas fa-calendar-times"></i>
+    </div>
+    <h3>No Joined Trips</h3>
+    <p>You haven't joined any organized trips yet. Browse available trips to start your adventure!</p>
+    <a href="{% url 'organized_trips' %}" class="btn btn-primary">
+        <i class="fas fa-search"></i>
+        Browse Organized Trips
+    </a>
+</div>
+{% endif %}
+</div>        
 
             <div class="tab-content" id="past-trips">
                 <div class="stats-row">
@@ -1258,36 +1075,61 @@
                         <div class="stat-box-icon icon-purple">
                             <i class="fas fa-check-double"></i>
                         </div>
-                        <div class="stat-box-value">0</div>
+                        <div class="stat-box-value">{{ completed_trips_count }}</div>
                         <div class="stat-box-label">Completed Trips</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-box-icon icon-green">
                             <i class="fas fa-map-marked-alt"></i>
                         </div>
-                        <div class="stat-box-value">0</div>
+                        <div class="stat-box-value">{{ places_visited }}</div>
                         <div class="stat-box-label">Places Visited</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-box-icon icon-pink">
                             <i class="fas fa-user-friends"></i>
                         </div>
-                        <div class="stat-box-value">0</div>
+                        <div class="stat-box-value">{{ travel_buddies_met }}</div>
                         <div class="stat-box-label">Travel Buddies Met</div>
                     </div>
                 </div>
-
+    {% if past_trips %}
+        <div class="trip-grid">
+            {% for participation in past_trips %}
+            <div class="trip-card">
+                <div class="trip-card-header">
+                    <div class="trip-card-title">
+                        <div class="trip-destination">
+                            <i class="fas fa-map-pin" style="color: var(--success);"></i>
+                            {{ participation.trip.trip_name }}
+                        </div>
+                        <div class="trip-dates">
+                            <i class="fas fa-calendar"></i>
+                            {{ participation.trip.departure_time|date:"M d, Y" }}
+                        </div>
+                    </div>
+                    <div class="status-badge status-completed">Completed</div>
+                </div>
+                <div class="trip-card-body">
+                    <p><strong>Destination:</strong> {{ participation.trip.destination }}</p>
+                    <p><strong>Participants:</strong> {{ participation.trip.total_participants }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
                 <div class="empty-state">
                     <div class="empty-icon">
                         <i class="fas fa-suitcase-rolling"></i>
                     </div>
                     <h3>No Past Trips Yet</h3>
                     <p>You haven't completed any trips yet. Start your first adventure and create amazing memories with verified travel companions!</p>
-                    <a href="#" class="btn btn-primary">
+                    <a href="{% url 'organized_trips' %}" class="btn btn-primary">
                         <i class="fas fa-search"></i>
                         Explore Available Trips
                     </a>
                 </div>
+            {% endif %}
             </div>
         </main>
     </div>
@@ -1304,19 +1146,39 @@
                 tabContents.forEach(tc => tc.classList.remove('active'));
 
                 tab.classList.add('active');
-                document.getElementById(targetTab).classList.add('active');
+                const targetContent = document.getElementById(targetTab);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
             });
         });
 
         document.querySelectorAll('.btn-danger').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 if(btn.textContent.includes('Delete') || btn.textContent.includes('Leave')) {
-                    if(!confirm('Are you sure you want to proceed? This action cannot be undone.')) {
+                    const action = btn.textContent.includes('Delete') ? 'delete this travel plan' : 'leave this trip';
+                    if(!confirm(`Are you sure you want to ${action}? This action cannot be undone.`)) {
                         e.preventDefault();
                     }
                 }
             });
         });
+
+            const savedTab = localStorage.getItem('activeTab');
+    if (savedTab) {
+        const savedTabElement = document.querySelector(`[data-tab="${savedTab}"]`);
+        if (savedTabElement) {
+            savedTabElement.click();
+        }
+    }
+
+    // Save active tab when switching
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            localStorage.setItem('activeTab', tab.getAttribute('data-tab'));
+        });
+    });
+
     </script>
 </body>
 </html>

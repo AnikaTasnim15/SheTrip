@@ -93,6 +93,12 @@
             color: #fecaca;
         }
 
+        .status-not-submitted {
+            background: rgba(59, 130, 246, 0.2);
+            border: 2px solid #3b82f6;
+            color: #dbeafe;
+        }
+
         .form-group {
             margin-bottom: 2rem;
             text-align: left;
@@ -172,6 +178,7 @@
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
         .back-link {
@@ -195,6 +202,21 @@
             border-radius: 15px;
             padding: 1.5rem;
             margin-bottom: 2rem;
+        }
+
+        .info-box.warning {
+            background: rgba(251, 191, 36, 0.2);
+            border-color: #fbbf24;
+        }
+
+        .info-box.success {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+
+        .info-box.danger {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
         }
 
         .info-box h3 {
@@ -224,6 +246,12 @@
             font-weight: bold;
         }
 
+        .info-box p {
+            opacity: 0.9;
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
         .messages {
             background: rgba(239, 68, 68, 0.2);
             border: 2px solid #ef4444;
@@ -239,9 +267,33 @@
             color: #d1fae5;
         }
 
-        .preview-image {
-            max-width: 100%;
-            border-radius: 10px;
+        .messages.info {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+            color: #dbeafe;
+        }
+
+        .messages.warning {
+            background: rgba(251, 191, 36, 0.2);
+            border-color: #fbbf24;
+            color: #fef3c7;
+        }
+
+        .lock-overlay {
+            position: relative;
+        }
+
+        .lock-icon {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .pending-overlay {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
             margin-top: 1rem;
         }
     </style>
@@ -250,7 +302,7 @@
     <div class="container">
         <div class="logo">SheTrip</div>
         <h1 class="title">Account Verification</h1>
-        <p class="subtitle">Upload your NID for identity verification</p>
+        <p class="subtitle">Complete identity verification to access all trip features</p>
 
         <div style="text-align: center;">
             {% if profile.verification_status == 'pending' %}
@@ -260,8 +312,7 @@
             {% elif profile.verification_status == 'rejected' %}
                 <span class="status-badge status-rejected">❌ Verification Rejected</span>
             {% else %}
-        <!-- For 'not_submitted' status -->
-                <span class="status-badge status-pending">📋 Not Submitted</span>
+                <span class="status-badge status-not-submitted">📋 Verification Required</span>
             {% endif %}
         </div>
 
@@ -274,19 +325,49 @@
         {% endif %}
 
         {% if profile.verification_status == 'verified' %}
-            <div class="info-box">
+            <div class="info-box success">
                 <h3>🎉 Your account is verified!</h3>
-                <p style="opacity: 0.9; margin-top: 0.5rem;">You can now access all features including organized trips and travel buddy connections.</p>
+                <p>You now have full access to all SheTrip features including:</p>
+                <ul>
+                    <li>Create and manage travel plans</li>
+                    <li>Find compatible travel buddies</li>
+                    <li>Join organized trips</li>
+                    <li>Connect with verified travelers</li>
+                </ul>
             </div>
+            <div class="back-link">
+                <a href="{% url 'dashboard' %}">← Back to Dashboard</a>
+            </div>
+
         {% elif profile.verification_status == 'pending' %}
-            <div class="info-box">
-                <h3>📋 Documents Submitted</h3>
-                <p style="opacity: 0.9; margin-top: 0.5rem;">Your verification documents are under review. This usually takes 24-48 hours. You'll be notified once approved.</p>
+            <div class="info-box warning">
+                <h3>📋 Verification Under Review</h3>
+                <p>Your documents have been submitted and are currently being reviewed by our admin team. This process typically takes 24-48 hours.</p>
+                <div class="pending-overlay">
+                    <div class="lock-icon">🔒</div>
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Trip Features Locked</p>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">You'll receive a notification once your verification is approved</p>
+                </div>
             </div>
+            <div class="back-link">
+                <a href="{% url 'dashboard' %}">← Back to Dashboard</a>
+            </div>
+
         {% elif profile.verification_status == 'rejected' %}
-            <div class="info-box" style="background: rgba(239, 68, 68, 0.2); border-color: #ef4444;">
+            <div class="info-box danger">
                 <h3>❌ Verification Rejected</h3>
-                <p style="opacity: 0.9; margin-top: 0.5rem;">Your verification was not approved. Please upload clear, valid ID images and try again.</p>
+                <p>Your verification documents were not approved. Please ensure your ID photos are:</p>
+                <ul>
+                    <li>Clear and well-lit</li>
+                    <li>Show all corners of the ID card</li>
+                    <li>Text is readable</li>
+                    <li>Valid and not expired</li>
+                </ul>
+                {% if profile.admin_notes %}
+                <p style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.1); border-radius: 10px;">
+                    <strong>Admin Notes:</strong> {{ profile.admin_notes }}
+                </p>
+                {% endif %}
             </div>
             
             <form method="post" enctype="multipart/form-data" id="verificationForm">
@@ -294,31 +375,37 @@
                 
                 <div class="form-group">
                     <label>NID Front Side</label>
-                    <div class="upload-area" onclick="document.getElementById('nid_front').click()">
+                    <label class="upload-area" for="nid_front">
                         <div class="upload-icon">📄</div>
                         <div class="upload-text">Click to upload NID front side</div>
                         <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
                         <input type="file" id="nid_front" name="nid_front" accept="image/jpeg,image/jpg,image/png" required>
                         <div class="file-name" id="front-name" style="display: none;"></div>
-                    </div>
+                    </label>
                 </div>
 
                 <div class="form-group">
                     <label>NID Back Side</label>
-                    <div class="upload-area" onclick="document.getElementById('nid_back').click()">
+                    <label class="upload-area" for="nid_back">
                         <div class="upload-icon">📄</div>
                         <div class="upload-text">Click to upload NID back side</div>
                         <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
                         <input type="file" id="nid_back" name="nid_back" accept="image/jpeg,image/jpg,image/png" required>
                         <div class="file-name" id="back-name" style="display: none;"></div>
-                    </div>
+                    </label>
                 </div>
 
                 <button type="submit" class="btn" id="submitBtn">Resubmit for Verification</button>
             </form>
+
+            <div class="back-link">
+                <a href="{% url 'dashboard' %}">← Back to Dashboard</a>
+            </div>
+
         {% else %}
             <div class="info-box">
-                <h3>📋 Requirements</h3>
+                <h3>🔐 Verification Required</h3>
+                <p>To ensure the safety of our community, all users must verify their identity before accessing trip features.</p>
                 <ul>
                     <li>Clear photo of your National ID (NID) - Front side</li>
                     <li>Clear photo of your National ID (NID) - Back side</li>
@@ -326,6 +413,11 @@
                     <li>Maximum file size: 5MB each</li>
                     <li>Verification takes 24-48 hours</li>
                 </ul>
+                <div class="pending-overlay" style="margin-top: 1.5rem;">
+                    <div class="lock-icon">🔒</div>
+                    <p style="font-weight: 600; margin-bottom: 0.5rem;">Trip Features Locked</p>
+                    <p style="font-size: 0.9rem; opacity: 0.8;">Complete verification to unlock all features</p>
+                </div>
             </div>
 
             <form method="post" enctype="multipart/form-data" id="verificationForm">
@@ -333,33 +425,33 @@
                 
                 <div class="form-group">
                     <label>NID Front Side</label>
-                    <label class="upload-area" for="nid_front" style="cursor:pointer;">
+                    <label class="upload-area" for="nid_front">
                         <div class="upload-icon">📄</div>
                         <div class="upload-text">Click to upload NID front side</div>
                         <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
-                        <input type="file" id="nid_front" name="nid_front" accept="image/jpeg,image/jpg,image/png" required style="display:none;">
+                        <input type="file" id="nid_front" name="nid_front" accept="image/jpeg,image/jpg,image/png" required>
                         <div class="file-name" id="front-name" style="display: none;"></div>
                     </label>
                 </div>
 
                 <div class="form-group">
                     <label>NID Back Side</label>
-                    <label class="upload-area" for="nid_back" style="cursor:pointer;">
+                    <label class="upload-area" for="nid_back">
                         <div class="upload-icon">📄</div>
                         <div class="upload-text">Click to upload NID back side</div>
                         <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
-                        <input type="file" id="nid_back" name="nid_back" accept="image/jpeg,image/jpg,image/png" required style="display:none;">
+                        <input type="file" id="nid_back" name="nid_back" accept="image/jpeg,image/jpg,image/png" required>
                         <div class="file-name" id="back-name" style="display: none;"></div>
                     </label>
                 </div>
 
                 <button type="submit" class="btn" id="submitBtn">Submit for Verification</button>
             </form>
-        {% endif %}
 
-        <div class="back-link">
-            <a href="{% url 'dashboard' %}">← Back to Dashboard</a>
-        </div>
+            <div class="back-link">
+                <a href="{% url 'dashboard' %}">← Back to Dashboard</a>
+            </div>
+        {% endif %}
     </div>
 
     <script>
@@ -381,7 +473,6 @@
             }
         });
 
-        // Prevent form resubmission
         document.getElementById('verificationForm')?.addEventListener('submit', function() {
             const submitBtn = document.getElementById('submitBtn');
             if (submitBtn) {

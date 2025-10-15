@@ -53,135 +53,7 @@
         .dashboard {
             display: flex;
             min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: var(--white);
-            border-right: 1px solid var(--gray-200);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 1000;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .sidebar-header {
-            padding: 2rem 1.5rem;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .brand {
-            font-size: 1.75rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.5px;
-        }
-
-        .user-card {
-            background: var(--gray-50);
-            border-radius: 12px;
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.875rem;
-        }
-
-        .user-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.125rem;
-            color: var(--white);
-            flex-shrink: 0;
-        }
-
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .user-info h4 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: 0.25rem;
-        }
-
-        .user-info p {
-            font-size: 0.8rem;
-            color: var(--gray-500);
-        }
-
-        .nav {
-            padding: 1.5rem 0;
-        }
-
-        .nav-section {
-            margin-bottom: 2rem;
-        }
-
-        .nav-label {
-            padding: 0 1.5rem;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--gray-400);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-item {
             position: relative;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 0.875rem;
-            padding: 0.75rem 1.5rem;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .nav-link:hover {
-            background: var(--gray-50);
-            color: var(--gray-900);
-        }
-
-        .nav-link.active {
-            background: linear-gradient(90deg, rgba(124, 58, 237, 0.08) 0%, transparent 100%);
-            color: var(--primary);
-            border-right: 3px solid var(--primary);
-        }
-
-        .nav-icon {
-            width: 20px;
-            text-align: center;
-            color: currentColor;
-        }
-
-        .badge {
-            margin-left: auto;
-            background: var(--primary);
-            color: var(--white);
-            padding: 0.125rem 0.5rem;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: 600;
         }
 
         .main-content {
@@ -189,6 +61,8 @@
             margin-left: 280px;
             padding: 2rem;
             background: var(--gray-50);
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
         }
 
         .topbar {
@@ -286,6 +160,11 @@
         .alert-card.info {
             background: linear-gradient(135deg, #dbeafe, #bfdbfe);
             border-left-color: var(--info);
+        }
+
+        .alert-card.danger {
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border-left-color: var(--danger);
         }
 
         .alert-icon {
@@ -644,7 +523,7 @@
             position: fixed;
             bottom: 2rem;
             right: 2rem;
-            z-index: 1000;
+            z-index: 999;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -716,13 +595,10 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
             .main-content {
-                margin-left: 0;
+                margin-left: 0 !important;
                 padding: 1rem;
+                padding-top: 5rem;
             }
 
             .stats-grid {
@@ -770,264 +646,12 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--gray-400);
         }
-
-        /* Profile Picture Lightbox */
-.profile-pic-lightbox {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.3s ease;
-}
-
-.profile-pic-lightbox.active {
-    display: flex;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.lightbox-content {
-    position: relative;
-    max-width: 90%;
-    max-height: 90%;
-    animation: zoomIn 0.3s ease;
-}
-
-@keyframes zoomIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-.lightbox-image {
-    max-width: 100%;
-    max-height: 90vh;
-    border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-}
-
-.lightbox-close {
-    position: absolute;
-    top: -50px;
-    right: 0;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid white;
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.lightbox-close:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: rotate(90deg);
-}
-
-.lightbox-info {
-    position: absolute;
-    bottom: -60px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: white;
-}
-
-.lightbox-info h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.lightbox-info p {
-    font-size: 1rem;
-    opacity: 0.8;
-}
-
-.user-avatar {
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.user-avatar:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
-}
-
     </style>
 </head>
 <body>
-
-    <!-- Profile Picture Lightbox -->
-<div class="profile-pic-lightbox" id="profileLightbox" onclick="closeLightbox(event)">
-    <div class="lightbox-content">
-        <button class="lightbox-close" onclick="closeLightbox(event)">
-            <i class="fas fa-times"></i>
-        </button>
-        <img src="" alt="Profile Picture" class="lightbox-image" id="lightboxImage">
-        <div class="lightbox-info">
-            <h3 id="lightboxName"></h3>
-            <p id="lightboxLocation"></p>
-        </div>
-    </div>
-</div>
-
     <div class="dashboard">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="brand">SheTrip</div>
-                <div class="user-card">
-                    <div class="user-avatar"onclick="openProfileLightbox(event)">
-                        {% if profile and profile.profile_picture %}
-                            <img src="{{ profile.profile_picture.url }}" alt="Profile">
-                        {% else %}
-                            {{ user.first_name|first }}{{ user.last_name|first }}
-                        {% endif %}
-                    </div>
-                    <div class="user-info">
-                        <h4>{{ user.first_name }} {{ user.last_name }}</h4>
-                        <p>{% if profile %}{{ profile.city }}{% else %}Traveler{% endif %}</p>
-                    </div>
-                </div>
-            </div>
-
-            <nav class="nav">
-                <div class="nav-section">
-                    <div class="nav-label">Main Menu</div>
-                    <div class="nav-item">
-                        <a href="{% url 'dashboard' %}" class="nav-link active">
-                            <i class="fas fa-th-large nav-icon"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="{% url 'my_trips' %}" class="nav-link">
-                           <i class="fas fa-map-marked-alt nav-icon"></i>
-                           <span>My Trips</span>
-                           <span class="badge">0</span>
-                       </a>
-                    </div>
-                    <a href="{% url 'find_buddies' %}" class="nav-link">
-    <i class="fas fa-search nav-icon"></i>
-    <span>Find Buddies</span>
-</a>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-calendar-alt nav-icon"></i>
-                            <span>Organized Trips</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-label">Communication</div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-comments nav-icon"></i>
-                            <span>Messages</span>
-                            <span class="badge">0</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-bell nav-icon"></i>
-                            <span>Notifications</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-users nav-icon"></i>
-                            <span>Community</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-label">Account</div>
-                    <div class="nav-item">
-                        <a href="{% url 'verification' %}" class="nav-link">
-                            <i class="fas fa-check-circle nav-icon"></i>
-                            <span>Verification</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-user-circle nav-icon"></i>
-                            <span>My Profile</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-credit-card nav-icon"></i>
-                            <span>Subscription</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-receipt nav-icon"></i>
-                            <span>Payments</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-label">Safety</div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-shield-alt nav-icon"></i>
-                            <span>Safety Center</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-phone-alt nav-icon"></i>
-                            <span>Emergency Contacts</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-exclamation-triangle nav-icon"></i>
-                            <span>SOS Alerts</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-label">Settings</div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-cog nav-icon"></i>
-                            <span>Settings</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="fas fa-question-circle nav-icon"></i>
-                            <span>Help & Support</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="{% url 'logout' %}" class="nav-link">
-                            <i class="fas fa-sign-out-alt nav-icon"></i>
-                            <span>Logout</span>
-                        </a>
-                    </div>
-                </div>
-            </nav>
-        </aside>
-
+        {% include 'includes/sidebar.html' %}
+        
         <main class="main-content">
             <div class="topbar">
                 <div class="topbar-left">
@@ -1039,7 +663,7 @@
                         <i class="fas fa-bell"></i>
                         Notifications
                     </a>
-                    <a href="#" class="btn btn-primary btn-sm">
+                    <a href="{% url 'create_travel_plan' %}" class="btn btn-primary btn-sm">
                         <i class="fas fa-plus"></i>
                         Create Trip Plan
                     </a>
@@ -1047,65 +671,70 @@
             </div>
             
             {% if profile %}
-    {% if profile.verification_status == 'verified' %}
-        <div class="alert-card success">
-            <div class="alert-icon">
-                <i class="fas fa-check-circle" style="color: var(--success);"></i>
-            </div>
-            <div class="alert-content">
-                <div class="alert-title">✅ Account Verified!</div>
-                <p class="alert-text">Your account is verified. You can now join organized trips and connect with verified travel buddies.</p>
-            </div>
-        </div>
-    {% elif profile.verification_status == 'pending' %}
-        <div class="alert-card info">
-            <div class="alert-icon">
-                <i class="fas fa-clock" style="color: var(--info);"></i>
-            </div>
-            <div class="alert-content">
-                <div class="alert-title">⏳ Verification Pending</div>
-                <p class="alert-text">Your verification documents are under review. This usually takes 24-48 hours. We'll notify you once approved.</p>
-            </div>
-        </div>
-    {% elif profile.verification_status == 'rejected' %}
-        <div class="alert-card" style="background: linear-gradient(135deg, #fee2e2, #fecaca); border-left-color: var(--danger);">
-            <div class="alert-icon">
-                <i class="fas fa-times-circle" style="color: var(--danger);"></i>
-            </div>
-            <div class="alert-content">
-                <div class="alert-title">❌ Verification Rejected</div>
-                <p class="alert-text">Your verification was not approved. Please check your documents and try again with clear, valid ID images.</p>
-                <a href="{% url 'verification' %}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-redo"></i>
-                    Try Again
-                </a>
-            </div>
-        </div>
-    {% else %}
-        <div class="alert-card">
-            <div class="alert-icon">
-                <i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>
-            </div>
-            <div class="alert-content">
-                <div class="alert-title">Account Verification Required</div>
-                <p class="alert-text">Complete your identity verification to join organized trips and connect with travel buddies. Upload your ID document for admin approval.</p>
-                <a href="{% url 'verification' %}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-check-circle"></i>
-                    Start Verification
-                </a>
-            </div>
-        </div>
-    {% endif %}
-{% endif %}
+                {% if profile.verification_status == 'verified' %}
+                    <div class="alert-card success">
+                        <div class="alert-icon">
+                            <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">✅ Account Verified!</div>
+                            <p class="alert-text">Your account is verified. You can now join organized trips and connect with verified travel buddies.</p>
+                        </div>
+                    </div>
+                {% elif profile.verification_status == 'pending' %}
+                    <div class="alert-card info">
+                        <div class="alert-icon">
+                            <i class="fas fa-clock" style="color: var(--info);"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">⏳ Verification Pending</div>
+                            <p class="alert-text">Your verification documents are under review. This usually takes 24-48 hours. We'll notify you once approved.</p>
+                        </div>
+                    </div>
+                {% elif profile.verification_status == 'rejected' %}
+                    <div class="alert-card danger">
+                        <div class="alert-icon">
+                            <i class="fas fa-times-circle" style="color: var(--danger);"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">❌ Verification Rejected</div>
+                            <p class="alert-text">Your verification was not approved. Please check your documents and try again with clear, valid ID images.</p>
+                            <a href="{% url 'verification' %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-redo"></i>
+                                Try Again
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert-card">
+                        <div class="alert-icon">
+                            <i class="fas fa-exclamation-circle" style="color: var(--warning);"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">Account Verification Required</div>
+                            <p class="alert-text">Complete your identity verification to join organized trips and connect with travel buddies. Upload your ID document for admin approval.</p>
+                            <a href="{% url 'verification' %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-check-circle"></i>
+                                Start Verification
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
 
+            <!-- DYNAMIC Statistics Grid -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-info">
                         <h3>Upcoming Trips</h3>
-                        <div class="stat-value">0</div>
-                        <div class="stat-change neutral">
-                            <i class="fas fa-minus"></i>
-                            No trips planned
+                        <div class="stat-value">{{ upcoming_trips_count }}</div>
+                        <div class="stat-change {% if upcoming_trips_count > 0 %}positive{% else %}neutral{% endif %}">
+                            <i class="fas {% if upcoming_trips_count > 0 %}fa-arrow-up{% else %}fa-minus{% endif %}"></i>
+                            {% if upcoming_trips_count > 0 %}
+                                {{ upcoming_trips_count }} planned
+                            {% else %}
+                                No trips planned
+                            {% endif %}
                         </div>
                     </div>
                     <div class="stat-icon icon-purple">
@@ -1116,10 +745,14 @@
                 <div class="stat-card">
                     <div class="stat-info">
                         <h3>Travel Matches</h3>
-                        <div class="stat-value">0</div>
-                        <div class="stat-change neutral">
+                        <div class="stat-value">{{ travel_buddies_count }}</div>
+                        <div class="stat-change {% if travel_buddies_count > 0 %}positive{% else %}neutral{% endif %}">
                             <i class="fas fa-users"></i>
-                            Find your buddies
+                            {% if travel_buddies_count > 0 %}
+                                Active connections
+                            {% else %}
+                                Find your buddies
+                            {% endif %}
                         </div>
                     </div>
                     <div class="stat-icon icon-pink">
@@ -1130,10 +763,14 @@
                 <div class="stat-card">
                     <div class="stat-info">
                         <h3>Completed Trips</h3>
-                        <div class="stat-value">0</div>
-                        <div class="stat-change positive">
-                            <i class="fas fa-arrow-up"></i>
-                            New traveler
+                        <div class="stat-value">{{ completed_trips_count }}</div>
+                        <div class="stat-change {% if completed_trips_count > 0 %}positive{% else %}neutral{% endif %}">
+                            <i class="fas {% if completed_trips_count > 0 %}fa-arrow-up{% else %}fa-plane{% endif %}"></i>
+                            {% if completed_trips_count > 0 %}
+                                {{ completed_trips_count }} completed
+                            {% else %}
+                                New traveler
+                            {% endif %}
                         </div>
                     </div>
                     <div class="stat-icon icon-green">
@@ -1144,10 +781,16 @@
                 <div class="stat-card">
                     <div class="stat-info">
                         <h3>Safety Rating</h3>
-                        <div class="stat-value">New</div>
+                        <div class="stat-value">{{ user_rating }}</div>
                         <div class="stat-change neutral">
                             <i class="fas fa-star"></i>
-                            Build reputation
+                            {% if completed_trips_count > 5 %}
+                                Trusted traveler
+                            {% elif completed_trips_count > 0 %}
+                                Building reputation
+                            {% else %}
+                                Build reputation
+                            {% endif %}
                         </div>
                     </div>
                     <div class="stat-icon icon-blue">
@@ -1157,41 +800,76 @@
             </div>
 
             <div class="grid-2">
+                <!-- DYNAMIC My Travel Plans -->
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">My Travel Plans</h2>
-                        <a href="#" class="card-action">
+                        <a href="{% url 'my_trips' %}" class="card-action">
                             View All
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                     <div class="trip-list">
-                        <div class="empty-state">
-                            <div class="empty-icon">
-                                <i class="fas fa-suitcase-rolling"></i>
+                        {% if has_trips %}
+                            {% for trip in user_trips %}
+                            <div class="trip-card">
+                                <div class="trip-header">
+                                    <div>
+                                        <div class="trip-title">{{ trip.destination }}</div>
+                                        <div class="trip-date">
+                                            <i class="fas fa-calendar"></i>
+                                            {{ trip.start_date|date:"M d, Y" }} - {{ trip.end_date|date:"M d, Y" }}
+                                        </div>
+                                    </div>
+                                    <span class="status-badge {% if trip.start_date > today %}status-upcoming{% else %}status-active{% endif %}">
+                                        {% if trip.start_date > today %}Upcoming{% else %}Active{% endif %}
+                                    </span>
+                                </div>
+                                <div class="trip-meta">
+                                    <div class="trip-meta-item">
+                                        <i class="fas fa-clock"></i>
+                                        {{ trip.duration }} days
+                                    </div>
+                                    <div class="trip-meta-item">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        ৳{{ trip.budget }}
+                                    </div>
+                                    <div class="trip-meta-item">
+                                        <i class="fas fa-users"></i>
+                                        {% if trip.travel_style == 'solo' %}Solo{% else %}Group{% endif %}
+                                    </div>
+                                </div>
                             </div>
-                            <h3>No trips yet</h3>
-                            <p>Create your first travel plan and find the perfect travel buddy</p>
-                            <a href="#" class="btn btn-primary btn-sm">
-                                <i class="fas fa-plus"></i>
-                                Create Trip Plan
-                            </a>
-                        </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-suitcase-rolling"></i>
+                                </div>
+                                <h3>No trips yet</h3>
+                                <p>Create your first travel plan and find the perfect travel buddy</p>
+                                <a href="#" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-plus"></i>
+                                    Create Trip Plan
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
+                <!-- DYNAMIC Quick Actions -->
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">Quick Actions</h2>
                     </div>
                     <div class="quick-actions">
-                        <a href="#" class="action-card">
+                        <a href="{% url 'find_buddies' %}" class="action-card">
                             <div class="action-icon">
                                 <i class="fas fa-search"></i>
                             </div>
                             <h4>Find Travel Buddies</h4>
                         </a>
-                        <a href="#" class="action-card">
+                        <a href="{% url 'organized_trips' %}" class="action-card">
                             <div class="action-icon">
                                 <i class="fas fa-route"></i>
                             </div>
@@ -1205,15 +883,16 @@
                         </a>
                         <a href="#" class="action-card">
                             <div class="action-icon">
-                                <i class="fas fa-book-open"></i>
+                                <i class="fas fa-plus-circle"></i>
                             </div>
-                            <h4>Safety Guidelines</h4>
+                            <h4>Create New Trip</h4>
                         </a>
                     </div>
                 </div>
             </div>
 
             <div class="grid-2">
+                <!-- DYNAMIC Recent Activity -->
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">Recent Activity</h2>
@@ -1223,9 +902,21 @@
                         </a>
                     </div>
                     <div class="activity-list">
+                        {% for activity in recent_activities %}
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: {{ activity.bg_color }}; color: {{ activity.icon_color }};">
+                                <i class="{{ activity.icon }}"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>{{ activity.title }}</h4>
+                                <p>{{ activity.description }}</p>
+                                <div class="activity-time">{{ activity.time|timesince }} ago</div>
+                            </div>
+                        </div>
+                        {% empty %}
                         <div class="activity-item">
                             <div class="activity-icon" style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(167, 139, 250, 0.15)); color: var(--primary);">
-                                <i class="fas fa-user-check"></i>
+                                <i class="fas fa-star"></i>
                             </div>
                             <div class="activity-content">
                                 <h4>Account Created Successfully</h4>
@@ -1233,47 +924,69 @@
                                 <div class="activity-time">Just now</div>
                             </div>
                         </div>
-                        <div class="activity-item">
-                            <div class="activity-icon" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(191, 219, 254, 0.15)); color: var(--info);">
-                                <i class="fas fa-clipboard-list"></i>
-                            </div>
-                            <div class="activity-content">
-                                <h4>Complete Your Profile</h4>
-                                <p>Add more details to attract compatible travel buddies</p>
-                                <div class="activity-time">Today</div>
-                            </div>
-                        </div>
-                        <div class="activity-item">
-                            <div class="activity-icon" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(167, 243, 208, 0.15)); color: var(--success);">
-                                <i class="fas fa-id-card"></i>
-                            </div>
-                            <div class="activity-content">
-                                <h4>Verify Your Identity</h4>
-                                <p>Submit verification documents for safety approval</p>
-                                <div class="activity-time">Today</div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
 
+                <!-- DYNAMIC Available Trips -->
                 <div class="card">
                     <div class="card-header">
                         <h2 class="card-title">Available Trips</h2>
-                        <a href="#" class="card-action">
+                        <a href="{% url 'organized_trips' %}" class="card-action">
                             Browse All
                             <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <i class="fas fa-map-marked-alt"></i>
+                    {% if has_available_trips %}
+                        <div class="trip-list">
+                            {% for trip in available_trips %}
+                            <div class="trip-card" style="border-left-color: var(--secondary);">
+                                <div class="trip-header">
+                                    <div>
+                                        <div class="trip-title">{{ trip.trip_name }}</div>
+                                        <div class="trip-date">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            {{ trip.destination }}
+                                        </div>
+                                    </div>
+                                    <span class="status-badge status-upcoming">
+                                        {{ trip.available_slots }} spots
+                                    </span>
+                                </div>
+                                <div class="trip-meta">
+                                    <div class="trip-meta-item">
+                                        <i class="fas fa-calendar"></i>
+                                        {{ trip.start_date|date:"M d" }}
+                                    </div>
+                                    <div class="trip-meta-item">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        ৳{{ trip.price_per_person }}
+                                    </div>
+                                    <div class="trip-meta-item">
+                                        <i class="fas fa-star"></i>
+                                        {{ trip.organizer.first_name }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
-                        <h3>No trips available</h3>
-                        <p>Check back soon for organized trips</p>
-                    </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <h3>No trips available</h3>
+                            <p>Check back soon for organized trips or create your own!</p>
+                            <a href="#" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i>
+                                Create Your Trip
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
+            <!-- DYNAMIC Profile Information -->
             {% if profile %}
             <div class="card">
                 <div class="card-header">
@@ -1324,6 +1037,7 @@
             </div>
             {% endif %}
 
+            <!-- Safety Guidelines -->
             <div class="card" style="margin-top: 2rem;">
                 <div class="card-header">
                     <h2 class="card-title">Safety Guidelines</h2>
@@ -1363,65 +1077,20 @@
                 </div>
             </div>
         </main>
-
-        <button class="sos-button" title="Emergency SOS">
+        
+        <!-- SOS Button -->
+        <button class="sos-button" onclick="handleSOS()" title="Emergency SOS">
             <i class="fas fa-exclamation-triangle"></i>
         </button>
     </div>
 
     <script>
-        document.querySelector('.sos-button').addEventListener('click', function() {
+        function handleSOS() {
             if(confirm('Are you in an emergency situation? This will alert our support team and your emergency contacts.')) {
                 alert('SOS Alert sent! Help is on the way. Stay safe!');
-            }
-        });
-        // Profile Picture Lightbox
-    function openProfileLightbox(event) {
-        event.stopPropagation();
-        
-        const lightbox = document.getElementById('profileLightbox');
-        const lightboxImage = document.getElementById('lightboxImage');
-        const lightboxName = document.getElementById('lightboxName');
-        const lightboxLocation = document.getElementById('lightboxLocation');
-        
-        {% if profile and profile.profile_picture %}
-            lightboxImage.src = "{{ profile.profile_picture.url }}";
-        {% else %}
-            // If no profile picture, don't open lightbox
-            return;
-        {% endif %}
-        
-        lightboxName.textContent = "{{ user.first_name }} {{ user.last_name }}";
-        lightboxLocation.textContent = "{% if profile %}{{ profile.city }}, {{ profile.country }}{% else %}Traveler{% endif %}";
-        
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
-    }
-
-    function closeLightbox(event) {
-        // Close only if clicking on background or close button
-        if (event.target.id === 'profileLightbox' || event.target.closest('.lightbox-close')) {
-            const lightbox = document.getElementById('profileLightbox');
-            lightbox.classList.remove('active');
-            document.body.style.overflow = ''; // Restore scrolling
-        }
-    }
-
-    // Close lightbox on Escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            const lightbox = document.getElementById('profileLightbox');
-            if (lightbox.classList.contains('active')) {
-                lightbox.classList.remove('active');
-                document.body.style.overflow = '';
+                // You can add AJAX call here to actually send the alert
             }
         }
-    });
-
-    // Prevent lightbox from closing when clicking on the image
-    document.querySelector('.lightbox-content').addEventListener('click', function(event) {
-        event.stopPropagation();
-    });
-  </script>
+    </script>
 </body>
 </html>

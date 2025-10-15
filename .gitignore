@@ -1,3 +1,10 @@
+# Environment variables
+.env
+.env.local
+
+# Keep example file
+!.env.example
+
 # Python cache files
 __pycache__/
 *.py[cod]

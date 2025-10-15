@@ -3,13 +3,13 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='userprofile')
-    age = models.IntegerField()
+    age = models.IntegerField(default=0, blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True)
-    city = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
+    city = models.CharField(max_length=100, blank=True)
+    country = models.CharField(max_length=100, blank=True)
     occupation = models.CharField(max_length=100, blank=True)
     languages = models.CharField(max_length=200, blank=True)
-    travel_style = models.CharField(max_length=50)
+    travel_style = models.CharField(max_length=50, blank=True)
     accommodation = models.CharField(max_length=200, blank=True)
     interests = models.CharField(max_length=500, blank=True)
     dream_destinations = models.TextField(blank=True)
@@ -34,3 +34,34 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
+    
+    @property
+    def is_verified(self):
+        """Check if user's account is verified"""
+        return self.verification_status == 'verified'
+    
+    @property
+    def is_profile_complete(self):
+        """Check if user has completed their profile"""
+        required_fields = [
+            self.age and self.age > 0 and
+            self.city and 
+            self.country and 
+            self.travel_style
+        ]
+        return all(required_fields) and self.age > 0
+    
+    def get_verification_badge(self):
+        """Return verification badge HTML for templates"""
+        if self.verification_status == 'verified':
+            return '✅ Verified'
+        elif self.verification_status == 'pending':
+            return '⏳ Pending'
+        elif self.verification_status == 'rejected':
+            return '❌ Rejected'
+        else:
+            return '📋 Not Verified'
+    
+    def can_access_trips(self):
+        """Check if user can access trip features"""
+        return self.verification_status == 'verified'
