@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Emergency Contact - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --danger: #ef4444;
+            --gray-50: #f8fafc;
+            --gray-200: #e2e8f0;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .delete-card {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .delete-header {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .delete-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .delete-header h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .delete-content {
+            padding: 2.5rem;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .warning-box p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #92400e;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+
+        .contact-preview {
+            background: var(--gray-50);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 2px solid var(--gray-200);
+        }
+
+        .contact-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .contact-details {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--gray-600);
+        }
+
+        .detail-item i {
+            color: var(--danger);
+            width: 20px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+            background: #dc2626;
+        }
+
+        .btn-outline {
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--gray-600);
+            color: var(--gray-900);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .delete-content {
+                padding: 1.5rem;
+            }
+
+            .btn-group {
+                flex-direction: column-reverse;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="delete-card">
+            <div class="delete-header">
+                <div class="delete-icon">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+                <h1>Delete Emergency Contact?</h1>
+                <p>This action cannot be undone</p>
+            </div>
+
+            <div class="delete-content">
+                <div class="warning-box">
+                    <p>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span><strong>Warning:</strong> Deleting this contact means they will no longer be notified during emergencies. Make sure you have other emergency contacts set up.</span>
+                    </p>
+                </div>
+
+                <div class="contact-preview">
+                    <div class="contact-name">
+                        <i class="fas fa-user-circle"></i>
+                        {{ contact.contact_name }}
+                    </div>
+                    <div class="contact-details">
+                        <div class="detail-item">
+                            <i class="fas fa-heart"></i>
+                            <span>{{ contact.get_relationship_display }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-phone"></i>
+                            <span>{{ contact.phone_number }}</span>
+                        </div>
+                        {% if contact.email %}
+                        <div class="detail-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>{{ contact.email }}</span>
+                        </div>
+                        {% endif %}
+                        {% if contact.is_primary %}
+                        <div class="detail-item">
+                            <i class="fas fa-star"></i>
+                            <span><strong>Primary Emergency Contact</strong></span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="btn-group">
+                        <a href="{% url 'safety:emergency_contacts' %}" class="btn btn-outline">
+                            <i class="fas fa-arrow-left"></i>
+                            Cancel
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i>
+                            Yes, Delete Contact
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
