@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')), 
     path('trips/', include('trips.urls')),
+    path('safety/', include('safety.urls')),
     
  # JWT & Social Auth APIs
     path('api/auth/', include('dj_rest_auth.urls')),
