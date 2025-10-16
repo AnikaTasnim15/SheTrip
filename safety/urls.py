@@ -5,22 +5,7 @@ app_name = 'safety'
 
 urlpatterns = [
     # Safety Center
-    path('center/', views.safety_center, name='safety_center'),
-
-    # Safety Reports
-    path('reports/', views.safety_list, name='safety_list'),
-    path('reports/create/', views.safety_create, name='safety_create'),
-    path('reports/<int:pk>/', views.safety_detail, name='safety_detail'),
-    path('reports/my-reports/', views.my_reports, name='my_reports'),
-
-    # Safety Guidelines
-    path('guidelines/', views.guidelines_index, name='guidelines_index'),
-    path('guidelines/<slug:slug>/', views.guideline_detail, name='guideline_detail'),
-
-    # Legacy guideline URLs
-    path('guidelines/verify-before-meeting/', views.verify_before_meeting, name='verify_before_meeting'),
-    path('guidelines/share-location/', views.share_location, name='share_location'),
-    path('guidelines/emergency-support/', views.emergency_support, name='emergency_support'),
+    path('', views.safety_center, name='safety_center'),
 
     # Emergency Contacts
     path('emergency-contacts/', views.emergency_contacts, name='emergency_contacts'),
@@ -35,8 +20,16 @@ urlpatterns = [
     path('sos/<int:alert_id>/', views.sos_alert_detail, name='sos_alert_detail'),
     path('sos/quick/', views.quick_sos, name='quick_sos'),
 
-    # Legacy URLs (backward compatibility)
-    path('', views.safety_list, name='safety_list_legacy'),
-    path('create/', views.safety_create, name='safety_create_legacy'),
-    path('<int:pk>/', views.safety_detail, name='safety_detail_legacy'),
+    # Safety Guidelines
+    path('guidelines/', views.guidelines_index, name='guidelines_index'),
+    path('guidelines/verify-before-meeting/', views.verify_before_meeting, name='verify_before_meeting'),
+    path('guidelines/share-location/', views.share_location, name='share_location'),
+    path('guidelines/emergency-support/', views.emergency_support, name='emergency_support'),
+    path('guidelines/<slug:slug>/', views.guideline_detail, name='guideline_detail'),
+
+    # Safety Reports
+    path('reports/', views.safety_list, name='safety_list'),
+    path('reports/create/', views.safety_create, name='safety_create'),
+    path('reports/my-reports/', views.my_reports, name='my_reports'),
+    path('reports/<int:pk>/', views.safety_detail, name='safety_detail'),
 ]
