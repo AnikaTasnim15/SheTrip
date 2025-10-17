@@ -206,6 +206,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'trips.context_processors.trip_counts',
+                'users.context_processors.notifications',
+'chat.context_processors.unread_messages',
             ],
         },
     },

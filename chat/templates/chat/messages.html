@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --secondary: #ec4899;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+        }
+
+        .navbar h1 {
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .conversations-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .conversation-item {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 2px solid transparent;
+        }
+
+        .conversation-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .conversation-info {
+            flex: 1;
+        }
+
+        .conversation-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .conversation-info p {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            color: var(--gray-300);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        {% include 'includes/sidebar.html' %}
+
+        <main class="main-content">
+            <div class="navbar">
+                <h1>
+                    <i class="fas fa-envelope"></i>
+                    Messages
+                </h1>
+            </div>
+
+            {% if conversations %}
+<div class="conversations-list">
+    {% for item in conversations %}
+    <a href="{% url 'chat:conversation_detail' item.conversation.id %}" class="conversation-item">
+        {% if item.other_user.userprofile.profile_picture %}
+        <img src="{{ item.other_user.userprofile.profile_picture.url }}" alt="{{ item.other_user.first_name }}" class="avatar">
+        {% else %}
+        <div class="avatar">
+            {{ item.other_user.first_name|first }}{{ item.other_user.last_name|first }}
+        </div>
+        {% endif %}
+
+        <div class="conversation-info">
+            <h3>{{ item.other_user.first_name }} {{ item.other_user.last_name }}</h3>
+            {% if item.last_message %}
+                <p class="last-message">
+                    {% if item.last_message.message_type == 'text' %}
+                        {{ item.last_message.content|truncatewords:8 }}
+                    {% elif item.last_message.message_type == 'image' %}
+                        <i class="fas fa-image"></i> Photo
+                    {% else %}
+                        <i class="fas fa-file"></i> File
+                    {% endif %}
+                </p>
+                <p class="time">{{ item.last_message.timestamp|timesince }} ago</p>
+            {% else %}
+                <p class="last-message">No messages yet</p>
+            {% endif %}
+        </div>
+
+        {% if item.unread_count > 0 %}
+        <div class="unread-badge">{{ item.unread_count }}</div>
+        {% endif %}
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">
+        <i class="fas fa-comments"></i>
+    </div>
+    <h2>No Messages Yet</h2>
+    <p>Start a conversation with your connections!</p>
+    <a href="{% url 'my_connections' %}" class="btn btn-primary">
+        <i class="fas fa-users"></i>
+        View Connections
+    </a>
+</div>
+{% endif %}
+        </main>
+    </div>
+</body>
+</html>

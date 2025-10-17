@@ -381,27 +381,31 @@
         <div class="nav-section">
             <div class="nav-label">Communication</div>
             <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-comments nav-icon"></i>
-                    <span>Messages</span>
-                    <span class="badge">0</span>
-                </a>
-            </div>
+                 <a href="{% url 'chat:messages' %}" class="nav-link {% if request.resolver_match.url_name == 'messages' %}active{% endif %}">
+                     <i class="fas fa-comments nav-icon"></i>
+                     <span>Messages</span>
+                     {% if unread_messages_count > 0 %}
+                     <span class="badge">{{ unread_messages_count }}</span>
+                     {% endif %}
+                 </a>
             <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'notifications' %}" class="nav-link {% if request.resolver_match.url_name == 'notifications' %}active{% endif %}">
                     <i class="fas fa-bell nav-icon"></i>
                     <span>Notifications</span>
+                    {% if unread_notifications_count > 0 %}
+                    <span class="badge">{{ unread_notifications_count }}</span>
+                    {% endif %}
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-users nav-icon"></i>
-                    <span>Community</span>
-                </a>
+                 <a href="{% url 'community' %}" class="nav-link">
+                 <i class="fas fa-users nav-icon"></i>
+                 <span>Community</span>
+               </a>
             </div>
-        </div>
+       </div>
 
-        <div class="nav-section">
+       <div class="nav-section">
             <div class="nav-label">Account</div>
             <div class="nav-item">
                 <a href="{% url 'verification' %}" class="nav-link {% if request.resolver_match.url_name == 'verification' %}active{% endif %}">
