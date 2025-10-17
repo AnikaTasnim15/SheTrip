@@ -24,11 +24,12 @@ urlpatterns = [
     path('', include('users.urls')), 
     path('trips/', include('trips.urls')),
     path('safety/', include('safety.urls')),
+path('chat/', include('chat.urls')),
     
  # JWT & Social Auth APIs
     path('api/auth/', include('dj_rest_auth.urls')),
     path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
-    path('accounts/', include('allauth.urls')),  # Social login
+    path('accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:
