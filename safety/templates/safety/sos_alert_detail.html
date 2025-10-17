@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Alert Details - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --secondary: #ec4899;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .brand {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .user-card {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .user-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .nav {
+            padding: 1.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-label {
+            padding: 0 1.5rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray-400);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.08) 0%, transparent 100%);
+            color: var(--primary);
+            border-right: 3px solid var(--primary);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            color: currentColor;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            background: var(--gray-50);
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 900px;
+        }
+
+        .alert-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-active {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-responding {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-resolved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-false_alarm {
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        .alert-type {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-item {
+            background: var(--gray-50);
+            padding: 1.25rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-item.danger {
+            border-left-color: var(--danger);
+        }
+
+        .info-item.success {
+            border-left-color: var(--success);
+        }
+
+        .info-item.warning {
+            border-left-color: var(--warning);
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-500);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .info-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray-900);
+        }
+
+        .description-box {
+            background: var(--gray-50);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--warning);
+        }
+
+        .description-box p {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--gray-200);
+        }
+
+        .location-info {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .location-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-500);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            border: 2px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border-left: 4px solid var(--success);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .success-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--success);
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        {% include 'includes/sidebar.html' %}
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="navbar">
+                <h1>
+                    <i class="fas fa-exclamation-triangle"></i>
+                    SOS Alert Details
+                </h1>
+                <a href="{% url 'safety:sos_alerts' %}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </a>
+            </div>
+
+            <div class="container">
+                <div class="success-message">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">🚨 Emergency Alert Successfully Sent!</h3>
+                        <p style="margin: 0; font-size: 0.95rem;">Your emergency contacts and our support team have been notified. Help is on the way. Stay safe!</p>
+                    </div>
+                </div>
+
+                <div class="alert-card">
+                    <div class="status-header">
+                        <div class="alert-type">
+                            {{ alert.get_alert_type_display }}
+                        </div>
+                        <span class="status-badge status-{{ alert.status }}">
+                            {{ alert.get_status_display }}
+                        </span>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item danger">
+                            <div class="info-label">Alert Time</div>
+                            <div class="info-value">
+                                <i class="fas fa-clock"></i>
+                                {{ alert.timestamp|date:"M d, Y H:i" }}
+                            </div>
+                        </div>
+
+                        <div class="info-item warning">
+                            <div class="info-label">Emergency Type</div>
+                            <div class="info-value">
+                                <i class="fas fa-exclamation-circle"></i>
+                                {{ alert.get_alert_type_display }}
+                            </div>
+                        </div>
+
+                        <div class="info-item success">
+                            <div class="info-label">Status</div>
+                            <div class="info-value">
+                                <i class="fas fa-info-circle"></i>
+                                {{ alert.get_status_display }}
+                            </div>
+                        </div>
+
+                        {% if alert.resolved_at %}
+                        <div class="info-item success">
+                            <div class="info-label">Resolved At</div>
+                            <div class="info-value">
+                                <i class="fas fa-check"></i>
+                                {{ alert.resolved_at|date:"M d, Y H:i" }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if alert.description %}
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-comment-medical"></i>
+                        Additional Details
+                    </h2>
+                    <div class="description-box">
+                        <p>{{ alert.description }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Location Information
+                    </h2>
+
+                    {% if alert.location_latitude and alert.location_longitude %}
+                    <div class="map-container">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            frameborder="0"
+                            style="border:0"
+                            src="https://www.google.com/maps?q={{ alert.location_latitude }},{{ alert.location_longitude }}&output=embed"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-icon">
+                            <i class="fas fa-map-pin"></i>
+                        </div>
+                        <div>
+                            <strong>GPS Coordinates:</strong><br>
+                            {{ alert.location_latitude }}, {{ alert.location_longitude }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if alert.location_address %}
+                    <div class="location-info" style="margin-top: 1rem;">
+                        <div class="location-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <div>
+                            <strong>Address:</strong><br>
+                            {{ alert.location_address }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if not alert.location_latitude and not alert.location_address %}
+                    <div class="no-data">
+                        <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: var(--gray-300); margin-bottom: 1rem;"></i>
+                        <p>No location information available</p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="section">
+                    <h2 class="section-title">
+                        <i class="fas fa-tools"></i>
+                        Actions
+                    </h2>
+                    <div class="action-buttons">
+                        <a href="{% url 'safety:safety_center' %}" class="btn btn-primary">
+                            <i class="fas fa-shield-alt"></i>
+                            Go to Safety Center
+                        </a>
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline">
+                            <i class="fas fa-home"></i>
+                            Back to Dashboard
+                        </a>
+                        {% if alert.status == 'active' %}
+                        <a href="{% url 'safety:sos_alerts' %}" class="btn btn-danger">
+                            <i class="fas fa-phone"></i>
+                            View Emergency Contacts
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

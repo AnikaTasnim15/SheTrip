@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency SOS Alert - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --danger: #ef4444;
+            --danger-dark: #dc2626;
+            --warning: #f59e0b;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-600: #475569;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .emergency-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .emergency-header {
+            background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 16px 16px 0 0;
+            text-align: center;
+        }
+
+        .emergency-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .pulse {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .emergency-form {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 0 0 16px 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .form-group select,
+        .form-group textarea,
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--gray-100);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-group select:focus,
+        .form-group textarea:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--danger);
+        }
+
+        .location-info {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .location-info i {
+            color: var(--warning);
+        }
+
+        .contacts-preview {
+            background: var(--gray-50);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .contacts-preview h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--gray-900);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--white);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-info strong {
+            display: block;
+            font-size: 0.95rem;
+        }
+
+        .contact-info span {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .btn-emergency {
+            background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+            color: var(--white);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.35);
+        }
+
+        .btn-emergency:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(239, 68, 68, 0.45);
+        }
+
+        .btn-cancel {
+            background: var(--gray-100);
+            color: var(--gray-900);
+        }
+
+        .btn-cancel:hover {
+            background: var(--gray-600);
+            color: var(--white);
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .warning-box p {
+            font-size: 0.95rem;
+            color: #92400e;
+        }
+
+        #locationStatus {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid var(--gray-100);
+            border-top: 4px solid var(--danger);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="emergency-container">
+        <div class="emergency-header">
+            <h1>
+                <i class="fas fa-exclamation-triangle pulse"></i>
+                Emergency SOS Alert
+            </h1>
+            <p>Help is just a click away. Stay safe!</p>
+        </div>
+
+        <div class="emergency-form">
+            <div class="warning-box">
+                <p><strong>⚠️ Important:</strong> Only use this for genuine emergencies. False alarms may result in account suspension.</p>
+            </div>
+
+            <form method="POST" id="sosForm">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="id_alert_type">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Emergency Type *
+                    </label>
+                    {{ form.alert_type }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_location_address">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Your Current Location
+                    </label>
+                    {{ form.location_address }}
+                    <button type="button" onclick="getLocation()" style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: var(--warning); color: white; border: none; border-radius: 6px; cursor: pointer;">
+                        <i class="fas fa-crosshairs"></i> Use My Current Location
+                    </button>
+                    <div id="locationStatus"></div>
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_description">
+                        <i class="fas fa-comment-medical"></i>
+                        Additional Details (Optional)
+                    </label>
+                    {{ form.description }}
+                </div>
+
+                <div class="location-info">
+                    <p><i class="fas fa-info-circle"></i> <strong>Your GPS coordinates will be automatically captured to help responders locate you quickly.</strong></p>
+                </div>
+
+                {% if emergency_contacts %}
+                <div class="contacts-preview">
+                    <h3><i class="fas fa-bell"></i> Emergency Contacts to be Notified:</h3>
+                    {% for contact in emergency_contacts %}
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="contact-info">
+                            <strong>{{ contact.contact_name }}</strong>
+                            <span>{{ contact.phone_number }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="warning-box">
+                    <p><i class="fas fa-exclamation-triangle"></i> You don't have any emergency contacts set up. Add contacts in Settings for better safety.</p>
+                </div>
+                {% endif %}
+
+                <div class="btn-group">
+                    <a href="{% url 'dashboard' %}" class="btn btn-cancel">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-emergency">
+                        <i class="fas fa-siren-on"></i>
+                        Send Emergency Alert
+                    </button>
+                </div>
+            </form>
+
+            <div class="loading" id="loadingScreen">
+                <div class="spinner"></div>
+                <p><strong>Sending emergency alert...</strong></p>
+                <p>Please wait while we notify your contacts and support team.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-capture location on page load
+        window.addEventListener('load', function() {
+            getLocation();
+        });
+
+        function getLocation() {
+            const statusDiv = document.getElementById('locationStatus');
+
+            if (navigator.geolocation) {
+                statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting your location...';
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        document.getElementById('latitude').value = position.coords.latitude;
+                        document.getElementById('longitude').value = position.coords.longitude;
+
+                        // Reverse geocode to get address
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const address = data.display_name || 'Location captured';
+                                document.getElementById('id_location_address').value = address;
+                                statusDiv.innerHTML = '<i class="fas fa-check-circle" style="color: green;"></i> Location captured successfully!';
+                            })
+                            .catch(() => {
+                                statusDiv.innerHTML = '<i class="fas fa-check-circle" style="color: green;"></i> GPS coordinates captured!';
+                            });
+                    },
+                    function(error) {
+                        statusDiv.innerHTML = '<i class="fas fa-exclamation-circle" style="color: red;"></i> Unable to get location. Please enter manually.';
+                        console.error('Geolocation error:', error);
+                    }
+                );
+            } else {
+                statusDiv.innerHTML = '<i class="fas fa-times-circle" style="color: red;"></i> Geolocation not supported by browser.';
+            }
+        }
+
+        // Show loading screen on form submit
+        document.getElementById('sosForm').addEventListener('submit', function() {
+            document.querySelector('.emergency-form form').style.display = 'none';
+            document.getElementById('loadingScreen').classList.add('active');
+        });
+
+        // Confirm before leaving page
+        window.addEventListener('beforeunload', function (e) {
+            if (!document.getElementById('loadingScreen').classList.contains('active')) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+</body>
+</html>
