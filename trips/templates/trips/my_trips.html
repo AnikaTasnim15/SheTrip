@@ -784,7 +784,7 @@
                     <button class="tab" data-tab="active-trips">
                         <i class="fas fa-play"></i>
                         Active Travel Plan
-                        <span class="badge">{{ active_trips_count }}</span>
+                        <span class="badge">{{ participations|dictsort:'trip__departure_time'|length }}</span>
                     </button>
                     <button class="tab" data-tab="past-trips">
                         <i class="fas fa-history"></i>
@@ -838,7 +838,7 @@
                 <div class="trip-dates">
                     <i class="fas fa-calendar"></i>
                     {{ plan.start_date|date:"M d" }} - {{ plan.end_date|date:"M d, Y" }}
-                    <span style="color: var(--gray-400);">•</span>
+                    <span style="color: var(--gray-400);">â€¢</span>
                     {{ plan.duration_days }} Day{{ plan.duration_days|pluralize }}
                 </div>
             </div>
@@ -1130,8 +1130,9 @@
                             <i class="fas fa-bolt"></i>
                         </div>
                         <div class="stat-box-value">
-                            {{ active_trips_count }}
-                            
+                            {% with active=participations|dictsort:'trip__departure_time' %}
+                                {{ active|length }}
+                            {% endwith %}
                         </div>
                         <div class="stat-box-label">Active Trips</div>
                     </div>

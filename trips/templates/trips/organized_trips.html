@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organized Trips - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-light: #a78bfa;
+            --secondary: #ec4899;
+            --secondary-dark: #db2777;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --dark: #1e293b;
+            --dark-light: #334155;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 6px 12px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            background: var(--gray-50);
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .page-header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-box {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            text-align: center;
+        }
+
+        .stat-box-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+
+        .icon-purple {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(167, 139, 250, 0.15));
+            color: var(--primary);
+        }
+
+        .icon-pink {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(249, 168, 212, 0.15));
+            color: var(--secondary);
+        }
+
+        .icon-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(167, 243, 208, 0.15));
+            color: var(--success);
+        }
+
+        .icon-blue {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(191, 219, 254, 0.15));
+            color: var(--info);
+        }
+
+        .stat-box-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-box-label {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            font-weight: 600;
+        }
+
+        .trip-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .trip-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .trip-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .trip-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .trip-card-title {
+            flex: 1;
+        }
+
+        .trip-destination {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .trip-dates {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-open { background: #dbeafe; color: #1e40af; }
+        .status-confirmed { background: #d1fae5; color: #065f46; }
+        .status-full { background: #fee2e2; color: #991b1b; }
+        .status-cancelled { background: #f3f4f6; color: #6b7280; }
+
+        .trip-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .trip-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .trip-detail-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            flex-shrink: 0;
+        }
+
+        .trip-detail-content h4 {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .trip-detail-content p {
+            font-size: 0.95rem;
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .trip-card-footer {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            border: 1.5px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(124, 58, 237, 0.02);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            color: var(--gray-300);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--gray-900);
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0 !important;
+                padding: 1rem;
+                padding-top: 5rem;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .trip-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .trip-details {
+                grid-template-columns: 1fr;
+            }
+
+            .trip-card-footer {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-400);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        {% include 'includes/sidebar.html' %}
+        
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Organized Trips</h1>
+                <p class="page-subtitle">View all organized trips you have joined and paid for</p>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-box-icon icon-purple">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="stat-box-value">{{ total_trips }}</div>
+                    <div class="stat-box-label">Total Trips</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-icon icon-green">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-box-value">{{ available_trips }}</div>
+                    <div class="stat-box-label">Available Slots</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-icon icon-pink">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-box-value">{{ total_participants|default:0 }}</div>
+                    <div class="stat-box-label">Total Participants</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-icon icon-blue">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <div class="stat-box-value">{{ unique_destinations|default:0 }}</div>
+                    <div class="stat-box-label">Destinations</div>
+                </div>
+            </div>
+
+            {% if organized_trips %}
+            <div class="trip-grid">
+                {% for trip in organized_trips %}
+                <div class="trip-card">
+                    <div class="trip-card-header">
+                        <div class="trip-card-title">
+                            <div class="trip-destination">
+                                <i class="fas fa-ship" style="color: var(--info);"></i>
+                                {{ trip.trip_name }}
+                            </div>
+                            <div class="trip-dates">
+                                <i class="fas fa-map-marker-alt"></i>
+                                {{ trip.destination }} â€¢
+                                <i class="fas fa-calendar"></i>
+                                {{ trip.departure_time|date:"M d" }} - {{ trip.return_time|date:"M d, Y" }} â€¢
+                                <i class="fas fa-users"></i>
+                                {{ trip.total_participants }} joined
+                            </div>
+                        </div>
+                        <span class="status-badge status-{{ trip.trip_status }}">
+                            {{ trip.get_trip_status_display }}
+                        </span>
+                    </div>
+
+                    <!-- Verification indicators -->
+                    <div class="trip-details" style="margin-top: -0.75rem; margin-bottom: 0.25rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                        <div class="trip-detail-item">
+                            <div class="trip-detail-icon icon-blue">
+                                <i class="fas fa-shield-check"></i>
+                            </div>
+                            <div class="trip-detail-content">
+                                <h4>Trip Status</h4>
+                                <p>{% if trip.is_finalized %}Finalized & Verified{% else %}Under Review{% endif %}</p>
+                            </div>
+                        </div>
+                        <div class="trip-detail-item">
+                            <div class="trip-detail-icon icon-green">
+                                <i class="fas fa-id-badge"></i>
+                            </div>
+                            <div class="trip-detail-content">
+                                <h4>Driver Verification</h4>
+                                <p>
+                                    {% if trip.driver %}
+                                        {% if trip.driver.is_verified %}Verified Driver{% else %}Pending Verification{% endif %}
+                                    {% else %}TBA{% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="trip-detail-item">
+                            <div class="trip-detail-icon icon-purple">
+                                <i class="fas fa-door-open"></i>
+                            </div>
+                            <div class="trip-detail-content">
+                                <h4>Available Slots</h4>
+                                <p>{{ trip.available_slots }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trip-details">
+                        <div class="trip-detail-item">
+                            <div class="trip-detail-icon icon-purple">
+                                <i class="fas fa-bus"></i>
+                            </div>
+                            <div class="trip-detail-content">
+                                <h4>Transportation</h4>
+                                <p>{{ trip.transportation_details|truncatewords:6 }}</p>
+                            </div>
+                        </div>
+                        <div class="trip-detail-item">
+                            <div class="trip-detail-icon icon-pink">
+                                <i class="fas fa-hotel"></i>
+                            </div>
+                            <div class="trip-detail-content">
+                                <h4>Accommodation</h4>
+                                <p>{{ trip.accommodation_details|truncatewords:6 }}</p>
+                            </div>
+                        </div>
+                        <div class="trip-detail-item">
+                            <div class="trip-detail-icon icon-green">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="trip-detail-content">
+                                <h4>Meals</h4>
+                                <p>{{ trip.meal_arrangements|truncatewords:6 }}</p>
+                            </div>
+                        </div>
+                        <div class="trip-detail-item">
+                            <div class="trip-detail-icon icon-blue">
+                                <i class="fas fa-user-shield"></i>
+                            </div>
+                            <div class="trip-detail-content">
+                                <h4>Driver</h4>
+                                <p>{% if trip.driver %}{{ trip.driver.name }}{% else %}TBA{% endif %}</p>
+                            </div>
+                        </div>
+                        <div class="trip-detail-item">
+                            <div class="trip-detail-icon icon-blue">
+                                <i class="fas fa-sack-dollar"></i>
+                            </div>
+                            <div class="trip-detail-content">
+                                <h4>Total Budget</h4>
+                                <p>৳{{ trip.base_cost }}</p>
+                            </div>
+                        </div>
+                        <div class="trip-detail-item">
+                            <div class="trip-detail-icon icon-green">
+                                <i class="fas fa-user-tag"></i>
+                            </div>
+                            <div class="trip-detail-content">
+                                <h4>Per Person</h4>
+                                <p>৳{{ trip.final_cost_per_person }}</p>
+                            </div>
+                        </div>
+                        <div class="trip-detail-item">
+                            <div class="trip-detail-icon icon-pink">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                            <div class="trip-detail-content">
+                                <h4>Commission</h4>
+                                <p>৳{{ trip.platform_commission }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="trip-card-footer">
+                        <a href="{% url 'organized_trip_detail' trip.trip_id %}" class="btn btn-outline btn-sm">
+                            <i class="fas fa-info-circle"></i>
+                            View Details
+                        </a>
+  
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-calendar-times"></i>
+                </div>
+                <h3>No Trips Available</h3>
+                <p>There are currently no organized trips available. Check back later for new adventures or create your own travel plan!</p>
+                <a href="{% url 'create_travel_plan' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Create Travel Plan
+                </a>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>

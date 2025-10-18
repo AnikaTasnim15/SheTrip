@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Trip - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-500: #64748b;
+            --gray-700: #334155;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
+        }
+
+        .form-container {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray-200);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: 10px;
+            border: 1.5px solid var(--gray-200);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-label {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        .form-help {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 0.25rem;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            border: 1.5px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                padding-top: 5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        {% include 'includes/sidebar.html' %}
+        
+        <main class="main-content">
+            <h1>Join Trip: {{ trip.trip_name }}</h1>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="error-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="form-container">
+                <form method="post" action="{% url 'join_organized_trip' trip.trip_id %}">
+                    {% csrf_token %}
+                    
+                    <!-- Emergency Contact -->
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.emergency_contact.id_for_label }}">
+                            <i class="fas fa-phone"></i>
+                            Emergency Contact <span class="required">*</span>
+                        </label>
+                        {{ form.emergency_contact }}
+                        {% if form.emergency_contact.errors %}
+                            <div class="error-message">{{ form.emergency_contact.errors }}</div>
+                        {% endif %}
+                        <div class="form-help">Provide a reliable emergency contact number</div>
+                    </div>
+
+                    <!-- Special Requirements -->
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.special_requirements.id_for_label }}">
+                            <i class="fas fa-clipboard-list"></i>
+                            Special Requirements
+                        </label>
+                        <textarea name="special_requirements" class="form-control form-textarea" 
+                                  id="{{ form.special_requirements.id_for_label }}" 
+                                  placeholder="Any dietary restrictions, medical needs, or special requests...">{{ form.special_requirements.value|default:"" }}</textarea>
+                        {% if form.special_requirements.errors %}
+                            <div class="error-message">{{ form.special_requirements.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Agree to Terms (REQUIRED CHECKBOX) -->
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" 
+                                   name="agree_to_terms" 
+                                   id="{{ form.agree_to_terms.id_for_label }}" 
+                                   required>
+                            <label class="checkbox-label" for="{{ form.agree_to_terms.id_for_label }}">
+                                I agree to the trip terms and safety guidelines <span class="required">*</span>
+                            </label>
+                        </div>
+                        {% if form.agree_to_terms.errors %}
+                            <div class="error-message">{{ form.agree_to_terms.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Emergency Contact Confirmed (REQUIRED CHECKBOX) -->
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" 
+                                   name="emergency_contact_confirmed" 
+                                   id="{{ form.emergency_contact_confirmed.id_for_label }}" 
+                                   required>
+                            <label class="checkbox-label" for="{{ form.emergency_contact_confirmed.id_for_label }}">
+                                I confirm my emergency contact is reachable <span class="required">*</span>
+                            </label>
+                        </div>
+                        {% if form.emergency_contact_confirmed.errors %}
+                            <div class="error-message">{{ form.emergency_contact_confirmed.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <a href="{% url 'organized_trip_detail' trip.trip_id %}" class="btn btn-outline">
+                            <i class="fas fa-arrow-left"></i>
+                            Back
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i>
+                            Join Trip & Proceed to Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

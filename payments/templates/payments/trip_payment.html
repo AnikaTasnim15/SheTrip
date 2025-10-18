@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - {{ trip.trip_name }} - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --info: #3b82f6;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-500: #64748b;
+            --gray-700: #334155;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
+        }
+
+        .page-header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray-200);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray-200);
+        }
+
+        .card-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--gray-100);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .alert-box {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--info);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .alert-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alert-content h4 {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-content ul {
+            margin: 0.5rem 0 0 1.25rem;
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+
+        .alert-content ul li {
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-card h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--primary);
+            padding-top: 1rem;
+            margin-top: 0.5rem;
+            border-top: 2px solid var(--gray-200);
+        }
+
+        .summary-label {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .info-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-section i {
+            font-size: 1.25rem;
+        }
+
+        .info-section h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.125rem;
+        }
+
+        .info-section p {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            border: 1.5px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(124, 58, 237, 0.02);
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .security-badge i {
+            color: var(--success);
+        }
+
+        @media (max-width: 1200px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                padding-top: 5rem;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        {% include 'includes/sidebar.html' %}
+        
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Secure Payment</h1>
+                <p class="page-subtitle">Complete payment for {{ trip.trip_name }}</p>
+            </div>
+
+            <div class="content-grid">
+                <!-- Main Content -->
+                <div>
+                    <div class="alert-box">
+                        <div class="alert-icon">
+                            <i class="fas fa-info-circle" style="color: var(--info);"></i>
+                        </div>
+                        <div class="alert-content">
+                            <h4>Payment Information</h4>
+                            <ul>
+                                <li>Secure payment powered by <strong>SSLCommerz</strong></li>
+                                <li>Pay with bKash, Nagad, Rocket, or Cards</li>
+                                <li><strong>1-day refund policy</strong> after payment</li>
+                                <li>Your payment is encrypted and protected</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="fas fa-lock"></i> Proceed to Payment Gateway
+                            </h2>
+                        </div>
+                        
+                        <p style="color: var(--gray-600); margin-bottom: 1.5rem;">
+                            Click the button below to proceed to SSLCommerz secure payment page. You'll be able to choose your payment method (bKash, Nagad, Rocket, Credit/Debit Card) on the next page.
+                        </p>
+
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <div class="form-actions">
+                                <a href="{% url 'organized_trip_detail' trip.trip_id %}" class="btn btn-outline">
+                                    <i class="fas fa-arrow-left"></i>
+                                    Cancel
+                                </a>
+                                <button type="submit" class="btn btn-primary" id="pay-button">
+                                    <i class="fas fa-shield-alt"></i>
+                                    Proceed to Secure Payment
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="security-badge">
+                            <i class="fas fa-lock"></i>
+                            <span>256-bit SSL Encrypted | PCI DSS Compliant</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div>
+                    <div class="summary-card">
+                        <h3><i class="fas fa-receipt"></i> Payment Summary</h3>
+                        <div class="summary-item">
+                            <span class="summary-label">Destination</span>
+                            <span class="summary-value">{{ trip.destination }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Departure</span>
+                            <span class="summary-value">{{ trip.departure_time|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Return</span>
+                            <span class="summary-value">{{ trip.return_time|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Duration</span>
+                            <span class="summary-value">{{ trip.travel_plan.duration_days }} days</span>
+                        </div>
+                        
+                        {% if trip.travel_plan.accommodation_cost %}
+                        <div class="summary-item">
+                            <span class="summary-label">Accommodation</span>
+                            <span class="summary-value">৳{{ trip.travel_plan.accommodation_cost|floatformat:2 }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if trip.travel_plan.food_cost %}
+                        <div class="summary-item">
+                            <span class="summary-label">Food & Meals</span>
+                            <span class="summary-value">৳{{ trip.travel_plan.food_cost|floatformat:2 }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if trip.travel_plan.combined_transportation_cost %}
+                        <div class="summary-item">
+                            <span class="summary-label">Transportation</span>
+                            <span class="summary-value">৳{{ trip.travel_plan.combined_transportation_cost|floatformat:2 }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if trip.travel_plan.other_costs %}
+                        <div class="summary-item">
+                            <span class="summary-label">Other Costs</span>
+                            <span class="summary-value">৳{{ trip.travel_plan.other_costs|floatformat:2 }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="summary-item">
+                            <span class="summary-label">Platform Fee</span>
+                            <span class="summary-value">৳{{ trip.platform_commission|floatformat:2 }}</span>
+                        </div>
+                        
+                        <div class="summary-item">
+                            <span class="summary-label">Total Amount</span>
+                            <span class="summary-value">৳{{ trip.final_cost_per_person|floatformat:2 }}</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-card">
+                        <h3><i class="fas fa-shield-check"></i> Payment Security</h3>
+                        
+                        <div class="info-section">
+                            <i class="fas fa-lock" style="color: var(--success);"></i>
+                            <div>
+                                <h4>Secure Payment</h4>
+                                <p>SSL encrypted transactions</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-section">
+                            <i class="fas fa-undo" style="color: var(--info);"></i>
+                            <div>
+                                <h4>Easy Refunds</h4>
+                                <p>1-day refund window</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-section">
+                            <i class="fas fa-headset" style="color: var(--primary);"></i>
+                            <div>
+                                <h4>24/7 Support</h4>
+                                <p>We're here to help</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Prevent double submission
+        const payButton = document.getElementById('pay-button');
+        const form = payButton.closest('form');
+        
+        form.addEventListener('submit', function() {
+            payButton.disabled = true;
+            payButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        });
+    </script>
+</body>
+</html>

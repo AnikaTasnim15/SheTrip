@@ -409,11 +409,16 @@ def organized_trip_detail_view(request, trip_id):
 
 
 @login_required
-
-
-
 def join_organized_trip_view(request, trip_id):
     """Join organized trip - CREATE TripParticipant and redirect to payment"""
+    
+    # ADD DEBUGGING
+    print(f"\n=== JOIN TRIP VIEW DEBUG ===")
+    print(f"Method: {request.method}")
+    print(f"Trip ID: {trip_id}")
+    print(f"User: {request.user}")
+    print(f"POST data: {request.POST}")
+    
     try:
         profile = request.user.userprofile
     except UserProfile.DoesNotExist:
@@ -436,8 +441,16 @@ def join_organized_trip_view(request, trip_id):
         return redirect('organized_trip_detail', trip_id=trip_id)
     
     if request.method == 'POST':
+        print("POST method detected - processing form")
         form = JoinTripForm(request.POST)
+        
+        print(f"Form is valid: {form.is_valid()}")
+        if not form.is_valid():
+            print(f"Form errors: {form.errors}")
+            print(f"Form errors dict: {form.errors.as_data()}")
+        
         if form.is_valid():
+            print("Creating participant...")
             # CREATE PARTICIPANT with pending payment status
             participant = TripParticipant.objects.create(
                 trip=trip,
@@ -447,19 +460,22 @@ def join_organized_trip_view(request, trip_id):
                 amount_paid=0,
                 payment_status='pending'
             )
+            print(f"Participant created: {participant.participant_id}")
             
             # Update total participants
             trip.total_participants += 1
             trip.save()
+            print(f"Trip participants updated to: {trip.total_participants}")
             
             messages.success(request, 'Registration complete! Please proceed to payment.')
             
-            #  REDIRECT TO PAYMENT PAGE
+            print(f"Redirecting to trip_payment with trip_id={trip_id}")
             return redirect('trip_payment', trip_id=trip_id)
         else:
-            #  ADD: Show form errors if validation fails
+            print(f"Form validation FAILED")
             messages.error(request, 'Please correct the errors below.')
     else:
+        print("GET method - showing form")
         form = JoinTripForm()
     
     context = {
