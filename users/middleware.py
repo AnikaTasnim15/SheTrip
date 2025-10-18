@@ -15,12 +15,18 @@ class VerificationMiddleware:
         'edit_travel_plan',
         'travel_plan_detail',
         'delete_travel_plan',
+        'join_travel_plan',
+        'withdraw_travel_plan',
+        'agree_travel_plan',
         'my_trips',
         'organized_trips',
         'organized_trip_detail',
         'join_organized_trip',
         'leave_organized_trip',
+        'pay_organized_trip',
+        'cancel_payment',
     ]
+    
     
     # URLs that are always accessible (even without verification)
     ALLOWED_URLS = [

@@ -781,6 +781,11 @@
                         Joined Trips
                         <span class="badge">{{ participations.count }}</span>
                     </button>
+                    <button class="tab" data-tab="active-trips">
+                        <i class="fas fa-play"></i>
+                        Active Travel Plan
+                        <span class="badge">{{ active_trips_count }}</span>
+                    </button>
                     <button class="tab" data-tab="past-trips">
                         <i class="fas fa-history"></i>
                         Past Trips
@@ -895,10 +900,12 @@
                 <i class="fas fa-info-circle"></i>
                 View Details
             </a>
+            {% if plan.status != 'rejected' %}
             <a href="{% url 'edit_travel_plan' plan.plan_id %}" class="btn btn-outline btn-sm">
                 <i class="fas fa-edit"></i>
                 Edit Plan
             </a>
+            {% endif %}
             <a href="{% url 'delete_travel_plan' plan.plan_id %}" class="btn btn-danger btn-sm">
                 <i class="fas fa-trash"></i>
                 Delete
@@ -1114,6 +1121,66 @@
                     <p><strong>Destination:</strong> {{ participation.trip.destination }}</p>
                     <p><strong>Participants:</strong> {{ participation.trip.total_participants }}</p>
                 </div>
+            </div>
+
+            <div class="tab-content" id="active-trips">
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-box-icon icon-purple">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="stat-box-value">
+                            {{ active_trips_count }}
+                            
+                        </div>
+                        <div class="stat-box-label">Active Trips</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-icon icon-blue">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="stat-box-value">
+                            {% if next_organized_trip %}{{ next_organized_trip.trip.departure_time|date:"M d, Y" }}{% else %}N/A{% endif %}
+                        </div>
+                        <div class="stat-box-label">Next Trip Date</div>
+                    </div>
+                </div>
+
+                {% if participations %}
+                <div class="trip-grid">
+                    {% for participation in participations %}
+                        {% if participation.trip.return_time >= today %}
+                        <div class="trip-card">
+                            <div class="trip-card-header">
+                                <div class="trip-card-title">
+                                    <div class="trip-destination">
+                                        <i class="fas fa-route" style="color: var(--primary);"></i>
+                                        {{ participation.trip.trip_name }}
+                                    </div>
+                                    <div class="trip-dates">
+                                        <i class="fas fa-calendar"></i>
+                                        {{ participation.trip.departure_time|date:"M d" }} - {{ participation.trip.return_time|date:"M d, Y" }}
+                                    </div>
+                                </div>
+                                <div class="status-badge status-confirmed">Active</div>
+                            </div>
+                            <div class="trip-card-footer">
+                                <a href="{% url 'organized_trip_detail' participation.trip.trip_id %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-info-circle"></i> Trip Details
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-compass"></i></div>
+                        <h3>No Active Trips</h3>
+                        <p>Join and pay for a trip to see it here.</p>
+                        <a href="{% url 'organized_trips' %}" class="btn btn-primary"><i class="fas fa-search"></i> Explore Trips</a>
+                    </div>
+                {% endif %}
             </div>
             {% endfor %}
         </div>

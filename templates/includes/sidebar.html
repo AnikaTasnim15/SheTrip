@@ -419,16 +419,12 @@
                     <span>My Profile</span>
                 </a>
             </div>
+            
             <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-credit-card nav-icon"></i>
-                    <span>Subscription</span>
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'payments_history' %}" class="nav-link {% if request.resolver_match.url_name == 'payments_history' %}active{% endif %}">
                     <i class="fas fa-receipt nav-icon"></i>
                     <span>Payments</span>
+                    <span class="badge">{{ user_payments_count|default:0 }}</span>
                 </a>
             </div>
         </div>
@@ -458,13 +454,13 @@
         <div class="nav-section">
             <div class="nav-label">Settings</div>
             <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'settings' %}" class="nav-link">
                     <i class="fas fa-cog nav-icon"></i>
                     <span>Settings</span>
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'help_support' %}" class="nav-link">
                     <i class="fas fa-question-circle nav-icon"></i>
                     <span>Help & Support</span>
                 </a>

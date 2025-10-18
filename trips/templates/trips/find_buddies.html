@@ -55,138 +55,6 @@
             min-height: 100vh;
         }
 
-        .sidebar {
-            width: 280px;
-            background: var(--white);
-            border-right: 1px solid var(--gray-200);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 1000;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .sidebar-header {
-            padding: 2rem 1.5rem;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .brand {
-            font-size: 1.75rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.5px;
-        }
-
-        .user-card {
-            background: var(--gray-50);
-            border-radius: 12px;
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.875rem;
-        }
-
-        .user-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.125rem;
-            color: var(--white);
-            flex-shrink: 0;
-            cursor: pointer;             
-            transition: all 0.2s;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.05);
-            box-shadow: var(--shadow);
-        }
-
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .user-info h4 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin-bottom: 0.25rem;
-        }
-
-        .user-info p {
-            font-size: 0.8rem;
-            color: var(--gray-500);
-        }
-
-        .nav {
-            padding: 1.5rem 0;
-        }
-
-        .nav-section {
-            margin-bottom: 2rem;
-        }
-
-        .nav-label {
-            padding: 0 1.5rem;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--gray-400);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 0.875rem;
-            padding: 0.75rem 1.5rem;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .nav-link:hover {
-            background: var(--gray-50);
-            color: var(--gray-900);
-        }
-
-        .nav-link.active {
-            background: linear-gradient(90deg, rgba(124, 58, 237, 0.08) 0%, transparent 100%);
-            color: var(--primary);
-            border-right: 3px solid var(--primary);
-        }
-
-        .nav-icon {
-            width: 20px;
-            text-align: center;
-            color: currentColor;
-        }
-
-        .badge {
-            margin-left: auto;
-            background: var(--primary);
-            color: var(--white);
-            padding: 0.125rem 0.5rem;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
-
         .main-content {
             flex: 1;
             margin-left: 280px;
@@ -365,6 +233,11 @@
             overflow: hidden;
         }
 
+        .buddy-card.own-post {
+            border: 2px solid var(--primary-light);
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.02), rgba(236, 72, 153, 0.02));
+        }
+
         .buddy-card::before {
             content: '';
             position: absolute;
@@ -448,6 +321,19 @@
             font-size: 0.8rem;
             font-weight: 700;
             color: var(--primary);
+        }
+
+        .own-post-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-top: 0.25rem;
         }
 
         .trip-destination-box {
@@ -579,11 +465,120 @@
             margin-right: auto;
         }
 
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
 
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+
+        .interested-user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.7rem;
+            border: 2px solid var(--white);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .interested-user-avatar:hover {
+            transform: scale(1.15);
+            box-shadow: var(--shadow-md);
+        }
+
+        .interested-users-container {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.25rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .interested-users-header {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--gray-700);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .interested-users-list {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .interested-more {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gray-300);
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.7rem;
+            border: 2px solid var(--white);
+        }
+
+        .interested-users-help {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-top: 0.5rem;
+        }
+
+        .interested-empty {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin: 0;
+        }
+
+        .status-closed {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+.status-finalized {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: #e0e7ff;
+    color: #3730a3;
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+        @media (max-width: 768px) {
             .main-content {
                 margin-left: 0;
                 padding: 1rem;
@@ -631,6 +626,15 @@
                 <h1 class="page-title">Find Travel Buddies</h1>
                 <p class="page-subtitle">Discover verified women travelers heading to similar destinations</p>
             </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
 
             <div class="search-section">
                 <div class="search-header">
@@ -683,15 +687,18 @@
 
             <div class="results-header">
                 <div class="results-count">
+                    {% if request.GET %}
                     Found <strong>{{ travel_plans.count }}</strong> travel plan{{ travel_plans.count|pluralize }} matching your search
+                    {% else %}
+                    Showing <strong>{{ travel_plans.count }}</strong>  available travel plan{{ travel_plans.count|pluralize }}
+                    {% endif %}
                 </div>
                 <div class="sort-dropdown">
                     <label style="font-size: 0.85rem; color: var(--gray-600);">Sort by:</label>
                     <select id="sortSelect">
-                        <option value="date">Departure Date</option>
-                        <option value="compatibility">Best Match</option>
-                        <option value="budget">Budget</option>
                         <option value="recent">Recently Posted</option>
+                        <option value="date">Departure Date</option>
+                        <option value="budget">Budget</option>
                     </select>
                 </div>
             </div>
@@ -699,31 +706,58 @@
             {% if travel_plans %}
             <div class="buddy-grid">
                 {% for plan in travel_plans %}
-                <div class="buddy-card">
+                <div class="buddy-card {% if plan.user == user %}own-post{% endif %}">
+                    {% if plan.user != user %}
                     <div class="match-percentage">
-                        {{ plan.compatibility_score|default:"85" }}%
+                        85%
                     </div>
+                    {% endif %}
 
                     <div class="buddy-header">
                         <div class="buddy-avatar-large">
                             {{ plan.user.first_name|first }}{{ plan.user.last_name|first }}
-                            {% if plan.user.profile.is_verified %}
+                            {% if plan.user.userprofile and plan.user.userprofile.is_verified %}
                             <div class="verified-badge">
                                 <i class="fas fa-check" style="color: white; font-size: 0.7rem;"></i>
                             </div>
                             {% endif %}
                         </div>
                         <div class="buddy-info">
-                            <h3>{{ plan.user.first_name }} {{ plan.user.last_name|first }}.</h3>
-                            <div class="buddy-location">
-                                <i class="fas fa-map-marker-alt"></i>
-                                {% if plan.user.profile %}{{ plan.user.profile.city }}, {{ plan.user.profile.country }}{% else %}Bangladesh{% endif %}
-                            </div>
-                            <div class="compatibility-score">
-                                <i class="fas fa-heart"></i>
-                                High Match
-                            </div>
-                        </div>
+    <h3>{{ plan.user.first_name }} {{ plan.user.last_name|first }}.</h3>
+    <div class="buddy-location">
+        <i class="fas fa-map-marker-alt"></i>
+        {% if plan.user.userprofile %}{{ plan.user.userprofile.city }}, {{ plan.user.userprofile.country }}{% else %}Bangladesh{% endif %}
+    </div>
+    {% if plan.user == user %}
+    <div class="own-post-badge">
+        <i class="fas fa-user"></i>
+        Your Post
+    </div>
+    {% else %}
+    <div class="compatibility-score">
+        <i class="fas fa-heart"></i>
+        High Match
+    </div>
+    {% endif %}
+    
+    <!-- Status badges -->
+    {% if plan.status == 'closed' %}
+    <div class="status-closed">
+        <i class="fas fa-lock"></i>
+        Closed - Admin Reviewing
+    </div>
+    {% elif plan.status == 'finalized' %}
+    <div class="status-finalized">
+        <i class="fas fa-check-circle"></i>
+        Finalized - Payment Open
+    </div>
+{% elif plan.status == 'rejected' %}
+<div class="status-closed" style="background: #fee2e2; color: #991b1b;">
+    <i class="fas fa-times-circle"></i>
+    Rejected
+</div>
+{% endif %}
+</div>
                     </div>
 
                     <div class="trip-destination-box">
@@ -756,6 +790,37 @@
                             </div>
                         </div>
                     </div>
+                     <!-- INTERESTED USERS SECTION -->
+                    <div class="interested-users-container">
+                        <div class="interested-users-header">
+                            <i class="fas fa-heart" style="color: var(--secondary); margin-right: 0.375rem;"></i>
+                            Interested Travelers ({{ plan.interests.count }})
+                        </div>
+                        
+                        {% if plan.interests.all %}
+                            <div class="interested-users-list">
+                                {% for interest in plan.interests.all|slice:":5" %}
+                                    <div class="interested-user-avatar" title="{{ interest.user.first_name }} {{ interest.user.last_name }}">
+                                        {{ interest.user.first_name|first }}{{ interest.user.last_name|first }}
+                                    </div>
+                                {% endfor %}
+                                
+                                {% if plan.interests.count > 5 %}
+                                    <div class="interested-more" title="And {{ plan.interests.count|add:'-5' }} more">
+                                        +{{ plan.interests.count|add:'-5' }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <p class="interested-users-help">
+                                Click "View Details" to see full list
+                            </p>
+                        {% else %}
+                            <p class="interested-empty">
+                                <i class="fas fa-clock"></i> No one interested yet
+                            </p>
+                        {% endif %}
+                    </div>
+                    
 
                     {% if plan.description %}
                     <div class="buddy-bio">
@@ -763,21 +828,21 @@
                     </div>
                     {% endif %}
 
-                    {% if plan.user.profile %}
+                    {% if plan.user.userprofile %}
                     <div class="buddy-tags">
-                        {% if plan.user.profile.travel_style %}
+                        {% if plan.user.userprofile.travel_style %}
                         <span class="tag">
-                            <i class="fas fa-hiking"></i> {{ plan.user.profile.travel_style|title }}
+                            <i class="fas fa-hiking"></i> {{ plan.user.userprofile.travel_style|title }}
                         </span>
                         {% endif %}
-                        {% if plan.user.profile.age %}
+                        {% if plan.user.userprofile.age %}
                         <span class="tag">
-                            <i class="fas fa-birthday-cake"></i> {{ plan.user.profile.age }} years
+                            <i class="fas fa-birthday-cake"></i> {{ plan.user.userprofile.age }} years
                         </span>
                         {% endif %}
-                        {% if plan.user.profile.languages %}
+                        {% if plan.user.userprofile.languages %}
                         <span class="tag">
-                            <i class="fas fa-language"></i> {{ plan.user.profile.languages }}
+                            <i class="fas fa-language"></i> {{ plan.user.userprofile.languages }}
                         </span>
                         {% endif %}
                     </div>
@@ -788,9 +853,7 @@
                             <i class="fas fa-info-circle"></i>
                             View Details
                         </a>
-                        <a href="#" class="btn btn-outline">
-                            <i class="fas fa-comment"></i>
-                        </a>
+                        
                     </div>
                 </div>
                 {% endfor %}

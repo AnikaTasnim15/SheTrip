@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from .models import UserProfile
+from .models import SupportTicket
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
@@ -79,3 +80,39 @@ class UserProfileEditForm(forms.ModelForm):
                         'class': 'form-control'
                     })
                 )
+
+
+class SupportTicketForm(forms.ModelForm):
+    class Meta:
+        model = SupportTicket
+        fields = ['name', 'email', 'phone', 'subject', 'category', 'priority', 'message']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Your full name'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'your@email.com'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '+880 17XX XXX XXXX'
+            }),
+            'subject': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'What is this about?'
+            }),
+            'category': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'priority': forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            'message': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 5,
+                'placeholder': 'Please describe your issue...'
+            }),
+        }
+

@@ -125,3 +125,48 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.notification_type} for {self.recipient.username}"
+
+    
+class SupportTicket(models.Model):
+    CATEGORY_CHOICES = [
+        ('payment', 'Payment Issue'),
+        ('trip', 'Trip Related'),
+        ('account', 'Account & Profile'),
+        ('verification', 'Verification Problem'),
+        ('safety', 'Safety Concern'),
+        ('technical', 'Technical Issue'),
+        ('other', 'Other'),
+    ]
+    
+    PRIORITY_CHOICES = [
+        ('low', 'Low - General inquiry'),
+        ('medium', 'Medium - Needs attention'),
+        ('high', 'High - Urgent issue'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('open', 'Open'),
+        ('in_progress', 'In Progress'),
+        ('resolved', 'Resolved'),
+        ('closed', 'Closed'),
+    ]
+    
+    ticket_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='support_tickets')
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    subject = models.CharField(max_length=200)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES)
+    message = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    admin_response = models.TextField(blank=True, null=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Ticket {self.ticket_id} - {self.subject} ({self.status})"

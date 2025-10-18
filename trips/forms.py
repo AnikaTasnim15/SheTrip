@@ -36,8 +36,8 @@ class TravelPlanForm(forms.ModelForm):
             'max_participants': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'min': 2,
-                'max': 50,
-                'value': 6
+                'max': 5,
+                'value': 5
             }),
         }
     
@@ -45,13 +45,15 @@ class TravelPlanForm(forms.ModelForm):
         cleaned_data = super().clean()
         start_date = cleaned_data.get('start_date')
         end_date = cleaned_data.get('end_date')
+        budget_range = cleaned_data.get('budget_range')
         
         if start_date and end_date:
-            if start_date < date.today():
-                raise forms.ValidationError("Start date cannot be in the past.")
-            if end_date < start_date:
-                raise forms.ValidationError("End date must be after start date.")
+            duration = (end_date - start_date).days + 1
+            if duration < 2 or duration > 14:
+                raise forms.ValidationError("Trip duration must be between 2 and 14 days.")
         
+        if budget_range and budget_range not in dict(TravelPlan.BUDGET_CHOICES):
+            raise forms.ValidationError("Invalid budget range selected.")
         return cleaned_data
 
 
@@ -91,6 +93,26 @@ class TripSearchForm(forms.Form):
 
 class JoinTripForm(forms.Form):
     """Form for joining an organized trip"""
+    emergency_contact = forms.CharField(
+        max_length=20,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '+880 1234-567890'
+        }),
+        label="Emergency Contact Number"
+    )
+    
+    special_requirements = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 4,
+            'placeholder': 'Any dietary restrictions, medical needs, or special requests...'
+        }),
+        label="Special Requirements"
+    )
+    
     agree_to_terms = forms.BooleanField(
         required=True,
         label="I agree to the trip terms and safety guidelines"
@@ -98,5 +120,5 @@ class JoinTripForm(forms.Form):
     
     emergency_contact_confirmed = forms.BooleanField(
         required=True,
-        label="I have added my emergency contacts"
+        label="I confirm my emergency contact is reachable"
     )

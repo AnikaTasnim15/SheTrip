@@ -19,6 +19,11 @@ from django.conf import settings
 from .models import UserConnection, Notification
 from django.db.models import Q
 
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import SupportTicket
+from django.views.decorators.http import require_http_methods
+
 
 def set_jwt_cookies(response, user):
     """Helper function to set JWT tokens in httpOnly cookies"""
@@ -104,19 +109,21 @@ def logout_view(request):
 
 
 def register_view(request):
+    """User registration with automatic profile creation via signals"""
+    
     if request.method == 'POST':
+        # Get form data
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name', '')
+        last_name = request.POST.get('last_name', '')
 
+        # Validation
         if password1 != password2:
             messages.error(request, 'Passwords do not match.')
             return render(request, 'users/register.html')
-
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = password1
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
 
         if User.objects.filter(username=username).exists():
             messages.error(request, 'Username already taken. Please choose another.')
@@ -126,32 +133,55 @@ def register_view(request):
             messages.error(request, 'Email already registered. Please use another email.')
             return render(request, 'users/register.html')
 
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-            first_name=first_name,
-            last_name=last_name
-        )
+        try:
+            # Create user (signal auto-creates UserProfile)
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password1,
+                first_name=first_name,
+                last_name=last_name
+            )
 
-        UserProfile.objects.create(
-            user=user,
-            age=request.POST.get('age'),
-            phone=request.POST.get('phone', ''),
-            city=request.POST.get('city'),
-            country=request.POST.get('country'),
-            occupation=request.POST.get('occupation', ''),
-            languages=request.POST.get('languages', ''),
-            travel_style=request.POST.get('travel_style'),
-            accommodation=','.join(request.POST.getlist('accommodation')),
-            interests=','.join(request.POST.getlist('interests')),
-            dream_destinations=request.POST.get('dream_destinations', ''),
-            bio=request.POST.get('bio', ''),
-            profile_picture=request.FILES.get('profile_picture')
-        )
+            # Get the auto-created profile (via signal)
+            try:
+                profile = user.userprofile
+            except UserProfile.DoesNotExist:
+                # Fallback if signal failed
+                profile = UserProfile.objects.create(
+                    user=user,
+                    age=0,
+                    verification_status='not_submitted'
+                )
+            
+            # Update profile with registration data
+            profile.age = request.POST.get('age') or 0
+            profile.phone = request.POST.get('phone', '')
+            profile.city = request.POST.get('city', '')
+            profile.country = request.POST.get('country', '')
+            profile.occupation = request.POST.get('occupation', '')
+            profile.languages = request.POST.get('languages', '')
+            profile.travel_style = request.POST.get('travel_style', '')
+            profile.accommodation = ','.join(request.POST.getlist('accommodation'))
+            profile.interests = ','.join(request.POST.getlist('interests'))
+            profile.dream_destinations = request.POST.get('dream_destinations', '')
+            profile.bio = request.POST.get('bio', '')
+            
+            # Handle profile picture
+            if request.FILES.get('profile_picture'):
+                profile.profile_picture = request.FILES.get('profile_picture')
+            
+            profile.save()
 
-        messages.success(request, "Account created successfully!")
-        return redirect('login')
+            messages.success(request, "Account created successfully! Please log in.")
+            return redirect('login')
+            
+        except Exception as e:
+            # If something goes wrong, clean up and show error
+            if 'user' in locals():
+                user.delete()
+            messages.error(request, f'Registration failed: {str(e)}')
+            return render(request, 'users/register.html')
 
     return render(request, 'users/register.html')
 
@@ -622,3 +652,151 @@ def my_connections(request):
 def connections_list(request):
     """Alias for my_connections - view current user's accepted connections"""
     return my_connections(request)
+
+
+@login_required
+def settings_view(request):
+    profile = getattr(request.user, 'userprofile', None)
+    return render(request, 'users/settings.html', {'profile': profile})
+
+@login_required
+def help_support_view(request):
+    profile = getattr(request.user, 'userprofile', None)
+    return render(request, 'users/help_support.html', {'profile': profile})
+
+
+@login_required
+def settings_view(request):
+    """Settings page - just displays, no backend logic needed yet"""
+    try:
+        profile = request.user.userprofile
+    except:
+        profile = None
+    
+    context = {
+        'profile': profile,
+        'user': request.user,
+    }
+    return render(request, 'users/settings.html', context)
+
+
+@login_required
+def help_support_view(request):
+    """Display help & support page with contact form"""
+    try:
+        profile = request.user.userprofile
+    except:
+        profile = None
+    
+    context = {
+        'profile': profile,
+        'user': request.user,
+    }
+    return render(request, 'users/help_support.html', context)
+
+
+@login_required
+def submit_support_ticket(request):
+    """Handle support form submission via AJAX or regular form"""
+    if request.method == 'POST':
+        try:
+            # Create support ticket
+            ticket = SupportTicket.objects.create(
+                user=request.user,
+                name=request.POST.get('name'),
+                email=request.POST.get('email'),
+                phone=request.POST.get('phone', ''),
+                subject=request.POST.get('subject'),
+                category=request.POST.get('category'),
+                priority=request.POST.get('priority'),
+                message=request.POST.get('message'),
+                status='open'
+            )
+            
+            # Send confirmation email to user
+            send_mail(
+                subject=f'Support Ticket #{ticket.ticket_id} Created',
+                message=f'''
+                Hello {ticket.name},
+                
+                We received your support request. Your ticket number is: {ticket.ticket_id}
+                
+                Category: {ticket.get_category_display()}
+                Priority: {ticket.get_priority_display()}
+                
+                Our team will respond within 24-48 hours.
+                
+                Best regards,
+                SheTrip Support Team
+                ''',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[ticket.email],
+                fail_silently=False,
+            )
+            
+            # Send notification email to admin
+            send_mail(
+                subject=f'New Support Ticket #{ticket.ticket_id} - {ticket.subject}',
+                message=f'''
+                New support ticket submitted:
+                
+                Ticket ID: {ticket.ticket_id}
+                User: {ticket.user.username}
+                Category: {ticket.get_category_display()}
+                Priority: {ticket.get_priority_display()}
+                
+                Message:
+                {ticket.message}
+                
+                Contact: {ticket.email} | {ticket.phone}
+                
+                Admin Panel: /admin/users/supportticket/{ticket.ticket_id}/change/
+                ''',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.EMAIL_HOST_USER],  # Your admin email
+                fail_silently=False,
+            )
+            
+            messages.success(request, 'Your support ticket has been created. We will contact you soon!')
+            return redirect('help_support')
+            
+        except Exception as e:
+            messages.error(request, f'Error creating ticket: {str(e)}')
+            return redirect('help_support')
+    
+    return redirect('help_support')
+
+@login_required
+def delete_account_confirmation_view(request):
+    """Show confirmation page before deleting account"""
+    try:
+        profile = request.user.userprofile
+    except:
+        profile = None
+    
+    context = {
+        'profile': profile,
+        'user': request.user,
+    }
+    return render(request, 'users/delete_account_confirm.html', context)
+
+
+@login_required
+@require_http_methods(["POST"])
+def delete_account_view(request):
+    """Delete user account permanently"""
+    
+    user = request.user
+    username = user.username
+    
+    try:
+        
+        # Delete user account
+        user.delete()
+        
+        messages.success(request, 'Your account has been permanently deleted.')
+        return redirect('login')
+        
+    except Exception as e:
+        messages.error(request, f'Error deleting account: {str(e)}')
+        return redirect('settings')

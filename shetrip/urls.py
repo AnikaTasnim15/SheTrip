@@ -23,8 +23,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')), 
     path('trips/', include('trips.urls')),
+<<<<<<< Updated upstream
     path('safety/', include('safety.urls')),
 path('chat/', include('chat.urls')),
+=======
+    path('payments/', include('payments.urls')),
+>>>>>>> Stashed changes
     
  # JWT & Social Auth APIs
     path('api/auth/', include('dj_rest_auth.urls')),

@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.utils.html import format_html
 from .models import UserProfile,UserConnection,Notification
 
+from .models import UserProfile
+from .models import SupportTicket
 admin.site.unregister(User)
 
 class CustomUserAdmin(BaseUserAdmin):
@@ -158,3 +160,26 @@ class NotificationAdmin(admin.ModelAdmin):
     list_filter = ['notification_type', 'is_read', 'created_at']
     search_fields = ['recipient__username', 'sender__username', 'message']
     readonly_fields = ['created_at']
+
+
+@admin.register(SupportTicket)
+class SupportTicketAdmin(admin.ModelAdmin):
+    list_display = ['ticket_id', 'user', 'subject', 'category', 'priority', 'status', 'created_at']
+    list_filter = ['status', 'category', 'priority', 'created_at']
+    search_fields = ['subject', 'message', 'user__username', 'email']
+    readonly_fields = ['ticket_id', 'created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Ticket Info', {
+            'fields': ('ticket_id', 'user', 'status', 'created_at', 'updated_at')
+        }),
+        ('Contact Details', {
+            'fields': ('name', 'email', 'phone')
+        }),
+        ('Issue Details', {
+            'fields': ('subject', 'category', 'priority', 'message')
+        }),
+        ('Admin Response', {
+            'fields': ('admin_response',)
+        }),
+    )

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+
    
 
     'chat',
@@ -50,6 +51,9 @@ INSTALLED_APPS = [
     'users',
     'safety',
     'payments',
+
+     # Third-party apps
+    'widget_tweaks', 
 
         # REST Framework
     'rest_framework',
@@ -69,6 +73,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
 
 ]
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -99,6 +106,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ],
 }
+
+SSLCOMMERZ_STORE_ID = 'testbox'  
+SSLCOMMERZ_STORE_PASSWORD = 'qwerty'  
+SSLCOMMERZ_IS_SANDBOX = True
 
 # JWT Settings - Secure & Auto-Refresh
 SIMPLE_JWT = {

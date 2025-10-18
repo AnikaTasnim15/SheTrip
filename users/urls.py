@@ -12,6 +12,11 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile_view, name='edit_profile'),
     path('verification/', views.verification_view, name='verification'),
 
+    path('settings/', views.settings_view, name='settings'),
+    path('help/', views.help_support_view, name='help_support'),
+    path('support/submit/', views.submit_support_ticket, name='submit_support_ticket'),
+    path('account/delete/', views.delete_account_confirmation_view, name='delete_account_confirm'),
+    path('account/delete/confirm/', views.delete_account_view, name='delete_account'),
     # Password reset URLs
     path('password-reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),
     path('password-reset/done/', views.password_reset_done_view, name='password_reset_done'),
