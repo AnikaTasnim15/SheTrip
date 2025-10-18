@@ -31,7 +31,7 @@ class Message(models.Model):
     class Meta:
         ordering = ['timestamp']
 
-    def __str__(self):
+    def str(self):
         return f"{self.sender.username} -> {self.recipient.username}: {self.content[:50] if self.content else self.message_type}"
 
 
@@ -43,7 +43,7 @@ class Conversation(models.Model):
     class Meta:
         ordering = ['-updated_at']
 
-    def __str__(self):
+    def str(self):
         return f"Conversation {self.id}"
 
     def get_other_participant(self, user):

@@ -69,3 +69,13 @@ class UserProfileEditForm(forms.ModelForm):
             self.fields['first_name'].initial = user.first_name
             self.fields['last_name'].initial = user.last_name
             self.fields['email'].initial = user.email
+
+            class UserConnectionForm(forms.Form):
+                message = forms.CharField(
+                    required=False,
+                    widget=forms.Textarea(attrs={
+                        'placeholder': 'Add a message (optional)',
+                        'rows': 3,
+                        'class': 'form-control'
+                    })
+                )

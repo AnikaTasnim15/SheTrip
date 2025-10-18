@@ -65,3 +65,63 @@ class UserProfile(models.Model):
     def can_access_trips(self):
         """Check if user can access trip features"""
         return self.verification_status == 'verified'
+
+
+class UserConnection(models.Model):
+    """Model for user connections/friendships"""
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('connected', 'Connected'),
+        ('blocked', 'Blocked'),
+    ]
+
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='connections_sent')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='connections_received')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('from_user', 'to_user')
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.from_user.username} -> {self.to_user.username} ({self.status})"
+
+    def accept(self):
+        """Accept a connection request"""
+        self.status = 'connected'
+        self.save()
+
+    def reject(self):
+        """Reject a connection request"""
+        self.delete()
+
+    def block(self):
+        """Block a user"""
+        self.status = 'blocked'
+        self.save()
+
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = [
+        ('connection_request', 'Connection Request'),
+        ('connection_accepted', 'Connection Accepted'),
+        ('connection_rejected', 'Connection Rejected'),
+        ('trip_invitation', 'Trip Invitation'),
+        ('message', 'New Message'),
+    ]
+
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications', null=True, blank=True)
+    notification_type = models.CharField(max_length=30, choices=NOTIFICATION_TYPES)
+    message = models.TextField()
+    link = models.CharField(max_length=200, blank=True)  # URL to redirect when clicked
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.notification_type} for {self.recipient.username}"

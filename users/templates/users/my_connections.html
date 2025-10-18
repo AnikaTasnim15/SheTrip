@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Connections - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .page-header {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-description {
+            color: var(--gray-600);
+        }
+
+        .connections-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .connection-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .connection-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .connection-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 3px solid var(--gray-100);
+            flex-shrink: 0;
+        }
+
+        .avatar-placeholder {
+            width: 100px;
+            height: 100px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .connection-info {
+            flex: 1;
+        }
+
+        .connection-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .verified-badge {
+            background: var(--success);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .connection-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .detail-item i {
+            color: var(--primary);
+            width: 20px;
+        }
+
+        .connection-date {
+            color: var(--gray-500);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .connection-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            border: 2px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            color: var(--gray-300);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: var(--gray-500);
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .connection-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .connection-details {
+                grid-template-columns: 1fr;
+            }
+
+            .connection-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        {% include 'includes/sidebar.html' %}
+
+        <main class="main-content">
+            <div class="navbar">
+                <h1>
+                    <i class="fas fa-user-friends"></i>
+                    My Connections
+                </h1>
+                <a href="{% url 'community' %}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Community
+                </a>
+            </div>
+
+            <div class="container">
+                <div class="page-header">
+                    <h1 class="page-title">Your Travel Connections</h1>
+                    <p class="page-description">
+                        You have {{ total_connections }} connection{% if total_connections != 1 %}s{% endif %}
+                    </p>
+                </div>
+
+                {% if connections %}
+                <div class="connections-list">
+                    {% for item in connections %}
+                    <div class="connection-card">
+                        {% if item.profile.profile_picture %}
+                        <img src="{{ item.profile.profile_picture.url }}" alt="{{ item.user.first_name }}" class="connection-avatar">
+                        {% else %}
+                        <div class="avatar-placeholder">
+                            {{ item.user.first_name|first }}{{ item.user.last_name|first }}
+                        </div>
+                        {% endif %}
+
+                        <div class="connection-info">
+                            <div class="connection-name">
+                                {{ item.user.first_name }} {{ item.user.last_name }}
+                                <span class="verified-badge">
+                                    <i class="fas fa-check-circle"></i>
+                                    Verified
+                                </span>
+                            </div>
+
+                            <div class="connection-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ item.profile.city }}, {{ item.profile.country }}</span>
+                                </div>
+
+                                {% if item.profile.age %}
+                                <div class="detail-item">
+                                    <i class="fas fa-birthday-cake"></i>
+                                    <span>{{ item.profile.age }} years old</span>
+                                </div>
+                                {% endif %}
+
+                                {% if item.profile.travel_style %}
+                                <div class="detail-item">
+                                    <i class="fas fa-suitcase"></i>
+                                    <span>{{ item.profile.travel_style }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if item.profile.languages %}
+                                <div class="detail-item">
+                                    <i class="fas fa-language"></i>
+                                    <span>{{ item.profile.languages }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if item.profile.occupation %}
+                                <div class="detail-item">
+                                    <i class="fas fa-briefcase"></i>
+                                    <span>{{ item.profile.occupation }}</span>
+                                </div>
+                                {% endif %}
+
+                                {% if item.user.email %}
+                                <div class="detail-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>{{ item.user.email }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            {% if item.profile.bio %}
+                            <div style="background: var(--gray-50); padding: 1rem; border-radius: 12px; margin-top: 1rem; font-size: 0.9rem; color: var(--gray-700);">
+                                {{ item.profile.bio }}
+                            </div>
+                            {% endif %}
+
+                            <div class="connection-date">
+                                <i class="fas fa-clock"></i>
+                                Connected on {{ item.connection.created_at|date:"M d, Y" }}
+                            </div>
+                        </div>
+
+                        <div class="connection-actions">
+                            <a href="{% url 'start_conversation' item.user.id %}" class="btn btn-primary">
+                                <i class="fas fa-comment"></i>
+                                Message
+                            </a>
+                            <a href="mailto:{{ item.user.email }}" class="btn btn-outline">
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h2>No Connections Yet</h2>
+                    <p>Start connecting with verified travelers in the community!</p>
+                    <a href="{% url 'community' %}" class="btn btn-primary">
+                        <i class="fas fa-users"></i>
+                        Browse Community
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

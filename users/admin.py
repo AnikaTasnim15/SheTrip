@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from django.utils.html import format_html
-from .models import UserProfile
+from .models import UserProfile,UserConnection,Notification
 
 admin.site.unregister(User)
 
@@ -114,3 +114,47 @@ class UserProfileAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(UserProfile, UserProfileAdmin)
+
+
+@admin.register(UserConnection)
+class UserConnectionAdmin(admin.ModelAdmin):
+    list_display = ['from_user', 'to_user', 'status_badge', 'created_at']
+    list_filter = ['status', 'created_at']
+    search_fields = ['from_user__username', 'to_user__username']
+    readonly_fields = ['created_at', 'updated_at']
+
+    def status_badge(self, obj):
+        colors = {
+            'pending': '#f59e0b',
+            'connected': '#10b981',
+            'blocked': '#ef4444',
+        }
+        color = colors.get(obj.status, '#6b7280')
+        return format_html(
+            '<span style="background-color: {}; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase;">{}</span>',
+            color,
+            obj.get_status_display()
+        )
+
+    status_badge.short_description = 'Status'
+
+    actions = ['mark_connected', 'mark_blocked']
+
+    def mark_connected(self, request, queryset):
+        count = queryset.update(status='connected')
+        self.message_user(request, f'{count} connection(s) marked as connected.')
+
+    mark_connected.short_description = 'Mark as connected'
+
+    def mark_blocked(self, request, queryset):
+        count = queryset.update(status='blocked')
+        self.message_user(request, f'{count} user(s) blocked.')
+
+    mark_blocked.short_description = 'Block users'
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ['recipient', 'notification_type', 'message', 'is_read', 'created_at']
+    list_filter = ['notification_type', 'is_read', 'created_at']
+    search_fields = ['recipient__username', 'sender__username', 'message']
+    readonly_fields = ['created_at']

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community - SheTrip</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #7c3aed;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-900: #0f172a;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            border-right: 1px solid var(--gray-200);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            border: 2px solid transparent;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .stat-card.clickable:hover .stat-icon {
+            transform: scale(1.1);
+        }
+
+        .stat-info h3 {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(236, 72, 153, 0.15));
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .user-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 3px solid var(--gray-100);
+        }
+
+        .avatar-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .user-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-location {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .verified-badge {
+            background: var(--success);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .user-details {
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--gray-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .user-bio {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--white);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            color: var(--gray-300);
+            margin-bottom: 1.5rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            border-left: 4px solid var(--success);
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        {% include 'includes/sidebar.html' %}
+
+        <main class="main-content">
+            <div class="navbar">
+                <h1>
+                    <i class="fas fa-users"></i>
+                    Community
+                </h1>
+            </div>
+
+            <div class="container">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                        <div>{{ message }}</div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Total Members</h3>
+                            <div class="stat-value">{{ total_users }}</div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+
+                    <!-- CLICKABLE CARD - Links to My Connections -->
+                    <a href="{% url 'connections_list' %}" class="stat-card clickable" style="text-decoration: none;">
+                        <div class="stat-info">
+                            <h3>My Connections</h3>
+                            <div class="stat-value">{{ connected_count }}</div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                    </a>
+                </div>
+                {% if pending_received %}
+                <div style="background: var(--white); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+                    <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--gray-900);">
+                        <i class="fas fa-hourglass-half"></i> Connection Requests
+                    </h2>
+
+                    <div style="display: grid; gap: 1rem;">
+                        {% for request_obj in pending_received %}
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--gray-50); border-radius: 12px; border-left: 4px solid var(--warning);">
+                            <div style="flex: 1;">
+                                <strong style="font-size: 1.1rem;">{{ request_obj.from_user.first_name }} {{ request_obj.from_user.last_name }}</strong>
+                                <p style="font-size: 0.9rem; color: var(--gray-600); margin-top: 0.25rem;">
+                                    <i class="fas fa-map-marker-alt"></i> {{ request_obj.from_user.userprofile.city }}, {{ request_obj.from_user.userprofile.country }}
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
+                                <form method="POST" action="{% url 'accept_connection' request_obj.pk %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem; width: auto;">
+                                        <i class="fas fa-check"></i> Accept
+                                    </button>
+                                </form>
+                                <form method="POST" action="{% url 'reject_connection' request_obj.pk %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-secondary" style="padding: 0.5rem 1rem; width: auto;">
+                                        <i class="fas fa-times"></i> Reject
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if users %}
+                <div class="users-grid">
+                    {% for item in users %}
+                    <div class="user-card">
+                        <div class="user-header">
+                            {% if item.profile.profile_picture %}
+                            <img src="{{ item.profile.profile_picture.url }}" alt="{{ item.user.first_name }}" class="user-avatar">
+                            {% else %}
+                            <div class="avatar-placeholder">
+                                {{ item.user.first_name|first }}{{ item.user.last_name|first }}
+                            </div>
+                            {% endif %}
+
+                            <div class="user-info">
+                                <h3>{{ item.user.first_name }} {{ item.user.last_name }}</h3>
+                                <div class="user-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    {{ item.profile.city }}, {{ item.profile.country }}
+                                </div>
+                                <span class="verified-badge">
+                                    <i class="fas fa-check-circle"></i>
+                                    Verified
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="user-details">
+                            {% if item.profile.age %}
+                            <div class="detail-row">
+                                <div class="detail-icon">
+                                    <i class="fas fa-birthday-cake"></i>
+                                </div>
+                                <span>{{ item.profile.age }} years old</span>
+                            </div>
+                            {% endif %}
+
+                            {% if item.profile.travel_style %}
+                            <div class="detail-row">
+                                <div class="detail-icon">
+                                    <i class="fas fa-suitcase"></i>
+                                </div>
+                                <span>{{ item.profile.travel_style }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% if item.profile.languages %}
+                            <div class="detail-row">
+                                <div class="detail-icon">
+                                    <i class="fas fa-language"></i>
+                                </div>
+                                <span>{{ item.profile.languages }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% if item.profile.occupation %}
+                            <div class="detail-row">
+                                <div class="detail-icon">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                                <span>{{ item.profile.occupation }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {% if item.profile.bio %}
+                        <div class="user-bio">
+                            {{ item.profile.bio|truncatewords:20 }}
+                        </div>
+                        {% endif %}
+
+                        {% if item.is_connected %}
+<div style="display: flex; gap: 0.75rem; width: 100%;">
+    <a href="{% url 'chat:start_conversation' item.user.id %}" class="btn btn-primary" style="flex: 1; text-decoration: none;">
+        <i class="fas fa-comment"></i>
+        Message
+    </a>
+    <button class="btn btn-success" disabled style="flex: 1;">
+        <i class="fas fa-check"></i>
+        Connected
+    </button>
+</div>
+                        {% elif item.has_pending_request %}
+                        <button class="btn btn-warning" disabled>
+                            <i class="fas fa-clock"></i>
+                            Pending Request
+                        </button>
+                        {% else %}
+                        <form method="POST" action="{% url 'send_connection_request' item.user.pk %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i>
+                                Connect
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-users-slash"></i>
+                    </div>
+                    <h2>No Community Members Yet</h2>
+                    <p>Be the first to complete verification and join our travel community!</p>
+                </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>
