@@ -14,10 +14,10 @@
 
         body {
             font-family: 'Arial', sans-serif;
-           background: linear-gradient(135deg, #3c1f3fff 0%, #431515fe 25%, #0c242ef0 50%, rgba(74, 22, 40, 1) 75%, #562e2fff 100%);
+            background: linear-gradient(135deg, #2C2B30 0%, #4F4F51 25%, #2C2B30 50%, #4F4F51 75%, #2C2B30 100%);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
-            color: white;
+            color: #FFFFFF;
             overflow-x: hidden;
             min-height: 100vh;
             display: flex;
@@ -35,18 +35,17 @@
         .login-container {
             max-width: 450px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(79, 79, 81, 0.3);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(214, 214, 214, 0.2);
             border-radius: 25px;
             padding: 3rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        /* Decorative elements */
         .login-container::before {
             content: '';
             position: absolute;
@@ -54,7 +53,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            background: linear-gradient(45deg, transparent, rgba(245, 143, 124, 0.05), transparent);
             transform: rotate(45deg);
             animation: shimmer 3s ease-in-out infinite;
         }
@@ -67,14 +66,14 @@
         .logo {
             font-size: 3.5rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            background: linear-gradient(45deg, #F58F7C, #F2C4CE);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 1rem;
-            text-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
             position: relative;
             z-index: 2;
+            filter: drop-shadow(0 0 20px rgba(245, 143, 124, 0.3));
         }
 
         .welcome-text {
@@ -83,14 +82,17 @@
             font-weight: 600;
             position: relative;
             z-index: 2;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .subtitle {
             font-size: 1rem;
-            opacity: 0.8;
+            color: #D6D6D6;
             margin-bottom: 2.5rem;
             position: relative;
             z-index: 2;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
         .form-group {
@@ -104,7 +106,7 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
-            color: white;
+            color: #FFFFFF;
             font-size: 1rem;
         }
 
@@ -116,24 +118,24 @@
             width: 100%;
             padding: 1.2rem 1.5rem;
             padding-left: 3.5rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(214, 214, 214, 0.3);
             border-radius: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: rgba(79, 79, 81, 0.4);
+            color: #FFFFFF;
             font-size: 1.1rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
         }
 
         .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(214, 214, 214, 0.7);
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #ff6b9d;
-            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
-            background: rgba(255, 255, 255, 0.15);
+            border-color: #F58F7C;
+            box-shadow: 0 0 20px rgba(245, 143, 124, 0.4);
+            background: rgba(79, 79, 81, 0.6);
             transform: translateY(-2px);
         }
 
@@ -143,12 +145,12 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(242, 196, 206, 0.8);
             transition: all 0.3s ease;
         }
 
         .form-group input:focus + .input-icon {
-            color: #ff6b9d;
+            color: #F58F7C;
         }
 
         .btn {
@@ -157,7 +159,7 @@
             border: none;
             border-radius: 50px;
             font-size: 1.2rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 1rem;
@@ -167,14 +169,15 @@
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, #ff6b9d, #c471f5);
-            color: white;
-            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+            background: linear-gradient(45deg, #F58F7C, #F2C4CE);
+            color: #2C2B30;
+            box-shadow: 0 8px 25px rgba(245, 143, 124, 0.4);
         }
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4);
+            box-shadow: 0 15px 35px rgba(245, 143, 124, 0.6);
+            background: linear-gradient(45deg, #F2C4CE, #F58F7C);
         }
 
         .btn-primary::before {
@@ -184,7 +187,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: left 0.5s;
         }
 
@@ -199,15 +202,15 @@
         }
 
         .forgot-password a {
-            color: rgba(255, 255, 255, 0.8);
+            color: #D6D6D6;
             text-decoration: none;
             font-size: 0.9rem;
             transition: all 0.3s ease;
         }
 
         .forgot-password a:hover {
-            color: #ff6b9d;
-            text-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
+            color: #F58F7C;
+            text-shadow: 0 0 10px rgba(245, 143, 124, 0.5);
         }
 
         .divider {
@@ -223,14 +226,14 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(214, 214, 214, 0.3);
         }
 
         .divider span {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(79, 79, 81, 0.8);
             backdrop-filter: blur(10px);
             padding: 0 1rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: #D6D6D6;
             font-size: 0.9rem;
         }
 
@@ -240,7 +243,7 @@
         }
 
         .register-link a {
-            color: #ff6b9d;
+            color: #F58F7C;
             text-decoration: none;
             font-weight: 600;
             font-size: 1.1rem;
@@ -248,19 +251,19 @@
             display: inline-block;
             padding: 0.5rem 1rem;
             border-radius: 10px;
-            background: rgba(255, 107, 157, 0.1);
+            background: rgba(245, 143, 124, 0.1);
         }
 
         .register-link a:hover {
-            color: #c471f5;
-            background: rgba(196, 113, 245, 0.2);
+            color: #F2C4CE;
+            background: rgba(242, 196, 206, 0.2);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(196, 113, 245, 0.3);
+            box-shadow: 0 5px 15px rgba(242, 196, 206, 0.3);
         }
 
         .errorlist {
-            background: rgba(255, 0, 0, 0.2);
-            border: 1px solid rgba(255, 0, 0, 0.5);
+            background: rgba(245, 143, 124, 0.2);
+            border: 1px solid rgba(245, 143, 124, 0.5);
             border-radius: 10px;
             padding: 1rem;
             margin-bottom: 1.5rem;
@@ -271,11 +274,11 @@
         }
 
         .errorlist li {
-            color: #ffcccb;
+            color: #FFFFFF;
             font-weight: 600;
         }
 
-        .floating-hearts {
+        .floating-stars {
             position: absolute;
             top: 0;
             left: 0;
@@ -285,14 +288,14 @@
             overflow: hidden;
         }
 
-        .heart {
+        .star {
             position: absolute;
-            color: rgba(255, 107, 157, 0.3);
+            color: rgba(242, 196, 206, 0.3);
             font-size: 1rem;
-            animation: floatHeart 8s linear infinite;
+            animation: floatStar 8s linear infinite;
         }
 
-        @keyframes floatHeart {
+        @keyframes floatStar {
             0% {
                 transform: translateY(100vh) rotate(0deg);
                 opacity: 0;
@@ -342,31 +345,35 @@
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(214, 214, 214, 0.3);
+            background: rgba(79, 79, 81, 0.4);
             backdrop-filter: blur(10px);
-            color: white;
+            color: #FFFFFF;
             font-size: 1rem;
+            position: relative;
+            z-index: 2;
         }
         
         .btn-google {
-            background: rgba(66, 133, 244, 0.1);
+            background: rgba(66, 133, 244, 0.15);
+            border-color: rgba(66, 133, 244, 0.3);
         }
         
         .btn-google:hover {
-            background: rgba(66, 133, 244, 0.2);
+            background: rgba(66, 133, 244, 0.3);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.3);
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.4);
         }
         
         .btn-facebook {
-            background: rgba(24, 119, 242, 0.1);
+            background: rgba(24, 119, 242, 0.15);
+            border-color: rgba(24, 119, 242, 0.3);
         }
         
         .btn-facebook:hover {
-            background: rgba(24, 119, 242, 0.2);
+            background: rgba(24, 119, 242, 0.3);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(24, 119, 242, 0.3);
+            box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4);
         }
         
         .social-icon {
@@ -374,18 +381,48 @@
             height: 20px;
         }
 
+        .remember-forgot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .remember-forgot label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+            cursor: pointer;
+            color: #FFFFFF;
+        }
+
+        .remember-forgot input[type="checkbox"] {
+            margin-right: 0.5rem;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .remember-forgot a {
+            color: #D6D6D6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .remember-forgot a:hover {
+            color: #F58F7C;
+        }
     </style>
 </head>
 <body>
-    <!-- Floating Hearts -->
-    <div class="floating-hearts" id="floatingHearts"></div>
+    <!-- Floating Stars -->
+    <div class="floating-stars" id="floatingStars"></div>
 
     <div class="login-container">
         <div class="logo">SheTrip</div>
         <h1 class="welcome-text">Welcome Back</h1>
         <p class="subtitle">Log in to continue your travel journey</p>
 
-        <!-- Django messages from backend -->
         {% if messages %}
             <div class="errorlist">
                 {% for message in messages %}
@@ -394,12 +431,8 @@
             </div>
         {% endif %}
 
-        <!-- JavaScript validation messages -->
-        <div class="errorlist" id="errorMessages" style="display: none;">
-        </div>
+        <div class="errorlist" id="errorMessages" style="display: none;"></div>
 
-    
-        <!-- Social Login Buttons -->
         <div class="social-buttons">
             <a href="{% provider_login_url 'google' %}" class="btn-social btn-google">
                 <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
@@ -410,22 +443,11 @@
                 </svg>
                 Continue with Google
             </a>
-            
-            {% comment %}
-<a href="{% provider_login_url 'facebook' %}" class="btn-social btn-facebook">
-    <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1877F2">
-        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-    </svg>
-    Continue with Facebook
-</a>
-{% endcomment %}
         </div>
 
         <div class="divider">
             <span>OR</span>
         </div>
-
-        <!-- Traditional Login Form -->    
 
         <form method="post" id="loginForm">
             {% csrf_token %}
@@ -445,12 +467,12 @@
                 </div>
             </div>
 
-            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
-                <label style="display: flex; align-items: center; margin-bottom: 0; cursor: pointer;">
-                    <input type="checkbox" name="remember_me" style="margin-right: 0.5rem; transform: scale(1.2);">
+            <div class="remember-forgot">
+                <label>
+                    <input type="checkbox" name="remember_me">
                     Remember me
                 </label>
-                <a href="{% url 'password_reset' %}" class="forgot-password" style="margin: 0;">Forgot password?</a>
+                <a href="{% url 'password_reset' %}">Forgot password?</a>
             </div>
 
             <button type="submit" class="btn btn-primary">Log In</button>
@@ -459,40 +481,37 @@
         <div class="divider">
             <span>New to SheTrip?</span>
         </div>
-<div class="register-link">
-    <a href="{% url 'register' %}">Create Your Account</a>
-</div>
+
+        <div class="register-link">
+            <a href="{% url 'register' %}">Create Your Account</a>
+        </div>
     </div>
 
     <script>
-    // Create floating hearts
-    function createFloatingHearts() {
-        const heartsContainer = document.getElementById('floatingHearts');
+    function createFloatingStars() {
+        const starsContainer = document.getElementById('floatingStars');
        
         setInterval(() => {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.innerHTML = '💕';
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDelay = '0s';
-            heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.innerHTML = '⭐';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.animationDelay = '0s';
+            star.style.animationDuration = (Math.random() * 3 + 5) + 's';
            
-            heartsContainer.appendChild(heart);
+            starsContainer.appendChild(star);
            
-            // Remove heart after animation
             setTimeout(() => {
-                heart.remove();
+                star.remove();
             }, 8000);
         }, 3000);
     }
 
-    // Form submission with validation
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value.trim();
         const errorDiv = document.getElementById('errorMessages');
        
-        // Clear previous errors
         errorDiv.innerHTML = '';
         errorDiv.style.display = 'none';
        
@@ -507,16 +526,13 @@
         }
        
         if (errors.length > 0) {
-            e.preventDefault();  // Only prevent submission if there are errors
+            e.preventDefault();
             errorDiv.innerHTML = errors.map(error => `<li>${error}</li>`).join('');
             errorDiv.style.display = 'block';
             return;
         }
-       
-        // If validation passes, let the form submit naturally to Django
     });
 
-    // Add input focus effects
     document.querySelectorAll('input').forEach(input => {
         input.addEventListener('focus', function() {
             this.parentElement.style.transform = 'scale(1.02)';
@@ -527,18 +543,13 @@
         });
     });
 
-    // Initialize floating hearts when page loads
-    window.addEventListener('load', createFloatingHearts);
-</script>
-<script>
-    // Clear password field when page loads from cache (back button)
+    window.addEventListener('load', createFloatingStars);
+
     window.addEventListener('pageshow', function(event) {
         if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-            // Page was loaded from cache (back button was used)
             document.getElementById('password').value = '';
             document.getElementById('password').focus();
             
-            // Don't clear username if "remember me" was checked
             const rememberMe = localStorage.getItem('rememberMe');
             if (!rememberMe) {
                 document.getElementById('username').value = '';
@@ -546,7 +557,6 @@
         }
     });
     
-    // Load saved username if "remember me" was checked previously
     window.addEventListener('load', function() {
         const savedUsername = localStorage.getItem('savedUsername');
         const rememberMe = localStorage.getItem('rememberMe');
@@ -556,11 +566,9 @@
             document.querySelector('input[name="remember_me"]').checked = true;
         }
         
-        // Always clear password for security
         document.getElementById('password').value = '';
     });
     
-    // Save username when form is submitted with "remember me" checked
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         const rememberMe = document.querySelector('input[name="remember_me"]').checked;
         const username = document.getElementById('username').value.trim();
@@ -574,6 +582,6 @@
            }
         }
     }, true);
-</script>
+    </script>
 </body>
 </html>

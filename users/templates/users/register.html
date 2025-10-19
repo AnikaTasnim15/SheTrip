@@ -13,10 +13,10 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 25%, #4facfe 50%, #00f2fe 75%, #c471f5 100%);
+            background: linear-gradient(135deg, #2C2B30 0%, #4F4F51 25%, #2C2B30 50%, #4F4F51 75%, #2C2B30 100%);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
-            color: white;
+            color: #FFFFFF;
             min-height: 100vh;
             padding: 2rem 0;
         }
@@ -41,32 +41,34 @@
         .logo {
             font-size: 3rem;
             font-weight: bold;
-            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            background: linear-gradient(45deg, #F58F7C, #F2C4CE);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 1rem;
-            text-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+            filter: drop-shadow(0 0 20px rgba(245, 143, 124, 0.3));
         }
 
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #FFFFFF;
         }
 
         .header p {
             font-size: 1.2rem;
-            opacity: 0.9;
+            color: #D6D6D6;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
         .form-container {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(79, 79, 81, 0.3);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(214, 214, 214, 0.2);
             border-radius: 20px;
             padding: 3rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
         .form-grid {
@@ -88,7 +90,7 @@
         .form-group label {
             margin-bottom: 0.5rem;
             font-weight: 600;
-            color: white;
+            color: #FFFFFF;
             font-size: 1rem;
         }
 
@@ -96,10 +98,10 @@
         .form-group select,
         .form-group textarea {
             padding: 1rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(214, 214, 214, 0.3);
             border-radius: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: rgba(79, 79, 81, 0.4);
+            color: #FFFFFF;
             font-size: 1rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
@@ -107,16 +109,16 @@
 
         .form-group input::placeholder,
         .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(214, 214, 214, 0.7);
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #ff6b9d;
-            box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
-            background: rgba(255, 255, 255, 0.15);
+            border-color: #F58F7C;
+            box-shadow: 0 0 20px rgba(245, 143, 124, 0.4);
+            background: rgba(79, 79, 81, 0.6);
         }
 
         .checkbox-group {
@@ -129,22 +131,23 @@
         .checkbox-item {
             display: flex;
             align-items: center;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(79, 79, 81, 0.4);
             padding: 0.5rem 1rem;
             border-radius: 25px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(214, 214, 214, 0.2);
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .checkbox-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #ff6b9d;
+            background: rgba(242, 196, 206, 0.2);
+            border-color: #F2C4CE;
         }
 
         .checkbox-item input[type="checkbox"] {
             margin-right: 0.5rem;
             transform: scale(1.2);
+            cursor: pointer;
         }
 
         .radio-group {
@@ -157,21 +160,22 @@
         .radio-item {
             display: flex;
             align-items: center;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(79, 79, 81, 0.4);
             padding: 0.5rem 1rem;
             border-radius: 25px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(214, 214, 214, 0.2);
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .radio-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #ff6b9d;
+            background: rgba(242, 196, 206, 0.2);
+            border-color: #F2C4CE;
         }
 
         .radio-item input[type="radio"] {
             margin-right: 0.5rem;
+            cursor: pointer;
         }
 
         .btn {
@@ -179,7 +183,7 @@
             border: none;
             border-radius: 50px;
             font-size: 1.2rem;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
@@ -190,38 +194,39 @@
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, #ff6b9d, #c471f5);
-            color: white;
-            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+            background: linear-gradient(45deg, #F58F7C, #F2C4CE);
+            color: #2C2B30;
+            box-shadow: 0 8px 25px rgba(245, 143, 124, 0.4);
         }
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4);
+            box-shadow: 0 15px 35px rgba(245, 143, 124, 0.6);
+            background: linear-gradient(45deg, #F2C4CE, #F58F7C);
         }
 
         .login-link {
             text-align: center;
             margin-top: 2rem;
             padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(214, 214, 214, 0.2);
         }
 
         .login-link a {
-            color: #ff6b9d;
+            color: #F58F7C;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .login-link a:hover {
-            color: #c471f5;
-            text-shadow: 0 0 10px rgba(196, 113, 245, 0.5);
+            color: #F2C4CE;
+            text-shadow: 0 0 10px rgba(242, 196, 206, 0.5);
         }
 
         .errorlist {
-            background: rgba(255, 0, 0, 0.2);
-            border: 1px solid rgba(255, 0, 0, 0.5);
+            background: rgba(245, 143, 124, 0.2);
+            border: 1px solid rgba(245, 143, 124, 0.5);
             border-radius: 10px;
             padding: 1rem;
             margin-bottom: 1rem;
@@ -229,14 +234,14 @@
         }
 
         .errorlist li {
-            color: #ffcccb;
+            color: #FFFFFF;
             font-weight: 600;
         }
 
         .progress-bar {
             width: 100%;
             height: 6px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(79, 79, 81, 0.5);
             border-radius: 3px;
             margin-bottom: 2rem;
             overflow: hidden;
@@ -244,7 +249,7 @@
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(45deg, #ff6b9d, #c471f5);
+            background: linear-gradient(45deg, #F58F7C, #F2C4CE);
             border-radius: 3px;
             width: 0%;
             transition: width 0.3s ease;
@@ -257,8 +262,8 @@
         .section-title {
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: #ff6b9d;
-            border-bottom: 2px solid rgba(255, 107, 157, 0.3);
+            color: #F58F7C;
+            border-bottom: 2px solid rgba(245, 143, 124, 0.3);
             padding-bottom: 0.5rem;
         }
 
@@ -284,13 +289,17 @@
             }
         }
 
-        /* Custom select arrow */
         select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3e%3cpath d='M8 13.1l4.7-4.7-1.4-1.4L8 10.3 4.7 7l-1.4 1.4z'/%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 1rem center;
             background-size: 1rem;
+        }
+
+        select option {
+            background: #2C2B30;
+            color: #FFFFFF;
         }
     </style>
 </head>
@@ -303,14 +312,11 @@
         </div>
 
         <div class="form-container">
-            <!-- Progress Bar -->
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
 
-            <!-- Error messages will be displayed here -->
-            <div class="errorlist" id="errorMessages" style="display: none;">
-            </div>
+            <div class="errorlist" id="errorMessages" style="display: none;"></div>
             
             {% if messages %}
             <div class="errorlist">
@@ -323,7 +329,6 @@
             <form method="post" enctype="multipart/form-data" id="registrationForm">
                 {% csrf_token %}
 
-                <!-- Basic Information Section -->
                 <div class="form-section">
                     <h2 class="section-title">Basic Information</h2>
                     <div class="form-grid">
@@ -354,7 +359,6 @@
                     </div>
                 </div>
 
-                <!-- Personal Details Section -->
                 <div class="form-section">
                     <h2 class="section-title">Personal Details</h2>
                     <div class="form-grid">
@@ -386,7 +390,6 @@
                                 <option value="BR">Brazil</option>
                                 <option value="IN">India</option>
                                 <option value="BD">Bangladesh</option>
-                                <!-- Add more countries as needed -->
                             </select>
                         </div>
                         <div class="form-group">
@@ -400,7 +403,6 @@
                     </div>
                 </div>
 
-                <!-- Travel Preferences Section -->
                 <div class="form-section">
                     <h2 class="section-title">Travel Preferences</h2>
 
@@ -430,20 +432,24 @@
                         <label>Accommodation Preferences</label>
                         <div class="checkbox-group">
                             <label class="checkbox-item">
-                                <input type="checkbox" name="accommodation" value="hostels">
-                                Hostels
-                            </label>
-                            <label class="checkbox-item">
                                 <input type="checkbox" name="accommodation" value="hotels">
                                 Hotels
                             </label>
                             <label class="checkbox-item">
-                                <input type="checkbox" name="accommodation" value="airbnb">
-                                Airbnb
+                                <input type="checkbox" name="accommodation" value="resorts">
+                                Resorts
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="accommodation" value="guesthouses">
                                 Guesthouses
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="accommodation" value="cottages">
+                                Cottages
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="accommodation" value="homestays">
+                                Homestays
                             </label>
                         </div>
                     </div>
@@ -452,28 +458,28 @@
                         <label>Travel Interests</label>
                         <div class="checkbox-group">
                             <label class="checkbox-item">
-                                <input type="checkbox" name="interests" value="adventure">
-                                Adventure & Sports
+                                <input type="checkbox" name="interests" value="beach">
+                                Beach & Sea
                             </label>
                             <label class="checkbox-item">
-                                <input type="checkbox" name="interests" value="culture">
-                                Culture & History
+                                <input type="checkbox" name="interests" value="hills">
+                                Hill Stations
                             </label>
                             <label class="checkbox-item">
-                                <input type="checkbox" name="interests" value="food">
-                                Food & Culinary
+                                <input type="checkbox" name="interests" value="heritage">
+                                Heritage & History
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="interests" value="nature">
                                 Nature & Wildlife
                             </label>
                             <label class="checkbox-item">
-                                <input type="checkbox" name="interests" value="nightlife">
-                                Nightlife & Entertainment
+                                <input type="checkbox" name="interests" value="religious">
+                                Religious Sites
                             </label>
                             <label class="checkbox-item">
-                                <input type="checkbox" name="interests" value="wellness">
-                                Wellness & Spa
+                                <input type="checkbox" name="interests" value="food">
+                                Food & Cuisine
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="interests" value="photography">
@@ -481,7 +487,15 @@
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" name="interests" value="shopping">
-                                Shopping
+                                Shopping & Markets
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="adventure">
+                                Adventure & Trekking
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="interests" value="river">
+                                River Cruises
                             </label>
                         </div>
                     </div>
@@ -494,21 +508,14 @@
                     </div>
                 </div>
 
-                <!-- About You Section -->
                 <div class="form-section">
                     <h2 class="section-title">About You</h2>
                     <div class="form-group">
                         <label for="id_bio">Bio</label>
                         <textarea name="bio" id="id_bio" rows="4" placeholder="Tell us about yourself, your travel experiences, and what makes you a great travel companion..."></textarea>
                     </div>
-
-                    <div class="form-group">
-                        <label for="id_profile_picture">Profile Picture</label>
-                        <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*">
-                    </div>
                 </div>
 
-                <!-- Terms and Conditions -->
                 <div class="form-group">
                     <label class="checkbox-item">
                         <input type="checkbox" name="terms_accepted" required>
@@ -527,13 +534,12 @@
             </form>
 
             <div class="login-link">
-    <p>Already have an account? <a href="{% url 'login' %}">Log In Here</a></p>
-</div>
+                <p>Already have an account? <a href="{% url 'login' %}">Log In Here</a></p>
+            </div>
         </div>
     </div>
 
     <script>
-        // Progress bar functionality
         function updateProgressBar() {
             const form = document.getElementById('registrationForm');
             const requiredInputs = form.querySelectorAll('input[required], select[required]');
@@ -548,7 +554,6 @@
             document.getElementById('progressFill').style.width = progress + '%';
         }
 
-        // Add event listeners to all form inputs
         document.addEventListener('DOMContentLoaded', function() {
             const formInputs = document.querySelectorAll('input, select, textarea');
             formInputs.forEach(input => {
@@ -556,19 +561,14 @@
                 input.addEventListener('change', updateProgressBar);
             });
 
-            // Initial progress calculation
             updateProgressBar();
         });
 
-        // Form submission with validation
         document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            
-
             const password1 = document.getElementById('id_password1').value;
             const password2 = document.getElementById('id_password2').value;
             const errorDiv = document.getElementById('errorMessages');
 
-            // Clear previous errors
             errorDiv.innerHTML = '';
             errorDiv.style.display = 'none';
 
@@ -582,7 +582,6 @@
                 errors.push('Password must be at least 8 characters long!');
             }
 
-            // Check required fields
             const requiredFields = this.querySelectorAll('input[required], select[required]');
             requiredFields.forEach(field => {
                 if (!field.value.trim()) {
@@ -590,51 +589,19 @@
                 }
             });
 
-            // Check if terms are accepted
             const termsCheckbox = document.querySelector('input[name="terms_accepted"]');
             if (!termsCheckbox.checked) {
                 errors.push('You must accept the Terms of Service and Privacy Policy.');
             }
 
             if (errors.length > 0) {
+                e.preventDefault();
                 errorDiv.innerHTML = errors.map(error => `<li>${error}</li>`).join('');
                 errorDiv.style.display = 'block';
                 errorDiv.scrollIntoView({ behavior: 'smooth' });
                 return;
             }
-
-            
         });
-
-        // Enhanced file input
-        document.getElementById('id_profile_picture').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                if (file.size > 5 * 1024 * 1024) { // 5MB limit
-                    alert('File size must be less than 5MB');
-                    this.value = '';
-                    return;
-                }
-
-                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-                if (!validTypes.includes(file.type)) {
-                    alert('Please upload a valid image file (JPEG, PNG, or GIF)');
-                    this.value = '';
-                    return;
-                }
-            }
-        });
-
-        // Mobile menu functionality
-        function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('active');
-        }
-
-        function closeMobileMenu() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.remove('active');
-        }
     </script>
 </body>
 </html>
