@@ -6,166 +6,175 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Connections - SheTrip</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #3c1f3fff 0%, #431515fe 25%, #0c242ef0 50%, rgba(74, 22, 40, 1) 75%, #562e2fff 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            color: white;
-            min-height: 100vh;
-            padding: 2rem;
-        }
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #2C2B30 0%, #4F4F51 25%, #2C2B30 50%, #4F4F51 75%, #2C2B30 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        color: #FFFFFF;
+        min-height: 100vh;
+        padding: 2rem;
+    }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            padding: 3rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(79, 79, 81, 0.3);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(214, 214, 214, 0.2);
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
 
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff6b9d, #c471f5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
+    .logo {
+        font-size: 2.5rem;
+        font-weight: bold;
+        background: linear-gradient(45deg, #F58F7C, #F2C4CE);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 2rem;
+        text-align: center;
+        filter: drop-shadow(0 0 20px rgba(245, 143, 124, 0.3));
+    }
 
-        h2 {
-            font-size: 1.8rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: #FFFFFF;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
 
-        .menu-section {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
+    .menu-section {
+        background: rgba(79, 79, 81, 0.4);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(214, 214, 214, 0.2);
+    }
 
-        .menu-section h3 {
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
+    .menu-section h3 {
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+        color: #FFFFFF;
+    }
 
-        .menu-list {
-            list-style: none;
-        }
+    .menu-list {
+        list-style: none;
+    }
 
-        .menu-item {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-            transition: all 0.3s ease;
-        }
+    .menu-item {
+        background: rgba(79, 79, 81, 0.5);
+        border: 1px solid rgba(214, 214, 214, 0.2);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+        transition: all 0.3s ease;
+    }
 
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateX(5px);
-        }
+    .menu-item:hover {
+        background: rgba(242, 196, 206, 0.2);
+        transform: translateX(5px);
+        border-color: #F2C4CE;
+    }
 
-        .menu-item a {
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 1.1rem;
-        }
+    .menu-item a {
+        color: #FFFFFF;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 1.1rem;
+    }
 
-        .account-card {
-            background: rgba(66, 133, 244, 0.15);
-            border: 2px solid rgba(66, 133, 244, 0.3);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    .account-card {
+        background: rgba(66, 133, 244, 0.15);
+        border: 2px solid rgba(66, 133, 244, 0.3);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-        .account-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+    .account-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
 
-        .provider-icon {
-            font-size: 2rem;
-        }
+    .provider-icon {
+        font-size: 2rem;
+    }
 
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-        .btn-danger {
-            background: linear-gradient(45deg, #ff4444, #cc0000);
-            color: white;
-        }
+    .btn-danger {
+        background: linear-gradient(45deg, #ff4444, #cc0000);
+        color: #FFFFFF;
+        box-shadow: 0 4px 12px rgba(255, 68, 68, 0.3);
+    }
 
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
-        }
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 68, 68, 0.5);
+    }
 
-        .btn-primary {
-            background: linear-gradient(45deg, #ff6b9d, #c471f5);
-            color: white;
-            text-decoration: none;
-            display: inline-block;
-        }
+    .btn-primary {
+        background: linear-gradient(45deg, #F58F7C, #F2C4CE);
+        color: #2C2B30;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 4px 12px rgba(245, 143, 124, 0.3);
+    }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
-        }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(245, 143, 124, 0.5);
+    }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 2rem;
-        }
+    .btn-secondary {
+        background: rgba(79, 79, 81, 0.5);
+        color: #FFFFFF;
+        border: 2px solid rgba(214, 214, 214, 0.3);
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 2rem;
+    }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
+    .btn-secondary:hover {
+        background: rgba(79, 79, 81, 0.7);
+        border-color: #F2C4CE;
+    }
 
-        .empty-state {
-            text-align: center;
-            padding: 2rem;
-            opacity: 0.8;
-        }
-    </style>
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #D6D6D6;
+    }
+</style>
 </head>
 <body>
     <div class="container">

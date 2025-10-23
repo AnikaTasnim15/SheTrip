@@ -8,12 +8,16 @@ def trip_counts(request):
         try:
             from trips.models import TravelPlan, TripParticipant, Payment
             
+            # Count user's travel plans
             user_plans_count = TravelPlan.objects.filter(user=request.user).count()
+            
+            # Count trips user is participating in (organized trips joined)
             participations_count = TripParticipant.objects.filter(user=request.user).count()
-            total_trips_count = user_plans_count + participations_count
             
+            # Total trips = organized trips the user has joined
+            total_trips_count = participations_count
             
-            # Count of user transactions (all statuses)
+            # Count of user payments
             user_payments_count = Payment.objects.filter(user=request.user).count()
 
             return {

@@ -10,13 +10,27 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         now = timezone.now()
+        
+        self.stdout.write(self.style.NOTICE(f'\n=== AUTO UPDATE STARTED at {now} ==='))
 
         # 1. Close open plans past join_deadline (5-minute window)
-        closed_count = TravelPlan.objects.filter(status='open', join_deadline__lt=now).update(status='closed')
+        self.stdout.write(self.style.NOTICE('\n[STEP 1] Checking for expired open plans...'))
+        
+        open_plans = TravelPlan.objects.filter(status='open', join_deadline__lt=now)
+        self.stdout.write(f'Found {open_plans.count()} plans past their join deadline')
+        
+        for plan in open_plans:
+            self.stdout.write(f'  - Plan {plan.plan_id} ({plan.destination}): join_deadline={plan.join_deadline}, now={now}')
+        
+        closed_count = open_plans.update(status='closed')
         if closed_count > 0:
-            self.stdout.write(self.style.SUCCESS(f'{closed_count} plans auto-closed after 5-minute join window'))
+            self.stdout.write(self.style.SUCCESS(f'✓ {closed_count} plans auto-closed after 5-minute join window'))
+        else:
+            self.stdout.write(self.style.WARNING('No plans to close'))
 
         # 2. Reject finalized plans where payment deadline passed with insufficient payments
+        self.stdout.write(self.style.NOTICE('\n[STEP 2] Checking finalized plans for rejection...'))
+        
         for plan in TravelPlan.objects.filter(status='finalized', payment_deadline__lt=now, organized_trip__isnull=True):
             # Count users who agreed AND paid
             agreed_users = TravelPlanInterest.objects.filter(plan=plan, agreed=True)
@@ -36,14 +50,18 @@ class Command(BaseCommand):
             if paid_count < 2:  # Less than 2 paid participants
                 plan.status = 'rejected'
                 plan.save(update_fields=['status'])
-                self.stdout.write(self.style.WARNING(f'Plan {plan.plan_id} rejected - insufficient payments ({paid_count} < 2)'))
+                self.stdout.write(self.style.WARNING(f'✗ Plan {plan.plan_id} rejected - insufficient payments ({paid_count} < 2)'))
 
         # 3. AUTO-CREATE OrganizedTrip when conditions are met
+        self.stdout.write(self.style.NOTICE('\n[STEP 3] Checking finalized plans for OrganizedTrip creation...'))
+        
         for plan in TravelPlan.objects.filter(status='finalized', organized_trip__isnull=True):
             # Count users who agreed AND paid
             agreed_users = TravelPlanInterest.objects.filter(plan=plan, agreed=True)
             paid_count = 0
             paid_users = []
+            
+            self.stdout.write(f'  - Plan {plan.plan_id}: {agreed_users.count()} agreed users')
             
             for interest in agreed_users:
                 # Check if this user has a completed payment (no trip filter since OrganizedTrip doesn't exist yet)
@@ -56,12 +74,17 @@ class Command(BaseCommand):
                 if payment_exists:
                     paid_count += 1
                     paid_users.append(interest)
+                    self.stdout.write(f'    ✓ {interest.user.username} has paid')
+                else:
+                    self.stdout.write(f'    ✗ {interest.user.username} has NOT paid')
             
             # Create trip when: max participants paid OR payment deadline passed with at least 2 paid
             should_create = (
                 paid_count >= plan.max_participants or  
                 (plan.payment_deadline and now > plan.payment_deadline and paid_count >= 2)
             )
+            
+            self.stdout.write(f'  - Should create trip: {should_create} (paid: {paid_count}, max: {plan.max_participants})')
             
             if should_create:
                 # Create OrganizedTrip
@@ -107,9 +130,11 @@ class Command(BaseCommand):
                 
                 plan.status = 'approved'
                 plan.save(update_fields=['status'])
-                self.stdout.write(self.style.SUCCESS(f'OrganizedTrip {organized_trip.trip_id} created for plan {plan.plan_id} with {paid_count} participants'))
+                self.stdout.write(self.style.SUCCESS(f'✓ OrganizedTrip {organized_trip.trip_id} created for plan {plan.plan_id} with {paid_count} participants'))
         
         # 4. Move confirmed trips to ongoing/completed based on dates
+        self.stdout.write(self.style.NOTICE('\n[STEP 4] Updating trip statuses based on dates...'))
+        
         ongoing_count = 0
         completed_count = 0
         
@@ -118,15 +143,17 @@ class Command(BaseCommand):
                 trip.trip_status = 'ongoing'
                 trip.save(update_fields=['trip_status'])
                 ongoing_count += 1
+                self.stdout.write(f'  ✓ Trip {trip.trip_id} moved to ongoing')
             elif trip.return_time <= now:
                 trip.trip_status = 'completed'
                 trip.save(update_fields=['trip_status'])
                 completed_count += 1
+                self.stdout.write(f'  ✓ Trip {trip.trip_id} moved to completed')
         
         if ongoing_count > 0:
-            self.stdout.write(self.style.SUCCESS(f'{ongoing_count} trips moved to ongoing status'))
+            self.stdout.write(self.style.SUCCESS(f'✓ {ongoing_count} trips moved to ongoing status'))
         
         if completed_count > 0:
-            self.stdout.write(self.style.SUCCESS(f'{completed_count} trips moved to completed status'))
+            self.stdout.write(self.style.SUCCESS(f'✓ {completed_count} trips moved to completed status'))
 
-        self.stdout.write(self.style.SUCCESS(' Auto update completed successfully.'))
+        self.stdout.write(self.style.SUCCESS('\n=== AUTO UPDATE COMPLETED SUCCESSFULLY ===\n'))

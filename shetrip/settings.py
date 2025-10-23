@@ -33,6 +33,18 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com', '*']
 
 SITE_URL = 'http://127.0.0.1:8000'
+
+
+# Time Zone Configuration
+USE_TZ = True 
+TIME_ZONE = 'Asia/Bangladesh'  
+
+
+DATETIME_FORMAT = 'Y-m-d H:i:s'
+DATE_FORMAT = 'Y-m-d'
+
+
+USE_L10N = True 
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.humanize',
 
    
 
@@ -202,6 +215,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 # Custom Social Account Adapter
 SOCIALACCOUNT_ADAPTER = 'users.adapters.CustomSocialAccountAdapter'
+
+
 
 ROOT_URLCONF = 'shetrip.urls'
 

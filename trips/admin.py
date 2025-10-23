@@ -45,7 +45,12 @@ class TravelPlanAdmin(admin.ModelAdmin):
     }),
     )
     
-    actions = ['mark_as_finalized', 'reject_plan']
+    actions = ['mark_as_finalized', 'reject_plan', 'close_plan']  
+    def close_plan(self, request, queryset):
+        """Admin can manually close open plans"""
+        updated = queryset.filter(status='open').update(status='closed')
+        self.message_user(request, f'{updated} plans have been closed.')
+    close_plan.short_description = "Close selected open plans"
 
     def reject_plan(self, request, queryset):
         """Admin can reject any plan at any time"""
@@ -115,10 +120,9 @@ class TripParticipantAdmin(admin.ModelAdmin):
         'join_date'
     ]
     list_filter = ['payment_status', 'attendance_status', 'face_verification_done']
-    search_fields = ['user__username', 'trip__trip_name', 'emergency_contact']  # ✅ ADD emergency_contact
+    search_fields = ['user__username', 'trip__trip_name', 'emergency_contact']
     date_hierarchy = 'join_date'
     
-    #  ADD fieldsets to organize admin view
     fieldsets = (
         ('Participant Info', {
             'fields': ('user', 'trip', 'join_date')

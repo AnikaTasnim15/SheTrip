@@ -21,49 +21,53 @@ def my_trips_view(request):
         profile = None
   
     
+    now = timezone.now()
+    today = timezone.localdate()  
+    
     user_plans = TravelPlan.objects.filter(user=request.user)
     
-    # Get trips user is participating in
+    
     participations = TripParticipant.objects.filter(user=request.user).select_related('trip')
 
     total_co_travelers = sum(
-        p.trip.total_participants - 1  # -1 to exclude the user themselves
+        p.trip.total_participants - 1  
         for p in participations 
         if p.trip
     )
     
     active_participations = participations.filter(
-    trip__departure_time__lte=timezone.now(),
-    trip__return_time__gte=timezone.now()
+        trip__departure_time__lte=now,
+        trip__return_time__gte=now
     ) 
-    # Get matched buddies count
+    
     user_plan_ids = user_plans.values_list('plan_id', flat=True)
     matched_buddies = TravelMatch.objects.filter(
         Q(travel_plan_1_id__in=user_plan_ids) | Q(travel_plan_2_id__in=user_plan_ids),
         match_status='accepted'
     ).count()
     
-    # Get next upcoming trip(by plan)
+    
     next_trip = user_plans.filter(
-        start_date__gte=date.today(),
+        start_date__gte=today,
         is_active=True
     ).order_by('start_date').first()
 
-      # Get next organized trip departure
-    next_organized_trip = participations.filter(
-    trip__departure_time__gte=timezone.now()  
-).order_by('trip__departure_time').first()
     
-    # Get past trips count(based on return_time)
+    next_organized_trip = participations.filter(
+        trip__departure_time__gte=now,
+        payment_status='paid'  
+    ).order_by('trip__departure_time').first()
+    
+    
     past_trips = participations.filter(
-        trip__return_time__lt=date.today()
+        trip__return_time__lt=now
     )
 
-     # Calculate past trips statistics
+    
     completed_trips_count = past_trips.count()
     places_visited = past_trips.values('trip__destination').distinct().count()
     
-    # Count total travel buddies met (sum of all participants from past trips minus self)
+
     travel_buddies_met = sum(
         p.trip.total_participants - 1
         for p in past_trips
@@ -77,7 +81,7 @@ def my_trips_view(request):
         'total_co_travelers': total_co_travelers,
         'matched_buddies': matched_buddies,
         'next_trip': next_trip,
-        'next_organized_trip': next_organized_trip,
+        'next_organized_trip': next_organized_trip,  
         'past_trips': past_trips,
         'completed_trips_count': completed_trips_count,
         'places_visited': places_visited,
@@ -89,7 +93,8 @@ def my_trips_view(request):
         'profile': profile, 
         'active_participations': active_participations,
         'user': request.user,
-        'today': date.today(),
+        'today': today,  
+        'now': now,  
     }
     return render(request, 'trips/my_trips.html', context)
 
@@ -321,36 +326,36 @@ def withdraw_interest_view(request, plan_id):
 
 
 @login_required
-
+@verification_required
 def organized_trips_view(request):
-    """View all available organized trips"""
+    """View only organized trips the user has joined"""
 
     try:
         profile = request.user.userprofile
     except UserProfile.DoesNotExist:
         profile = None
 
-    # Show only confirmed/finalized
-    organized_trips = OrganizedTrip.objects.filter(
-        trip_status__in=['confirmed']
-    ).select_related('driver').order_by('departure_time')
-    
-    # Check which trips the user has already joined
-    user_trip_ids = TripParticipant.objects.filter(
+    # Get only trips the user has joined
+    user_participations = TripParticipant.objects.filter(
         user=request.user
-    ).values_list('trip_id', flat=True)
+    ).select_related('trip', 'trip__driver').order_by('trip__departure_time')
     
-    total_trips = organized_trips.count()
+    # Extract trips from participations
+    organized_trips = [p.trip for p in user_participations]
+    
+    # Already filtered to user's trips
+    user_trip_ids = [trip.trip_id for trip in organized_trips]
+    
+    total_trips = len(organized_trips)
     available_trips = sum(1 for trip in organized_trips if trip.available_slots() > 0)
-  
 
     context = {
         'organized_trips': organized_trips,
-        'user_trip_ids': list(user_trip_ids),
+        'user_trip_ids': user_trip_ids,
         'total_trips': total_trips,
         'available_trips': available_trips,
-        'total_participants': sum(trip.total_participants for trip in organized_trips),  
-        'unique_destinations': organized_trips.values('destination').distinct().count(),  
+        'total_participants': sum(trip.total_participants for trip in organized_trips),
+        'unique_destinations': len(set(trip.destination for trip in organized_trips)),
         'profile': profile,
         'user': request.user,
     }
@@ -573,12 +578,13 @@ def _recalculate_trip_status(trip: OrganizedTrip) -> None:
 
 
 @login_required
-
 def agree_plan_details_view(request, plan_id):
     """User agrees to finalized plan - create OrganizedTrip and redirect to join"""
+    from datetime import datetime, time
+    
     plan = get_object_or_404(TravelPlan, plan_id=plan_id, status='finalized')
     
-    # Check if user is creator OR expressed interest
+    
     is_creator = plan.user == request.user
     
     if not is_creator:
@@ -596,16 +602,23 @@ def agree_plan_details_view(request, plan_id):
             user=request.user
         )
     
-    # Mark as agreed
+    
     interest.agreed = True
     interest.agreed_at = timezone.now()
     interest.save()
     
-    # Set 5-minute payment deadline
+   
     plan.payment_deadline = timezone.now() + timedelta(minutes=5)
     plan.save()
     
-    # CREATE OR GET OrganizedTrip - FIX: Add all required fields
+    
+    departure_naive = datetime.combine(plan.start_date, time(9, 0))  # 9 AM departure
+    return_naive = datetime.combine(plan.end_date, time(18, 0))  # 6 PM return
+    
+    departure_time = timezone.make_aware(departure_naive)
+    return_time = timezone.make_aware(return_naive)
+    
+    
     organized_trip, created = OrganizedTrip.objects.get_or_create(
         travel_plan=plan,
         defaults={
@@ -615,13 +628,13 @@ def agree_plan_details_view(request, plan_id):
             'base_cost': plan.final_cost_per_person or 0,
             'platform_commission': plan.platform_commission or 0,
             'final_cost_per_person': plan.final_cost_per_person or 0,
-            'profit_margin': plan.profit_margin or 0,  # ✅ ADDED
-            'driver_payment': plan.driver_payment or 0,  # ✅ ADDED
-            'transportation_details': plan.transportation_details or '',  # ✅ ADDED
-            'accommodation_details': plan.accommodation_details or '',  # ✅ ADDED
-            'meal_arrangements': plan.meal_arrangements or '',  # ✅ ADDED
-            'departure_time': timezone.make_aware(timezone.datetime.combine(plan.start_date, timezone.datetime.min.time())),  # ✅ FIXED
-            'return_time': timezone.make_aware(timezone.datetime.combine(plan.end_date, timezone.datetime.min.time())),  # ✅ FIXED
+            'profit_margin': plan.profit_margin or 0,
+            'driver_payment': plan.driver_payment or 0,
+            'transportation_details': plan.transportation_details or '',
+            'accommodation_details': plan.accommodation_details or '',
+            'meal_arrangements': plan.meal_arrangements or '',
+            'departure_time': departure_time, 
+            'return_time': return_time, 
             'total_participants': 0,
         }
     )
@@ -631,9 +644,8 @@ def agree_plan_details_view(request, plan_id):
     else:
         messages.success(request, 'You agreed to the plan! Proceeding to join...')
     
-    # Redirect to join organized trip form
+    
     return redirect('join_organized_trip', trip_id=organized_trip.trip_id)
-
 @login_required
 
 def initiate_payment_view(request, trip_id):

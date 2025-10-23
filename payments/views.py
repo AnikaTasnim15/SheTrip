@@ -144,7 +144,7 @@ def payment_success_view(request):
             # Recalculate trip status
             _recalculate_trip_status(payment.trip)
             
-            messages.success(request, 'Payment successful! You have 1 day to request a refund if needed.')
+            messages.success(request, 'Payment successful! You have 5 minutes to request a refund if needed.')
             return redirect('organized_trip_detail', trip_id=payment.trip.trip_id)
             
         except Payment.DoesNotExist:
@@ -224,7 +224,7 @@ def payment_ipn_view(request):
 @login_required
 @verification_required
 def trip_cancel_payment_view(request, trip_id):
-    """Refund - 1-day refund window with SSLCommerz"""
+    """Refund - 5-minute refund window with SSLCommerz"""
     try:
         profile = request.user.userprofile
     except:
@@ -243,10 +243,12 @@ def trip_cancel_payment_view(request, trip_id):
         messages.error(request, 'No payment found.')
         return redirect('organized_trip_detail', trip_id=trip_id)
 
-    # 1-day refund window
-    within_window = payment.payment_date >= timezone.now() - timedelta(days=1)
+    # ✅ FIXED: 5-minute refund window
+    refund_deadline = payment.payment_date + timedelta(minutes=5)
+    within_window = timezone.now() < refund_deadline
+    
     if not within_window:
-        messages.error(request, 'Refund period expired (1-day limit).')
+        messages.error(request, 'Refund period expired (5-minute limit).')
         return redirect('organized_trip_detail', trip_id=trip_id)
 
     if request.method == 'POST':
@@ -263,7 +265,7 @@ def trip_cancel_payment_view(request, trip_id):
             refund_response = sslcz.initiate_refund(
                 bank_tran_id=bank_tran_id,
                 refund_amount=payment.total_amount,
-                refund_remarks='Customer requested refund within 1-day window'
+                refund_remarks='Customer requested refund within 5-minute window'
             )
             
             if refund_response.get('status') == 'success':
@@ -284,7 +286,6 @@ def trip_cancel_payment_view(request, trip_id):
         else:
             messages.error(request, 'Unable to process refund. Please contact support.')
 
-    refund_deadline = payment.payment_date + timedelta(days=1)
     can_refund = timezone.now() < refund_deadline
 
     context = {

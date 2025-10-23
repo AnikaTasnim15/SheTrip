@@ -6,379 +6,369 @@
     <title>Organized Trips - SheTrip</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        :root {
-            --primary: #7c3aed;
-            --primary-dark: #6d28d9;
-            --primary-light: #a78bfa;
-            --secondary: #ec4899;
-            --secondary-dark: #db2777;
-            --accent: #8b5cf6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --info: #3b82f6;
-            --dark: #1e293b;
-            --dark-light: #334155;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-300: #cbd5e1;
-            --gray-400: #94a3b8;
-            --gray-500: #64748b;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1e293b;
-            --gray-900: #0f172a;
-            --white: #ffffff;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 6px 12px -2px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #2C2B30 0%, #4F4F51 25%, #2C2B30 50%, #4F4F51 75%, #2C2B30 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        color: #FFFFFF;
+        min-height: 100vh;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            line-height: 1.6;
-        }
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 
-        .dashboard {
-            display: flex;
-            min-height: 100vh;
-            position: relative;
-        }
+    .dashboard {
+        display: flex;
+        min-height: 100vh;
+        position: relative;
+    }
 
+    .main-content {
+        flex: 1;
+        margin-left: 280px;
+        padding: 2rem;
+        transition: margin-left 0.3s ease;
+    }
+
+    .page-header {
+        background: rgba(79, 79, 81, 0.3);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(214, 214, 214, 0.2);
+        padding: 2rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #FFFFFF;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        letter-spacing: -0.5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+        color: #D6D6D6;
+        font-size: 0.95rem;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .stat-box {
+        background: rgba(79, 79, 81, 0.3);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(214, 214, 214, 0.2);
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    .stat-box:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        border-color: rgba(245, 143, 124, 0.5);
+    }
+
+    .stat-box-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+    }
+
+    .icon-purple {
+        background: linear-gradient(135deg, rgba(245, 143, 124, 0.2), rgba(242, 196, 206, 0.2));
+        color: #F58F7C;
+    }
+
+    .icon-pink {
+        background: linear-gradient(135deg, rgba(242, 196, 206, 0.2), rgba(245, 143, 124, 0.2));
+        color: #F2C4CE;
+    }
+
+    .icon-green {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+        color: #10b981;
+    }
+
+    .icon-blue {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2));
+        color: #3b82f6;
+    }
+
+    .stat-box-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #FFFFFF;
+        margin-bottom: 0.25rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .stat-box-label {
+        font-size: 0.85rem;
+        color: #D6D6D6;
+        font-weight: 600;
+    }
+
+    .trip-grid {
+        display: grid;
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .trip-card {
+        background: rgba(79, 79, 81, 0.3);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(214, 214, 214, 0.2);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .trip-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        border-color: rgba(245, 143, 124, 0.5);
+    }
+
+    .trip-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1.5rem;
+        gap: 1rem;
+    }
+
+    .trip-card-title {
+        flex: 1;
+    }
+
+    .trip-destination {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #FFFFFF;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .trip-dates {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #D6D6D6;
+        font-size: 0.9rem;
+    }
+
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .status-open { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .status-confirmed { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .status-full { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .status-cancelled { background: rgba(214, 214, 214, 0.15); color: #D6D6D6; border: 1px solid rgba(214, 214, 214, 0.3); }
+
+    .trip-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .trip-detail-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .trip-detail-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.125rem;
+        flex-shrink: 0;
+    }
+
+    .trip-detail-content h4 {
+        font-size: 0.75rem;
+        color: #D6D6D6;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.25rem;
+    }
+
+    .trip-detail-content p {
+        font-size: 0.95rem;
+        color: #FFFFFF;
+        font-weight: 600;
+    }
+
+    .trip-card-footer {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(214, 214, 214, 0.1);
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #F58F7C, #F2C4CE);
+        color: #2C2B30;
+        box-shadow: 0 8px 25px rgba(245, 143, 124, 0.4);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px rgba(245, 143, 124, 0.6);
+        background: linear-gradient(45deg, #F2C4CE, #F58F7C);
+    }
+
+    .btn-outline {
+        background: rgba(79, 79, 81, 0.4);
+        border: 2px solid rgba(214, 214, 214, 0.3);
+        color: #FFFFFF;
+    }
+
+    .btn-outline:hover {
+        border-color: #F58F7C;
+        background: rgba(245, 143, 124, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: rgba(79, 79, 81, 0.3);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(214, 214, 214, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .empty-icon {
+        font-size: 5rem;
+        color: rgba(214, 214, 214, 0.3);
+        margin-bottom: 1.5rem;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: #FFFFFF;
+        font-weight: 700;
+    }
+
+    .empty-state p {
+        color: #D6D6D6;
+        margin-bottom: 2rem;
+        font-size: 1rem;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @media (max-width: 768px) {
         .main-content {
-            flex: 1;
-            margin-left: 280px;
-            padding: 2rem;
-            background: var(--gray-50);
-            min-height: 100vh;
-            transition: margin-left 0.3s ease;
-        }
-
-        .page-header {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--gray-200);
-        }
-
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--gray-900);
-            letter-spacing: -0.5px;
-            margin-bottom: 0.5rem;
-        }
-
-        .page-subtitle {
-            color: var(--gray-500);
-            font-size: 0.95rem;
+            margin-left: 0 !important;
+            padding: 1rem;
+            padding-top: 5rem;
         }
 
         .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .stat-box {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--gray-200);
-            text-align: center;
-        }
-
-        .stat-box-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.5rem;
-        }
-
-        .icon-purple {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(167, 139, 250, 0.15));
-            color: var(--primary);
-        }
-
-        .icon-pink {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(249, 168, 212, 0.15));
-            color: var(--secondary);
-        }
-
-        .icon-green {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(167, 243, 208, 0.15));
-            color: var(--success);
-        }
-
-        .icon-blue {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(191, 219, 254, 0.15));
-            color: var(--info);
-        }
-
-        .stat-box-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-box-label {
-            font-size: 0.85rem;
-            color: var(--gray-500);
-            font-weight: 600;
-        }
-
-        .trip-grid {
-            display: grid;
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .trip-card {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--gray-200);
-            transition: all 0.3s ease;
-        }
-
-        .trip-card:hover {
-            box-shadow: var(--shadow-md);
-            border-color: var(--primary-light);
-            transform: translateY(-2px);
+            grid-template-columns: 1fr;
         }
 
         .trip-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1.5rem;
-            gap: 1rem;
+            flex-direction: column;
+            align-items: flex-start;
         }
-
-        .trip-card-title {
-            flex: 1;
-        }
-
-        .trip-destination {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .trip-dates {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--gray-600);
-            font-size: 0.9rem;
-        }
-
-        .status-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .status-open { background: #dbeafe; color: #1e40af; }
-        .status-confirmed { background: #d1fae5; color: #065f46; }
-        .status-full { background: #fee2e2; color: #991b1b; }
-        .status-cancelled { background: #f3f4f6; color: #6b7280; }
 
         .trip-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .trip-detail-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .trip-detail-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.125rem;
-            flex-shrink: 0;
-        }
-
-        .trip-detail-content h4 {
-            font-size: 0.75rem;
-            color: var(--gray-500);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.25rem;
-        }
-
-        .trip-detail-content p {
-            font-size: 0.95rem;
-            color: var(--gray-900);
-            font-weight: 600;
+            grid-template-columns: 1fr;
         }
 
         .trip-card-footer {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--gray-200);
+            flex-direction: column;
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 10px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
+            width: 100%;
+            justify-content: center;
         }
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--white);
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
-        }
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
-        }
+    ::-webkit-scrollbar-track {
+        background: rgba(79, 79, 81, 0.3);
+    }
 
-        .btn-outline {
-            background: var(--white);
-            border: 1.5px solid var(--gray-300);
-            color: var(--gray-700);
-        }
+    ::-webkit-scrollbar-thumb {
+        background: rgba(214, 214, 214, 0.3);
+        border-radius: 4px;
+    }
 
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(124, 58, 237, 0.02);
-        }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: var(--white);
-            border-radius: 16px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--gray-200);
-        }
-
-        .empty-icon {
-            font-size: 5rem;
-            color: var(--gray-300);
-            margin-bottom: 1.5rem;
-        }
-
-        .empty-state h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: var(--gray-900);
-            font-weight: 700;
-        }
-
-        .empty-state p {
-            color: var(--gray-500);
-            margin-bottom: 2rem;
-            font-size: 1rem;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0 !important;
-                padding: 1rem;
-                padding-top: 5rem;
-            }
-
-            .stats-row {
-                grid-template-columns: 1fr;
-            }
-
-            .trip-card-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .trip-details {
-                grid-template-columns: 1fr;
-            }
-
-            .trip-card-footer {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--gray-100);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--gray-300);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gray-400);
-        }
-    </style>
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(214, 214, 214, 0.5);
+    }
+</style>
 </head>
 <body>
     <div class="dashboard">
@@ -398,20 +388,8 @@
                     <div class="stat-box-value">{{ total_trips }}</div>
                     <div class="stat-box-label">Total Trips</div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-box-icon icon-green">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <div class="stat-box-value">{{ available_trips }}</div>
-                    <div class="stat-box-label">Available Slots</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-box-icon icon-pink">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-box-value">{{ total_participants|default:0 }}</div>
-                    <div class="stat-box-label">Total Participants</div>
-                </div>
+                
+                
                 <div class="stat-box">
                     <div class="stat-box-icon icon-blue">
                         <i class="fas fa-map-marked-alt"></i>
