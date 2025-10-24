@@ -389,6 +389,7 @@
                      <span class="badge">{{ unread_messages_count }}</span>
                      {% endif %}
                  </a>
+            </div>
             <div class="nav-item">
                 <a href="{% url 'notifications' %}" class="nav-link {% if request.resolver_match.url_name == 'notifications' %}active{% endif %}">
                     <i class="fas fa-bell nav-icon"></i>
@@ -399,7 +400,7 @@
                 </a>
             </div>
             <div class="nav-item">
-                 <a href="{% url 'community' %}" class="nav-link">
+                 <a href="{% url 'community' %}" class="nav-link {% if request.resolver_match.url_name == 'community' %}active{% endif %}">
                  <i class="fas fa-users nav-icon"></i>
                  <span>Community</span>
                </a>
@@ -420,7 +421,7 @@
                     <span>My Profile</span>
                 </a>
             </div>
-            
+
             <div class="nav-item">
                 <a href="{% url 'payments_history' %}" class="nav-link {% if request.resolver_match.url_name == 'payments_history' %}active{% endif %}">
                     <i class="fas fa-receipt nav-icon"></i>
@@ -431,43 +432,43 @@
         </div>
 
         <div class="nav-section">
-                    <div class="nav-label">Safety</div>
-                    <div class="nav-item">
-                        <a href="{% url 'safety:safety_center' %}" class="nav-link">
-                            <i class="fas fa-shield-alt nav-icon"></i>
-                            <span>Safety Center</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                        <a href="{% url 'safety:emergency_contacts' %}" class="nav-link">
-                            <i class="fas fa-phone-alt nav-icon"></i>
-                            <span>Emergency Contacts</span>
-                        </a>
-                    </div>
-                    <div class="nav-item">
-                         <a href="{% url 'safety:sos_alerts' %}" class="nav-link">
-                             <i class="fas fa-exclamation-triangle nav-icon"></i>
-                             <span>SOS Alerts</span>
-                         </a>
-                    </div>
-                </div>
+            <div class="nav-label">Safety</div>
+            <div class="nav-item">
+                <a href="{% url 'safety:safety_center' %}" class="nav-link {% if request.resolver_match.url_name == 'safety_center' %}active{% endif %}">
+                    <i class="fas fa-shield-alt nav-icon"></i>
+                    <span>Safety Center</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="{% url 'safety:emergency_contacts' %}" class="nav-link {% if request.resolver_match.url_name == 'emergency_contacts' %}active{% endif %}">
+                    <i class="fas fa-phone-alt nav-icon"></i>
+                    <span>Emergency Contacts</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                 <a href="{% url 'safety:sos_alerts' %}" class="nav-link {% if request.resolver_match.url_name == 'sos_alerts' %}active{% endif %}">
+                     <i class="fas fa-exclamation-triangle nav-icon"></i>
+                     <span>SOS Alerts</span>
+                 </a>
+            </div>
+        </div>
 
         <div class="nav-section">
             <div class="nav-label">Settings</div>
             <div class="nav-item">
-                <a href="{% url 'settings' %}" class="nav-link">
+                <a href="{% url 'settings' %}" class="nav-link {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
                     <i class="fas fa-cog nav-icon"></i>
                     <span>Settings</span>
                 </a>
             </div>
             <div class="nav-item">
-                <a href="{% url 'help_support' %}" class="nav-link">
+                <a href="{% url 'help_support' %}" class="nav-link {% if request.resolver_match.url_name == 'help_support' %}active{% endif %}">
                     <i class="fas fa-question-circle nav-icon"></i>
                     <span>Help & Support</span>
                 </a>
             </div>
             <div class="nav-item">
-                <a href="{% url 'logout' %}" class="nav-link">
+                <a href="{% url 'logout' %}" class="nav-link {% if request.resolver_match.url_name == 'logout' %}active{% endif %}">
                     <i class="fas fa-sign-out-alt nav-icon"></i>
                     <span>Logout</span>
                 </a>

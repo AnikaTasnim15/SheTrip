@@ -31,8 +31,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
+           background: linear-gradient(135deg, #2C2B30 0%, #4F4F51 100%);
+color: #FFFFFF;
             line-height: 1.6;
             padding-bottom: 100px;
         }
@@ -154,20 +154,22 @@
             flex: 1;
             margin-left: 280px;
             padding: 2rem;
-            background: var(--gray-50);
+              background: transparent;
         }
 
-        .navbar {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--white);
-            padding: 1.5rem 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+       .navbar {
+    background: rgba(79, 79, 81, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    color: var(--white);
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
         .navbar h1 {
             font-size: 1.75rem;
@@ -198,26 +200,27 @@
         }
 
         .hero-section {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border-left: 5px solid var(--danger);
-        }
+    background: rgba(79, 79, 81, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border-left: 5px solid var(--danger);
+}
 
-        .hero-section h2 {
-            font-size: 1.875rem;
-            margin-bottom: 1rem;
-            color: var(--gray-900);
-        }
+.hero-section h2 {
+    font-size: 1.875rem;
+    margin-bottom: 1rem;
+    color: #FFFFFF;
+}
 
-        .hero-section p {
-            font-size: 1.125rem;
-            color: var(--gray-600);
-            margin-bottom: 1.5rem;
-        }
-
+.hero-section p {
+    font-size: 1.125rem;
+    color: #D6D6D6;
+    margin-bottom: 1.5rem;
+}
         .emergency-button {
             background: linear-gradient(135deg, var(--danger), #dc2626);
             color: var(--white);
@@ -248,10 +251,12 @@
         }
 
         .stat-card {
-            background: var(--white);
+           background: rgba(79, 79, 81, 0.3);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(214, 214, 214, 0.2);
             border-radius: 16px;
             padding: 1.75rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -265,20 +270,18 @@
             border-color: var(--primary);
         }
 
-        .stat-info h3 {
-            font-size: 0.875rem;
-            color: var(--gray-500);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
+       .stat-info h3 {
+    font-size: 0.875rem;
+    color: #D6D6D6;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
 
-        .stat-value {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--gray-900);
-        }
+.stat-value {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #FFFFFF;
+}
 
         .stat-icon {
             width: 60px;
@@ -290,25 +293,25 @@
             font-size: 1.5rem;
         }
 
-        .icon-danger {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.15));
-            color: var(--danger);
-        }
+  .icon-danger {
+    background: #5a4a4a;
+    color: #ef4444;
+}
 
-        .icon-success {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.15));
-            color: var(--success);
-        }
+.icon-success {
+    background: #4a5a52;
+    color: #10b981;
+}
 
-        .icon-warning {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.15));
-            color: var(--warning);
-        }
+.icon-warning {
+    background: #5a5249;
+    color: #f59e0b;
+}
 
-        .icon-info {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.15));
-            color: var(--info);
-        }
+.icon-info {
+    background: #4a4e5a;
+    color: #3b82f6;
+}
 
         .grid-2 {
             display: grid;
@@ -318,11 +321,13 @@
         }
 
         .card {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
+    background: rgba(79, 79, 81, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
 
         .card-header {
             display: flex;
@@ -336,7 +341,7 @@
         .card-title {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--gray-900);
+            color: #FFFFFF;
         }
 
         .btn {
@@ -353,15 +358,27 @@
             font-size: 0.875rem;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--white);
-        }
+       .btn-primary {
+    background: #e88b8b;
+    color: #ffffff;
+    padding: 0.625rem 1.25rem;
+    border-radius: 20px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);
-        }
+.btn-primary:hover {
+    background: #d67a7a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(232, 139, 139, 0.3);
+}
 
         .btn-outline {
             background: var(--white);
@@ -607,7 +624,7 @@
                 <!-- Hero Section -->
                 <div class="hero-section">
                     <h2>🚨 Your Safety is Our Priority</h2>
-                    <p>Access emergency support, manage emergency contacts, view safety guidelines, and report safety concerns.</p>
+                    <p>Access emergency support, manage emergency contacts, and report safety concerns.</p>
                     <a href="{% url 'safety:create_sos_alert' %}" class="emergency-button">
                         <i class="fas fa-exclamation-triangle"></i>
                         Emergency SOS Alert
@@ -756,15 +773,7 @@
                 </div>
                 {% endif %}
 
-                <!-- Safety Guidelines -->
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="card-title">Safety Guidelines</h2>
-                        <a href="{% url 'safety:guidelines_index' %}" class="btn btn-outline">
-                            View All
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
+
 
                     {% if featured_guidelines %}
                     <div class="guidelines-grid">

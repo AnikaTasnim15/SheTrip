@@ -13,8 +13,8 @@
         }
 
         :root {
-            --primary: #7c3aed;
-            --secondary: #ec4899;
+                --primary: #F58F7C;
+    --secondary: #F2C4CE;
             --success: #10b981;
             --warning: #f59e0b;
             --gray-50: #f8fafc;
@@ -28,8 +28,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
+            background: linear-gradient(135deg, #2C2B30 0%, #4F4F51 100%);
+color: #FFFFFF;
             line-height: 1.6;
         }
 
@@ -38,15 +38,15 @@
             min-height: 100vh;
         }
 
-        .sidebar {
-            width: 280px;
-            background: var(--white);
-            border-right: 1px solid var(--gray-200);
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 1000;
-        }
+       .sidebar {
+    width: 280px;
+    background: var(--white);
+    border-right: 1px solid var(--gray-200);
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+}
 
         .main-content {
             flex: 1;
@@ -54,17 +54,19 @@
             padding: 2rem;
         }
 
-        .navbar {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--white);
-            padding: 1.5rem 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+       .navbar {
+    background: rgba(79, 79, 81, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    color: var(--white);
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
         .navbar h1 {
             font-size: 1.75rem;
@@ -81,24 +83,25 @@
         }
 
         .stat-card {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 1.75rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            border: 2px solid transparent;
-        }
+    background: rgba(79, 79, 81, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
 
         .stat-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary);
+            border-color: #F58F7C;
         }
 
         .stat-card.clickable:hover .stat-icon {
@@ -107,7 +110,7 @@
 
         .stat-info h3 {
             font-size: 0.875rem;
-            color: var(--gray-500);
+            color: #D6D6D6;
             text-transform: uppercase;
             margin-bottom: 0.5rem;
         }
@@ -115,7 +118,8 @@
         .stat-value {
             font-size: 2.25rem;
             font-weight: 700;
-            color: var(--gray-900);
+            color: #FFFFFF;
+
         }
 
         .stat-icon {
@@ -126,8 +130,8 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(236, 72, 153, 0.15));
-            color: var(--primary);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.15));
+    color: #F58F7C;
             transition: transform 0.3s ease;
         }
 
@@ -137,7 +141,7 @@
             gap: 1.5rem;
         }
 
-        .user-card {
+  .user-card {
             background: var(--white);
             border-radius: 16px;
             padding: 2rem;
@@ -147,11 +151,10 @@
             display: flex;
             flex-direction: column;
         }
-
         .user-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary);
+            border-color: #F58F7C;
         }
 
         .user-header {
@@ -162,18 +165,17 @@
         }
 
         .user-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 16px;
-            object-fit: cover;
-            border: 3px solid var(--gray-100);
-        }
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
 
         .avatar-placeholder {
             width: 80px;
             height: 80px;
             border-radius: 16px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+           background: linear-gradient(135deg, #F58F7C, #F2C4CE);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -234,7 +236,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
+             color: #F58F7C;
         }
 
         .user-bio {
@@ -264,7 +266,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, #F58F7C, #F2C4CE);
             color: var(--white);
         }
 
@@ -307,29 +309,32 @@
             margin-bottom: 1.5rem;
         }
 
-        .alert {
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+       .alert {
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
 
-        .alert-success {
-            background: #d1fae5;
-            border-left: 4px solid var(--success);
-        }
+.alert-success {
+    background: rgba(245, 143, 124, 0.2);
+    border-left: 4px solid #F58F7C;
+    color: #FFFFFF;
+}
 
-        .alert-info {
-            background: #dbeafe;
-            border-left: 4px solid #3b82f6;
-        }
+.alert-info {
+    background: rgba(242, 196, 206, 0.2);
+    border-left: 4px solid #F2C4CE;
+    color: #FFFFFF;
+}
 
-        .alert-warning {
-            background: #fef3c7;
-            border-left: 4px solid var(--warning);
-        }
+.alert-warning {
+    background: rgba(245, 158, 11, 0.2);
+    border-left: 4px solid var(--warning);
+    color: #FFFFFF;
+}
 
         @media (max-width: 768px) {
             .sidebar {
@@ -452,43 +457,8 @@
                             </div>
                         </div>
 
-                        <div class="user-details">
-                            {% if item.profile.age %}
-                            <div class="detail-row">
-                                <div class="detail-icon">
-                                    <i class="fas fa-birthday-cake"></i>
-                                </div>
-                                <span>{{ item.profile.age }} years old</span>
-                            </div>
-                            {% endif %}
 
-                            {% if item.profile.travel_style %}
-                            <div class="detail-row">
-                                <div class="detail-icon">
-                                    <i class="fas fa-suitcase"></i>
-                                </div>
-                                <span>{{ item.profile.travel_style }}</span>
-                            </div>
-                            {% endif %}
 
-                            {% if item.profile.languages %}
-                            <div class="detail-row">
-                                <div class="detail-icon">
-                                    <i class="fas fa-language"></i>
-                                </div>
-                                <span>{{ item.profile.languages }}</span>
-                            </div>
-                            {% endif %}
-
-                            {% if item.profile.occupation %}
-                            <div class="detail-row">
-                                <div class="detail-icon">
-                                    <i class="fas fa-briefcase"></i>
-                                </div>
-                                <span>{{ item.profile.occupation }}</span>
-                            </div>
-                            {% endif %}
-                        </div>
 
                         {% if item.profile.bio %}
                         <div class="user-bio">

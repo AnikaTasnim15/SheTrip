@@ -7,24 +7,108 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #7c3aed; --secondary: #ec4899; --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-300: #cbd5e1; --gray-500: #64748b; --gray-700: #334155; --white: #ffffff;
-        }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--gray-50); color: #0f172a; }
+    --primary: #F58F7C;
+    --secondary: #F2C4CE;
+    --gray-50: #4F4F51;
+    --gray-100: rgba(79, 79, 81, 0.5);
+    --gray-200: rgba(214, 214, 214, 0.2);
+    --gray-300: rgba(214, 214, 214, 0.3);
+    --gray-500: #D6D6D6;
+    --gray-700: #FFFFFF;
+    --white: rgba(79, 79, 81, 0.3);
+}body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #2C2B30 0%, #4F4F51 25%, #2C2B30 50%, #4F4F51 75%, #2C2B30 100%);
+    background-size: 400% 400%;
+    color: #FFFFFF;
+}
         .dashboard { display: flex; min-height: 100vh; }
         .main-content { flex: 1; margin-left: 280px; padding: 2rem; }
-        .page-header { background: var(--white); padding: 2rem; border-radius: 16px; margin-bottom: 2rem; border: 1px solid var(--gray-200); }
-        .page-title { font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; }
-        .group { background: var(--white); border-radius: 16px; border: 1px solid var(--gray-200); margin-bottom: 1.25rem; overflow: hidden; }
-        .group-header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; background: var(--gray-100); border-bottom: 1px solid var(--gray-200); }
-        .group-title { font-weight: 700; }
-        .group-meta { color: var(--gray-500); font-size: 0.9rem; }
-        .payments { padding: 1rem 1.25rem; display: grid; gap: 0.75rem; }
-        .payment { display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; padding: 1rem; border: 1px solid var(--gray-200); border-radius: 12px; background: var(--white); }
+        .page-header {
+    background: rgba(79, 79, 81, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    padding: 2rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+        .page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+        .group {
+    background: rgba(79, 79, 81, 0.3);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+        .group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background: rgba(245, 143, 124, 0.15);
+    border-bottom: 1px solid rgba(214, 214, 214, 0.2);
+}
+        .group-title {
+    font-weight: 700;
+    color: #FFFFFF;
+}
+        .group-meta {
+    color: #D6D6D6;
+    font-size: 0.9rem;
+}
+        .payments {
+    padding: 1rem 1.25rem;
+    display: grid;
+    gap: 0.75rem;
+    background: rgba(79, 79, 81, 0.2);
+}
+        .payment {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    border-radius: 12px;
+    background: rgba(79, 79, 81, 0.4);
+    backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+}
+.payment:hover {
+    border-color: rgba(245, 143, 124, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.payment strong {
+    color: #FFFFFF;
+}
         .status { font-size: 0.8rem; padding: 0.25rem 0.5rem; border-radius: 8px; font-weight: 700; text-transform: uppercase; }
         .status-completed { background: #d1fae5; color: #065f46; }
         .status-pending { background: #fef3c7; color: #92400e; }
         .status-refunded { background: #e0e7ff; color: #3730a3; }
-        .empty-state { text-align: center; padding: 3rem; background: var(--white); border: 1px solid var(--gray-200); border-radius: 16px; }
+        .empty-state {
+    text-align: center;
+    padding: 3rem;
+    background: rgba(79, 79, 81, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.empty-state h3 {
+    color: #FFFFFF;
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
         @media (max-width: 768px){ .main-content { margin-left: 0; padding: 1rem; } .payment { grid-template-columns: 1fr; align-items: start; } }
     </style>
 </head>

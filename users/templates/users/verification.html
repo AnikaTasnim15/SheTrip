@@ -694,27 +694,39 @@ body {
             <form method="post" enctype="multipart/form-data" id="verificationForm">
                 {% csrf_token %}
                 
-                <div class="form-group">
-                    <label>NID Front Side</label>
-                    <label class="upload-area" for="nid_front">
-                        <div class="upload-icon">📄</div>
-                        <div class="upload-text">Click to upload NID front side</div>
-                        <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
-                        <input type="file" id="nid_front" name="nid_front" accept="image/jpeg,image/jpg,image/png" required>
-                        <div class="file-name" id="front-name" style="display: none;"></div>
-                    </label>
-                </div>
+               <div class="form-group nid-front-group">
+    <label for="nid_front" class="form-label">NID Front Side</label>
+    <div class="upload-area" onclick="document.getElementById('nid_front').click()">
+        <div class="upload-icon">📄</div>
+        <div class="upload-text">Click to upload NID front side</div>
+        <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
+    </div>
+    <input type="file"
+           id="nid_front"
+           name="nid_front"
+           data-testid="nid-front-upload"
+           accept="image/jpeg,image/jpg,image/png"
+           required
+           style="display: none;">
+    <div class="file-name" id="front-name" style="display: none;"></div>
+</div>
 
-                <div class="form-group">
-                    <label>NID Back Side</label>
-                    <label class="upload-area" for="nid_back">
-                        <div class="upload-icon">📄</div>
-                        <div class="upload-text">Click to upload NID back side</div>
-                        <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
-                        <input type="file" id="nid_back" name="nid_back" accept="image/jpeg,image/jpg,image/png" required>
-                        <div class="file-name" id="back-name" style="display: none;"></div>
-                    </label>
-                </div>
+                <div class="form-group nid-back-group">
+    <label for="nid_back" class="form-label">NID Back Side</label>
+    <div class="upload-area" onclick="document.getElementById('nid_back').click()">
+        <div class="upload-icon">📄</div>
+        <div class="upload-text">Click to upload NID back side</div>
+        <div class="upload-hint">JPG, JPEG, PNG (Max 5MB)</div>
+    </div>
+    <input type="file"
+           id="nid_back"
+           name="nid_back"
+           data-testid="nid-back-upload"
+           accept="image/jpeg,image/jpg,image/png"
+           required
+           style="display: none;">
+    <div class="file-name" id="back-name" style="display: none;"></div>
+</div>
 
                 <button type="submit" class="btn" id="submitBtn">Resubmit for Verification</button>
             </form>

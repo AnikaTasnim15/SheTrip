@@ -11,7 +11,7 @@ from .models import SafetyReport, SafetyGuideline, EmergencyContact, SOSAlert
 from .forms import SafetyReportForm, EmergencyContactForm, SOSAlertForm, QuickSOSForm
 
 
-# ==================== NOTIFICATION FUNCTIONS ====================
+
 def notify_emergency_contacts(alert):
     """Send Email to user's emergency contacts"""
     contacts = EmergencyContact.objects.filter(user=alert.user)
@@ -154,15 +154,23 @@ SheTrip Safety System
 @login_required
 def safety_center(request):
     """Main safety center dashboard"""
+    user = request.user
+
+    # Fetch user profile
+    try:
+        profile = user.userprofile
+    except:
+        profile = None
+
     # Get user's emergency contacts
-    emergency_contacts = EmergencyContact.objects.filter(user=request.user)
+    emergency_contacts = EmergencyContact.objects.filter(user=user)
 
     # Get recent SOS alerts
-    recent_sos_queryset = SOSAlert.objects.filter(user=request.user).order_by('-timestamp')
+    recent_sos_queryset = SOSAlert.objects.filter(user=user).order_by('-timestamp')
     recent_sos = recent_sos_queryset[:5]
 
     # Get user's safety reports
-    user_reports_queryset = SafetyReport.objects.filter(reporter=request.user)
+    user_reports_queryset = SafetyReport.objects.filter(reporter=user)
     user_reports = user_reports_queryset[:5]
 
     # Get featured safety guidelines
@@ -185,6 +193,8 @@ def safety_center(request):
         'user_reports': user_reports,
         'featured_guidelines': featured_guidelines,
         'stats': stats,
+        'user': user,
+        'profile': profile,
     }
     return render(request, 'safety/safety_center.html', context)
 
@@ -300,15 +310,22 @@ def emergency_support(request):
 # ==================== EMERGENCY CONTACTS ====================
 @login_required
 def emergency_contacts(request):
-    """Manage emergency contacts"""
-    contacts = EmergencyContact.objects.filter(user=request.user).order_by('-is_primary', 'contact_name')
+    user = request.user
+
+    try:
+        profile = user.userprofile
+    except:
+        profile = None
+
+    contacts = EmergencyContact.objects.filter(user=user).order_by('-is_primary', 'contact_name')
 
     context = {
         'contacts': contacts,
         'has_primary': contacts.filter(is_primary=True).exists(),
+        'user': user,
+        'profile': profile,
     }
     return render(request, 'safety/emergency_contacts.html', context)
-
 
 @login_required
 def add_emergency_contact(request):
@@ -372,10 +389,15 @@ def delete_emergency_contact(request, contact_id):
 # ==================== SOS ALERTS ====================
 @login_required
 def sos_alerts(request):
-    """View user's SOS alert history"""
-    alerts = SOSAlert.objects.filter(user=request.user).order_by('-timestamp')
+    user = request.user
 
-    # Statistics
+    try:
+        profile = user.userprofile
+    except:
+        profile = None
+
+    alerts = SOSAlert.objects.filter(user=user).order_by('-timestamp')
+
     stats = {
         'total_alerts': alerts.count(),
         'active_alerts': alerts.filter(status='active').count(),
@@ -385,6 +407,8 @@ def sos_alerts(request):
     context = {
         'alerts': alerts,
         'stats': stats,
+        'user': user,
+        'profile': profile,
     }
     return render(request, 'safety/sos_alerts.html', context)
 

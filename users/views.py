@@ -474,6 +474,8 @@ def community_view(request):
         'connected_count': len(connected_user_ids),
         'pending_received': pending_received,
         'pending_sent': pending_sent,
+        'user': current_user,
+        'profile': profile,
     }
 
     return render(request, 'users/community.html', context)
@@ -574,18 +576,28 @@ def reject_connection(request, connection_id):
 @login_required
 def notifications_view(request):
     """View all notifications"""
+    user = request.user
+
+    # Fetch user profile
+    try:
+        profile = user.userprofile
+    except:
+        profile = None
+
     notifications = Notification.objects.filter(
-        recipient=request.user
+        recipient=user
     ).select_related('sender')
 
     # Mark all as read when viewing
     Notification.objects.filter(
-        recipient=request.user,
+        recipient=user,
         is_read=False
     ).update(is_read=True)
 
     context = {
         'notifications': notifications,
+        'user': user,
+        'profile': profile,
     }
     return render(request, 'users/notifications.html', context)
 

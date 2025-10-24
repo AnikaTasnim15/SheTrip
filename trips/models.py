@@ -105,7 +105,7 @@ class TravelPlan(models.Model):
         from django.utils import timezone
         from django.core.exceptions import ValidationError
         
-        # ADD at start of save() method:
+
         try:
             self.full_clean()
         except ValidationError:
@@ -308,7 +308,7 @@ class TripParticipant(models.Model):
     )
     face_verification_done = models.BooleanField(default=False)
     
-    # ✅ ADD THESE TWO FIELDS:
+
     emergency_contact = models.CharField(
         max_length=20, 
         blank=True, 

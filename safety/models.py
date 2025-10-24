@@ -4,8 +4,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 
 
-# Import OrganizedTrip if you need it for SOS/Safety reports
-# from trips.models import OrganizedTrip
+
 
 
 class SafetyReport(models.Model):
@@ -47,8 +46,6 @@ class SafetyReport(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     location = models.CharField(max_length=300, blank=True)
 
-    # Optional: Link to trip if report is trip-related
-    # trip = models.ForeignKey(OrganizedTrip, on_delete=models.SET_NULL, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     resolved = models.BooleanField(default=False)

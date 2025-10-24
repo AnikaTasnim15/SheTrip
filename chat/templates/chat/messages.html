@@ -12,22 +12,23 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #7c3aed;
-            --secondary: #ec4899;
-            --gray-50: #f8fafc;
-            --gray-100: #f1f5f9;
-            --gray-200: #e2e8f0;
-            --gray-500: #64748b;
-            --gray-600: #475569;
-            --gray-900: #0f172a;
-            --white: #ffffff;
-        }
+     :root {
+    --primary: #F58F7C;
+    --secondary: #F2C4CE;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-500: #9ca3af;
+    --gray-600: #d1d5db;
+    --gray-900: #f3f4f6;
+    --white: #ffffff;
+}
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
+            background: linear-gradient(135deg, #2C2B30 0%, #4F4F51 100%);
+color: #FFFFFF;
+
         }
 
         .dashboard {
@@ -52,13 +53,18 @@
         }
 
         .navbar {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: var(--white);
-            padding: 1.5rem 2rem;
-            border-radius: 16px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
-        }
+    background: rgba(79, 79, 81, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    color: var(--white);
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
         .navbar h1 {
             font-size: 1.75rem;
@@ -73,10 +79,11 @@
         }
 
         .conversation-item {
-            background: var(--white);
+            background: rgba(79, 79, 81, 0.3);
+            backdrop-filter: blur(20px);
             border-radius: 12px;
             padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             cursor: pointer;
             transition: all 0.2s;
             text-decoration: none;
@@ -84,20 +91,20 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            border: 2px solid transparent;
+             border: 1px solid rgba(214, 214, 214, 0.2);
         }
 
         .conversation-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary);
+            border-color: #F58F7C;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
         }
 
         .avatar {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, #F58F7C, #F2C4CE);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -105,7 +112,15 @@
             font-weight: 700;
             font-size: 1.5rem;
             flex-shrink: 0;
+            overflow: hidden;
         }
+        .avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+
+}
 
         .conversation-info {
             flex: 1;
@@ -115,24 +130,28 @@
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 0.25rem;
+            color: #FFFFFF;
         }
 
         .conversation-info p {
             font-size: 0.9rem;
-            color: var(--gray-600);
+            color: #D6D6D6;
         }
 
         .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: var(--white);
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background: rgba(79, 79, 81, 0.3);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(214, 214, 214, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
 
         .empty-icon {
             font-size: 4rem;
-            color: var(--gray-300);
+            color: rgba(214, 214, 214, 0.5);
+
             margin-bottom: 1rem;
         }
 
@@ -163,13 +182,13 @@
 <div class="conversations-list">
     {% for item in conversations %}
     <a href="{% url 'chat:conversation_detail' item.conversation.id %}" class="conversation-item">
-        {% if item.other_user.userprofile.profile_picture %}
-        <img src="{{ item.other_user.userprofile.profile_picture.url }}" alt="{{ item.other_user.first_name }}" class="avatar">
-        {% else %}
-        <div class="avatar">
-            {{ item.other_user.first_name|first }}{{ item.other_user.last_name|first }}
-        </div>
-        {% endif %}
+       <div class="avatar">
+    {% if item.other_user.userprofile.profile_picture %}
+        <img src="{{ item.other_user.userprofile.profile_picture.url }}" alt="{{ item.other_user.first_name }}">
+    {% else %}
+        {{ item.other_user.first_name|first }}{{ item.other_user.last_name|first }}
+    {% endif %}
+</div>
 
         <div class="conversation-info">
             <h3>{{ item.other_user.first_name }} {{ item.other_user.last_name }}</h3>

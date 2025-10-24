@@ -2,7 +2,6 @@ from django.db.models import Q
 from .models import Message
 
 def unread_messages(request):
-    """Add unread message count to all templates"""
     if request.user.is_authenticated:
         unread_count = Message.objects.filter(
             recipient=request.user,
