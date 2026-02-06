@@ -15,7 +15,7 @@
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #2C2B30 0%, #4F4F51 25%, #2C2B30 50%, #4F4F51 75%, #2C2B30 100%);
             background-size: 400% 400%;
-
+            animation: gradientShift 15s ease infinite;
             color: #FFFFFF;
             overflow-x: hidden;
         }
@@ -224,7 +224,9 @@
             animation: float 6s ease-in-out infinite;
         }
 
-
+        .floating-element:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 60%; right: 10%; animation-delay: 2s; }
+        .floating-element:nth-child(3) { top: 80%; left: 20%; animation-delay: 4s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -453,7 +455,11 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-
+        <!-- Floating decorative elements -->
+        <div class="floating-element" style="font-size: 4rem;">✈️</div>
+        <div class="floating-element" style="font-size: 4rem;">🌸</div>
+        <div class="floating-element" style="font-size: 4rem;">⭐</div>
+        
         <div class="hero-content">
             <div style="font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: 3px; text-transform: uppercase; color: #F2C4CE; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">For Women, By Women</div>
             <h1>Find A Travel Buddy</h1>

@@ -243,7 +243,7 @@ def trip_cancel_payment_view(request, trip_id):
         messages.error(request, 'No payment found.')
         return redirect('organized_trip_detail', trip_id=trip_id)
 
-    # ✅ FIXED: 5-minute refund window
+    #  FIXED: 5-minute refund window
     refund_deadline = payment.payment_date + timedelta(minutes=5)
     within_window = timezone.now() < refund_deadline
     
